@@ -1,0 +1,14 @@
+.container{
+  display: flex;
+  justify-content: center;
+  .inner-container{
+    background-color: #e3e3e3;
+    display: inline-flex;
+    min-width: 500px;
+    justify-content: space-around;
+    height: 40px;
+    .items{
+      line-height: 40px;
+    }
+  }
+}
