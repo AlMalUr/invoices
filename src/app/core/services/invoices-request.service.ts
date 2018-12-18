@@ -7,12 +7,12 @@ import { ProductModel } from '../models/models';
 })
 export class InvoicesRequestService {
 
-  dataUrl = 'https://api.invoice-app.2muchcoffee.com/api/';
+  dataUrl = 'https://api.invoice-app.2muchcoffee.com/api/products';
 
   constructor(private http: HttpClient) { }
 
   fetchProducts() {
-    return this.http.get<ProductModel[]>(this.dataUrl + 'products');
+    return this.http.get<ProductModel[]>(this.dataUrl);
   }
 
 }

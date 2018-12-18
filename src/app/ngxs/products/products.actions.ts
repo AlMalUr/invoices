@@ -4,6 +4,7 @@ import { ProductModel } from '../../core/models/models';
 export class FetchProducts {
   static readonly type = '[Products] FetchProducts';
 }
+
 export class FetchProductsSuccess {
   static readonly type = '[Products] FetchProductsSuccess';
 

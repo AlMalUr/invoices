@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { InvoicesResolverService } from './core/services/invoices-resolver.service';
 
 const routes: Routes = [
   {
     path: '',
-    loadChildren: './content/products/products.module#ProductsModule'
+    loadChildren: './content/products/products.module#ProductsModule',
+    resolve: [InvoicesResolverService]
   }
 ];
 

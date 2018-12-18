@@ -6,7 +6,11 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatToolbarModule } from '@angular/material';
-
+import { NgxsModule } from '@ngxs/store';
+import { ProductsState } from './ngxs/products/products.state';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { HttpClientModule } from '@angular/common/http';
+import { InvoicesService } from './core/services/invoices.service';
 
 @NgModule({
   declarations: [
@@ -18,9 +22,12 @@ import { MatButtonModule, MatToolbarModule } from '@angular/material';
     BrowserModule,
     BrowserAnimationsModule,
     MatToolbarModule,
-    MatButtonModule
+    MatButtonModule,
+    HttpClientModule,
+    NgxsModule.forRoot([ProductsState]),
+    NgxsReduxDevtoolsPluginModule.forRoot()
   ],
-  providers: [],
+  providers: [InvoicesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
