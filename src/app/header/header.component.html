@@ -6,7 +6,8 @@
         mat-tab-link
         routerLink="products"
         routerLinkActive="mat-tab-link-active"
-        #all = "routerLinkActive"
+        #products = "routerLinkActive"
+
       >
         Products
       </a>
@@ -14,17 +15,16 @@
         mat-tab-link
         routerLink="/customers"
         routerLinkActive="mat-tab-link-active"
-        #active = "routerLinkActive"
+        #customers = "routerLinkActive"
 
       >
         Customers
       </a>
       <a
         mat-tab-link
-        routerLink="/invoices"
+        routerLink="invoices"
         routerLinkActive="mat-tab-link-active"
         #completed = "routerLinkActive"
-
       >
         Invoices
       </a>

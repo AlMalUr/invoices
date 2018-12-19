@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProductModel } from '../../core/models/models';
-import { InvoicesService } from '../../core/services/invoices.service';
+import { ProductsService } from '../../core/services/products-services/products.service';
 
 
 
@@ -16,11 +16,10 @@ export class ProductsComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'price'];
 
-  constructor(private invoicesService: InvoicesService) { }
+  constructor(private invoicesService: ProductsService) { }
 
   ngOnInit() {
     this.products$ = this.invoicesService.products$;
-    console.log(this.products$);
   }
 
 }

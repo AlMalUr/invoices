@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FetchProducts } from '../../ngxs/products/products.actions';
+import { FetchProducts } from '../../../ngxs/products/products.actions';
 import { Select, Store } from '@ngxs/store';
-import { ProductsState } from '../../ngxs/products/products.state';
+import { ProductsState } from '../../../ngxs/products/products.state';
 import { Observable } from 'rxjs';
-import { ProductModel } from '../models/models';
+import { ProductModel } from '../../models/models';
 
 @Injectable({
   providedIn: 'root'
 })
-export class InvoicesService {
+export class ProductsService {
 
   @Select(ProductsState.getProducts) products$: Observable<ProductModel[]>;
 

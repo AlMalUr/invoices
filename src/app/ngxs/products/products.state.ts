@@ -1,6 +1,6 @@
 import * as ProductsActions from './products.actions';
 import { ProductModel } from '../../core/models/models';
-import { InvoicesRequestService } from '../../core/services/invoices-request.service';
+import { ProductsRequestService } from '../../core/services/products-services/products-request.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
 
@@ -19,7 +19,7 @@ export class ProductsStateModel {
 export class ProductsState {
 
   constructor(
-    private invoicesRequestService: InvoicesRequestService
+    private invoicesRequestService: ProductsRequestService
   ) {
   }
 

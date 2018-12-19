@@ -10,7 +10,7 @@ import { NgxsModule } from '@ngxs/store';
 import { ProductsState } from './ngxs/products/products.state';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { HttpClientModule } from '@angular/common/http';
-import { InvoicesService } from './core/services/invoices.service';
+import { ProductsService } from './core/services/products-services/products.service';
 
 @NgModule({
   declarations: [
@@ -27,7 +27,7 @@ import { InvoicesService } from './core/services/invoices.service';
     NgxsModule.forRoot([ProductsState]),
     NgxsReduxDevtoolsPluginModule.forRoot()
   ],
-  providers: [InvoicesService],
+  providers: [ProductsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

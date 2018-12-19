@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ProductModel } from '../models/models';
+import { ProductModel } from '../../models/models';
 
 @Injectable({
   providedIn: 'root'
 })
-export class InvoicesRequestService {
+export class ProductsRequestService {
 
   dataUrl = 'https://api.invoice-app.2muchcoffee.com/api/products';
 
