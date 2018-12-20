@@ -12,6 +12,6 @@ import { MatToolbarModule } from '@angular/material';
     HeaderRoutingModule,
     MatToolbarModule
   ],
-  declarations: [HeaderComponent]
+  declarations: []
 })
 export class HeaderModule { }

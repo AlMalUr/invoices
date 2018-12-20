@@ -11,6 +11,7 @@ import { ProductsState } from './ngxs/products/products.state';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { HttpClientModule } from '@angular/common/http';
 import { ProductsService } from './core/services/products-services/products.service';
+import { TransferHttpCacheModule } from '@nguniversal/common';
 
 @NgModule({
   declarations: [
@@ -19,13 +20,14 @@ import { ProductsService } from './core/services/products-services/products.serv
   ],
   imports: [
     AppRoutingModule,
-    BrowserModule,
+    BrowserModule.withServerTransition({appId: 'invoice-app'}),
     BrowserAnimationsModule,
     MatToolbarModule,
     MatButtonModule,
     HttpClientModule,
     NgxsModule.forRoot([ProductsState]),
-    NgxsReduxDevtoolsPluginModule.forRoot()
+    NgxsReduxDevtoolsPluginModule.forRoot(),
+    TransferHttpCacheModule
   ],
   providers: [ProductsService],
   bootstrap: [AppComponent]
