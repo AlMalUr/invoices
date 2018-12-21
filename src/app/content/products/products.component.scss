@@ -6,3 +6,8 @@ mat-table{
 mat-header-cell, mat-cell{
   justify-content: center;
 }
+.container{
+  .number{
+    max-width: 50px;
+  }
+}

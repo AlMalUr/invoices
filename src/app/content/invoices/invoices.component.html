@@ -1,3 +1,44 @@
-<p>
-  invoices works!
-</p>
+<div class="container">
+
+  <mat-table [dataSource]="(invoices$ | async)" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="number">
+      <mat-header-cell class="number" *matHeaderCellDef> Number </mat-header-cell>
+      <mat-cell class="number" *matCellDef="let i = index"> {{i + 1}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="customerId">
+      <mat-header-cell class="invoiceId" *matHeaderCellDef> Invoice Id </mat-header-cell>
+      <mat-cell class="invoiceId" *matCellDef="let element"> {{element.customer_id}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="customerName">
+      <mat-header-cell *matHeaderCellDef> Customer Name </mat-header-cell>
+      <mat-cell *matCellDef="let i = index"> {{i + 1}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="discount">
+      <mat-header-cell *matHeaderCellDef> Discount </mat-header-cell>
+      <mat-cell *matCellDef="let element"> <span *ngIf="element.discount && (element.discount !== 0)">{{element.discount}}%</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="total">
+      <mat-header-cell *matHeaderCellDef> Total </mat-header-cell>
+      <mat-cell *matCellDef="let element"> ${{element.total}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell class="actions" *matHeaderCellDef> Actions </mat-header-cell>
+      <mat-cell class="actions" *matCellDef="let i = index">
+        <button color="primary" mat-flat-button>View</button>
+        <button color="accent" mat-flat-button>Edit</button>
+        <button color="warn" mat-flat-button>Delete</button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+</div>

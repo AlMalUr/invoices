@@ -12,7 +12,8 @@ export class ProductsService {
 
   @Select(ProductsState.getProducts) products$: Observable<ProductModel[]>;
 
-  constructor(private store: Store) { }
+  constructor(private store: Store) {
+  }
 
   fetchProducts() {
     return this.store.dispatch(new FetchProducts());

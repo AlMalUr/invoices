@@ -1,0 +1,28 @@
+mat-table{
+  max-width: 1000px;
+  min-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+mat-header-cell, mat-cell{
+  justify-content: center;
+}
+mat-cell{
+  overflow: visible;
+  word-break: break-all;
+}
+.container{
+  .number{
+    max-width: 50px;
+  }
+  .invoiceId{
+    min-width: 160px;
+  }
+  .actions{
+    min-width: 236px;
+    button{
+      margin-left: 4px;
+    }
+  }
+}
+

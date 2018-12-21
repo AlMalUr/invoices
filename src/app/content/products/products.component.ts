@@ -14,12 +14,12 @@ export class ProductsComponent implements OnInit {
 
   products$: Observable<ProductModel[]>;
 
-  displayedColumns: string[] = ['id', 'name', 'price'];
+  displayedColumns: string[] = ['number', 'name', 'price'];
 
-  constructor(private invoicesService: ProductsService) { }
+  constructor(private productsService: ProductsService) { }
 
   ngOnInit() {
-    this.products$ = this.invoicesService.products$;
+    this.products$ = this.productsService.products$;
   }
 
 }

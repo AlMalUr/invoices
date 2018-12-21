@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 
 import { ProductsRoutingModule } from './products-routing.module';
 import { ProductsComponent } from './products.component';
-import { MatTableModule } from '@angular/material';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     ProductsRoutingModule,
-    MatTableModule
+    SharedModule
   ],
   declarations: [ProductsComponent]
 })

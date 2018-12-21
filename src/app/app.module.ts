@@ -5,13 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatToolbarModule } from '@angular/material';
 import { NgxsModule } from '@ngxs/store';
 import { ProductsState } from './ngxs/products/products.state';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { HttpClientModule } from '@angular/common/http';
-import { ProductsService } from './core/services/products-services/products.service';
 import { TransferHttpCacheModule } from '@nguniversal/common';
+import { CustomersState } from './ngxs/customers/customers.state';
+import { InvoicesState } from './ngxs/invoices/invoices.state';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -22,14 +23,13 @@ import { TransferHttpCacheModule } from '@nguniversal/common';
     AppRoutingModule,
     BrowserModule.withServerTransition({appId: 'invoice-app'}),
     BrowserAnimationsModule,
-    MatToolbarModule,
-    MatButtonModule,
     HttpClientModule,
-    NgxsModule.forRoot([ProductsState]),
+    NgxsModule.forRoot([ProductsState, CustomersState, InvoicesState]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
-    TransferHttpCacheModule
+    TransferHttpCacheModule,
+    SharedModule
   ],
-  providers: [ProductsService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

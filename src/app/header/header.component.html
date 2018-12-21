@@ -1,40 +1,17 @@
-<mat-toolbar class="menu" color="primary">
-    <span>Custom Toolbar</span>
-
-    <nav mat-tab-nav-bar>
-      <a
-        mat-tab-link
-        routerLink="products"
-        routerLinkActive="mat-tab-link-active"
-        #products = "routerLinkActive"
-
-      >
-        Products
-      </a>
-      <a
-        mat-tab-link
-        routerLink="/customers"
-        routerLinkActive="mat-tab-link-active"
-        #customers = "routerLinkActive"
-
-      >
-        Customers
-      </a>
-      <a
-        mat-tab-link
-        routerLink="invoices"
-        routerLinkActive="mat-tab-link-active"
-        #completed = "routerLinkActive"
-      >
-        Invoices
+<div class="header-container">
+  <mat-toolbar class="menu" color="primary">
+    <a class="logo" href="/">Custom Toolbar</a>
+    <nav mat-tab-nav-bar color="accent">
+      <a mat-tab-link
+         *ngFor="let link of navLinks"
+         [routerLink]="link.path"
+         routerLinkActive #rla="routerLinkActive"
+         [active]="rla.isActive"
+         [routerLinkActiveOptions]="{exact: true}">
+        {{link.label}}
+        <span *ngIf="(link.label === 'Invoices') && ((invoicesCount$ |async) !== 0)">({{invoicesCount$ | async}})</span>
       </a>
     </nav>
-
     <button mat-flat-button>new invoice</button>
-</mat-toolbar>
-<!--
-1        [active] = "all.isActive"
-        [routerLinkActiveOptions]="{ exact: true }"
-2 [active] = "active.isActive"
-3 [active] = "completed.isActive"
--->
+  </mat-toolbar>
+</div>

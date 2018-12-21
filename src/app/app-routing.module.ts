@@ -1,20 +1,24 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ProductsResolverService } from './core/services/products-services/products-resolver.service';
+import { CustomersResolverService } from './core/services/customers-services/customers-resolver.service';
+import { InvoicesResolverService } from './core/services/invoices-services/invoices-resolver.service';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'products',
     loadChildren: './content/products/products.module#ProductsModule',
     resolve: [ProductsResolverService]
   },
   {
     path: 'customers',
-    loadChildren: './content/customers/customers.module#CustomersModule'
+    loadChildren: './content/customers/customers.module#CustomersModule',
+    resolve: [CustomersResolverService]
   },
   {
-    path: 'invoices',
-    loadChildren: './content/invoices/invoices.module#InvoicesModule'
+    path: '',
+    loadChildren: './content/invoices/invoices.module#InvoicesModule',
+    resolve: [InvoicesResolverService]
   }
 ];
 

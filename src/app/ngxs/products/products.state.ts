@@ -19,7 +19,7 @@ export class ProductsStateModel {
 export class ProductsState {
 
   constructor(
-    private invoicesRequestService: ProductsRequestService
+    private productsRequestService: ProductsRequestService
   ) {
   }
 
@@ -30,7 +30,7 @@ export class ProductsState {
 
   @Action(ProductsActions.FetchProducts)
   fetchProducts({dispatch}: StateContext<ProductsStateModel>) {
-    return this.invoicesRequestService
+    return this.productsRequestService
     .fetchProducts()
     .pipe(
       tap((products: ProductModel[]) => {
