@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { CustomerModel } from '../../models/models';
-import { CustomersState } from '../../../ngxs/customers/customers.state';
+
 import { FetchCustomers } from '../../../ngxs/customers/customers.actions';
+import { CustomersState } from '../../../ngxs/customers/customers.state';
+import { CustomerModel } from '../../models/models';
 
 @Injectable({
   providedIn: 'root'

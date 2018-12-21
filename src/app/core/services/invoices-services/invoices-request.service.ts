@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
 import { InvoiceModel } from '../../models/models';
 
 @Injectable({
@@ -7,7 +8,7 @@ import { InvoiceModel } from '../../models/models';
 })
 export class InvoicesRequestService {
 
-  dataUrl = 'https://api.invoice-app.2muchcoffee.com/api/invoices';
+  dataUrl = 'invoices';
 
   constructor(private http: HttpClient) { }
 

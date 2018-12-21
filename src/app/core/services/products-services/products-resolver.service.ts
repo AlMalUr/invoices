@@ -12,9 +12,7 @@ import { ProductsService } from './products.service';
 export class ProductsResolverService implements Resolve<any> {
 
   constructor(
-    private productsService: ProductsService,
-    private router: Router,
-    private actions$: Actions
+    private productsService: ProductsService
   ) {
   }
 

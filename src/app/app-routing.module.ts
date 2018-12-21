@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { ProductsResolverService } from './core/services/products-services/products-resolver.service';
+import { RouterModule, Routes } from '@angular/router';
+
 import { CustomersResolverService } from './core/services/customers-services/customers-resolver.service';
 import { InvoicesResolverService } from './core/services/invoices-services/invoices-resolver.service';
+import { ProductsResolverService } from './core/services/products-services/products-resolver.service';
 
 const routes: Routes = [
   {

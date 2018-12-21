@@ -1,8 +1,10 @@
-import * as InvoicesActions from './invoices.actions';
-import { InvoiceModel } from '../../core/models/models';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
+
+import { InvoiceModel } from '../../core/models/models';
 import { InvoicesRequestService } from '../../core/services/invoices-services/invoices-request.service';
+
+import * as InvoicesActions from './invoices.actions';
 
 export class InvoicesStateModel {
   invoices: { [ids: string]: InvoiceModel };

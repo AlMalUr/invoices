@@ -14,12 +14,13 @@
 
     <ng-container matColumnDef="customerName">
       <mat-header-cell *matHeaderCellDef> Customer Name </mat-header-cell>
-      <mat-cell *matCellDef="let i = index"> {{i + 1}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.customer.name}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="discount">
       <mat-header-cell *matHeaderCellDef> Discount </mat-header-cell>
-      <mat-cell *matCellDef="let element"> <span *ngIf="element.discount && (element.discount !== 0)">{{element.discount}}%</span>
+      <mat-cell *matCellDef="let element">
+        <span *ngIf="element.discount && (element.discount !== 0)">{{element.discount}}%</span>
       </mat-cell>
     </ng-container>
 

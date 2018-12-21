@@ -10,8 +10,7 @@ import { InvoicesService } from './invoices.service';
 export class InvoicesResolverService implements Resolve<any> {
 
   constructor(
-    private invoicesService: InvoicesService,
-
+    private invoicesService: InvoicesService
   ) {
   }
 

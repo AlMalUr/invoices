@@ -1,8 +1,10 @@
-import * as ProductsActions from './products.actions';
-import { ProductModel } from '../../core/models/models';
-import { ProductsRequestService } from '../../core/services/products-services/products-request.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
+
+import { ProductModel } from '../../core/models/models';
+import { ProductsRequestService } from '../../core/services/products-services/products-request.service';
+
+import * as ProductsActions from './products.actions';
 
 export class ProductsStateModel {
   products: { [ids: string]: ProductModel };

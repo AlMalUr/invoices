@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { FetchProducts } from '../../../ngxs/products/products.actions';
 import { Select, Store } from '@ngxs/store';
-import { ProductsState } from '../../../ngxs/products/products.state';
 import { Observable } from 'rxjs';
+
+import { FetchProducts } from '../../../ngxs/products/products.actions';
+import { ProductsState } from '../../../ngxs/products/products.state';
 import { ProductModel } from '../../models/models';
 
 @Injectable({

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, Router } from '@angular/router';
-import { Actions } from '@ngxs/store';
+import { Resolve } from '@angular/router';
 import { take } from 'rxjs/operators';
 
 
@@ -12,9 +11,7 @@ import { CustomersService } from './customers.service';
 export class CustomersResolverService implements Resolve<any> {
 
   constructor(
-    private customersService: CustomersService,
-    private router: Router,
-    private actions$: Actions
+    private customersService: CustomersService
   ) {
   }
 

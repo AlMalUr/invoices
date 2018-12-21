@@ -1,8 +1,10 @@
-import * as CustomersActions from './customers.actions';
-import { CustomerModel } from '../../core/models/models';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
+
+import { CustomerModel } from '../../core/models/models';
 import { CustomersRequestService } from '../../core/services/customers-services/customers-request.service';
+
+import * as CustomersActions from './customers.actions';
 
 export class CustomersStateModel {
   customers: { [ids: string]: CustomerModel };
