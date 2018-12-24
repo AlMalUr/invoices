@@ -1,7 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
 
-import { ProductModel } from '../../core/models/models';
+import { ProductModel } from '../../core/models/product.model';
 import { ProductsRequestService } from '../../core/services/products-services/products-request.service';
 
 import * as ProductsActions from './products.actions';
@@ -38,7 +39,7 @@ export class ProductsState {
       tap((products: ProductModel[]) => {
         dispatch(new ProductsActions.FetchProductsSuccess(products));
       }),
-      catchError(error =>
+      catchError((error: HttpErrorResponse) =>
         dispatch(new ProductsActions.FetchProductsFailed(error))
       )
     );

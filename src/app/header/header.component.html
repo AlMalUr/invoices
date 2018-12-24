@@ -9,7 +9,7 @@
          [active]="rla.isActive"
          [routerLinkActiveOptions]="{exact: true}">
         {{link.label}}
-        <span *ngIf="(link.label === 'Invoices') && ((invoicesCount$ |async) !== 0)">({{invoicesCount$ | async}})</span>
+        <span *ngIf="(link.label === 'Invoices') && ((invoicesCount$ |async).length !== 0)">({{(invoicesCount$ | async).length}})</span>
       </a>
     </nav>
     <button mat-flat-button>new invoice</button>

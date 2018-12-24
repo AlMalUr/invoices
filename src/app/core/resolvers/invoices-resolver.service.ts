@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Resolve, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 
-import { InvoicesService } from './invoices.service';
+import { InvoicesService } from '../services/invoices-services/invoices.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,6 @@ export class InvoicesResolverService implements Resolve<any> {
     return this.invoicesService.fetchInvoices().pipe(
       take(1)
     );
-
   }
 }
 

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { FetchProducts } from '../../../ngxs/products/products.actions';
 import { ProductsState } from '../../../ngxs/products/products.state';
-import { ProductModel } from '../../models/models';
+import { ProductModel } from '../../models/product.model';
 
 @Injectable({
   providedIn: 'root'

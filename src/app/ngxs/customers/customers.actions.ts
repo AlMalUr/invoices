@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { CustomerModel } from '../../core/models/models';
+import { CustomerModel } from '../../core/models/customer.model';
+
 
 export class FetchCustomers {
   static readonly type = '[Customers] FetchCustomers';

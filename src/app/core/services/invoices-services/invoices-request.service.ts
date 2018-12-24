@@ -1,19 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { InvoiceModel } from '../../models/models';
+import { InvoiceModel } from '../../models/invoice.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InvoicesRequestService {
 
-  dataUrl = 'invoices';
-
   constructor(private http: HttpClient) { }
 
   fetchInvoices() {
-    return this.http.get<InvoiceModel[]>(this.dataUrl);
+    return this.http.get<InvoiceModel[]>('invoices');
   }
 
 }

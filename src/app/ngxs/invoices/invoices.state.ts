@@ -1,7 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
 
-import { InvoiceModel } from '../../core/models/models';
+import { InvoiceModel } from '../../core/models/invoice.model';
 import { InvoicesRequestService } from '../../core/services/invoices-services/invoices-request.service';
 
 import * as InvoicesActions from './invoices.actions';
@@ -29,10 +30,6 @@ export class InvoicesState {
   static getInvoices(state: InvoicesStateModel) {
     return state.invoicesIds.map(id => state.invoices[id]);
   }
-  @Selector()
-    static getInvoicesCount(state: InvoicesStateModel) {
-      return state.invoicesIds.length;
-  }
 
   @Action(InvoicesActions.FetchInvoices)
   fetchInvoices({dispatch}: StateContext<InvoicesStateModel>) {
@@ -42,7 +39,7 @@ export class InvoicesState {
       tap((invoices: InvoiceModel[]) => {
         dispatch(new InvoicesActions.FetchInvoicesSuccess(invoices));
       }),
-      catchError(error =>
+      catchError((error: HttpErrorResponse) =>
         dispatch(new InvoicesActions.FetchInvoicesFailed(error))
       )
     );
@@ -64,7 +61,7 @@ export class InvoicesState {
 
 
   @Action(InvoicesActions.FetchInvoicesFailed)
-  sharedInvoicesFailed(
+  InvoicesFailed(
     {dispatch}: StateContext<InvoiceModel>,
     {payload: error}: InvoicesActions.FetchInvoicesFailed
   ) {

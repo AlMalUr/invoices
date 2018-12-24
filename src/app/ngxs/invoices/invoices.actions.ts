@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { InvoiceModel } from '../../core/models/models';
+import { InvoiceModel } from '../../core/models/invoice.model';
+
 
 export class FetchInvoices {
   static readonly type = '[Invoices] FetchInvoices';

@@ -1,10 +1,11 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
 
-import { CustomerModel } from '../../core/models/models';
+import { CustomerModel } from '../../core/models/customer.model';
 import { CustomersRequestService } from '../../core/services/customers-services/customers-request.service';
 
 import * as CustomersActions from './customers.actions';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export class CustomersStateModel {
   customers: { [ids: string]: CustomerModel };
@@ -38,7 +39,7 @@ export class CustomersState {
       tap((customers: CustomerModel[]) => {
         dispatch(new CustomersActions.FetchCustomersSuccess(customers));
       }),
-      catchError(error =>
+      catchError((error: HttpErrorResponse) =>
         dispatch(new CustomersActions.FetchCustomersFailed(error))
       )
     );
@@ -60,7 +61,7 @@ export class CustomersState {
 
 
   @Action(CustomersActions.FetchCustomersFailed)
-  sharedCustomersFailed(
+  CustomersFailed(
     {dispatch}: StateContext<CustomerModel>,
     {payload: error}: CustomersActions.FetchCustomersFailed
   ) {
