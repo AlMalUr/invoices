@@ -72,7 +72,3 @@ export class InvoicesState {
 
 }
 
-
-// _id: string = null;
-// name: string = null;
-// price: number = null;

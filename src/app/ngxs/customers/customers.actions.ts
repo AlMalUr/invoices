@@ -5,6 +5,9 @@ import { CustomerModel } from '../../core/models/customer.model';
 
 export class FetchCustomers {
   static readonly type = '[Customers] FetchCustomers';
+
+  constructor(private payload: CustomerModel[]) {
+  }
 }
 
 export class FetchCustomersSuccess {

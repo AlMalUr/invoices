@@ -22,7 +22,6 @@ export class CustomersStateModel {
 export class CustomersState {
 
   constructor(
-    private customersRequestService: CustomersRequestService
   ) {
   }
 
@@ -31,19 +30,19 @@ export class CustomersState {
     return state.customersIds.map(id => state.customers[id]);
   }
 
-  @Action(CustomersActions.FetchCustomers)
-  fetchCustomers({dispatch}: StateContext<CustomersStateModel>) {
-    return this.customersRequestService
-    .fetchCustomers()
-    .pipe(
-      tap((customers: CustomerModel[]) => {
-        dispatch(new CustomersActions.FetchCustomersSuccess(customers));
-      }),
-      catchError((error: HttpErrorResponse) =>
-        dispatch(new CustomersActions.FetchCustomersFailed(error))
-      )
-    );
-  }
+//  @Action(CustomersActions.FetchCustomers)
+//  fetchCustomers({dispatch}: StateContext<CustomersStateModel>) {
+//    return this.customersRequestService
+//    .fetchCustomers()
+//    .pipe(
+//      tap((customers: CustomerModel[]) => {
+//        dispatch(new CustomersActions.FetchCustomersSuccess(customers));
+//      }),
+//      catchError((error: HttpErrorResponse) =>
+//        dispatch(new CustomersActions.FetchCustomersFailed(error))
+//      )
+//    );
+//  }
 
   @Action(CustomersActions.FetchCustomersSuccess)
   fetchCustomersSuccess(
@@ -60,15 +59,15 @@ export class CustomersState {
   }
 
 
-  @Action(CustomersActions.FetchCustomersFailed)
-  CustomersFailed(
-    {dispatch}: StateContext<CustomerModel>,
-    {payload: error}: CustomersActions.FetchCustomersFailed
-  ) {
-    dispatch(
-      console.error('An error occured: ', error.message)
-    );
-  }
+//  @Action(CustomersActions.FetchCustomersFailed)
+//  CustomersFailed(
+//    {dispatch}: StateContext<CustomerModel>,
+//    {payload: error}: CustomersActions.FetchCustomersFailed
+//  ) {
+//    dispatch(
+//      console.error('An error occured: ', error.message)
+//    );
+//  }
 
 }
 

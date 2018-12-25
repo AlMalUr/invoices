@@ -61,7 +61,7 @@ export class ProductsState {
 
 
   @Action(ProductsActions.FetchProductsFailed)
-  sharedTodoItemFailed(
+  ProductsFailed(
     {dispatch}: StateContext<ProductModel>,
     {payload: error}: ProductsActions.FetchProductsFailed
   ) {
@@ -72,7 +72,3 @@ export class ProductsState {
 
 }
 
-
-// _id: string = null;
-// name: string = null;
-// price: number = null;
