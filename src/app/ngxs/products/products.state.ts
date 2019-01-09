@@ -1,11 +1,13 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { catchError, tap } from 'rxjs/operators';
 
 import { ProductModel } from '../../core/models/product.model';
-import { ProductsRequestService } from '../../core/services/products-services/products-request.service';
+import { ProductsRequestAction } from '../requests/products/products-request.action';
 
-import * as ProductsActions from './products.actions';
+import {
+  FetchProducts,
+  FetchProductsFailed,
+  FetchProductsSuccess
+} from './products.actions';
 
 export class ProductsStateModel {
   products: { [ids: string]: ProductModel };
@@ -22,7 +24,6 @@ export class ProductsStateModel {
 export class ProductsState {
 
   constructor(
-    private productsRequestService: ProductsRequestService
   ) {
   }
 
@@ -31,24 +32,15 @@ export class ProductsState {
     return state.productsIds.map(id => state.products[id]);
   }
 
-  @Action(ProductsActions.FetchProducts)
+  @Action(FetchProducts)
   fetchProducts({dispatch}: StateContext<ProductsStateModel>) {
-    return this.productsRequestService
-    .fetchProducts()
-    .pipe(
-      tap((products: ProductModel[]) => {
-        dispatch(new ProductsActions.FetchProductsSuccess(products));
-      }),
-      catchError((error: HttpErrorResponse) =>
-        dispatch(new ProductsActions.FetchProductsFailed(error))
-      )
-    );
+    dispatch(new ProductsRequestAction);
   }
 
-  @Action(ProductsActions.FetchProductsSuccess)
+  @Action(FetchProductsSuccess)
   fetchProductsSuccess(
     {setState}: StateContext<ProductsStateModel>,
-    {payload: prod}: ProductsActions.FetchProductsSuccess
+    {payload: prod}: FetchProductsSuccess
   ) {
     setState({
       products: prod.reduce((acc, item) => ({
@@ -60,10 +52,10 @@ export class ProductsState {
   }
 
 
-  @Action(ProductsActions.FetchProductsFailed)
+  @Action(FetchProductsFailed)
   ProductsFailed(
     {dispatch}: StateContext<ProductModel>,
-    {payload: error}: ProductsActions.FetchProductsFailed
+    {payload: error}: FetchProductsFailed
   ) {
     dispatch(
       console.error('An error occured: ', error.message)

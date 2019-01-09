@@ -5,8 +5,10 @@ import { NgxsModule } from '@ngxs/store';
 import { CustomersState } from './customers/customers.state';
 import { InvoicesState } from './invoices/invoices.state';
 import { ProductsState } from './products/products.state';
-import { RequestsState } from './requests/requests.state';
 import { CustomersRequestState } from './requests/customers/customers-request.state';
+import { InvoicesRequestState } from './requests/invoices/invoices-request.state';
+import { ProductsRequestState } from './requests/products/products-request.state';
+import { RequestsState } from './requests/requests.state';
 
 @NgModule({
   imports: [
@@ -15,7 +17,9 @@ import { CustomersRequestState } from './requests/customers/customers-request.st
       CustomersState,
       InvoicesState,
       RequestsState,
-      CustomersRequestState
+      CustomersRequestState,
+      ProductsRequestState,
+      InvoicesRequestState
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot()
   ]

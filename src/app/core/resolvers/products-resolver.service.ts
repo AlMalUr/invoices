@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { Resolve } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 import { ProductsState } from '../../ngxs/products/products.state';
@@ -13,17 +12,14 @@ import { ProductsService } from '../services/products-services/products.service'
 })
 export class ProductsResolverService implements Resolve<ProductModel[]> {
 
-  isLoaded = false;
-
   constructor(
     private productsService: ProductsService,
     private store: Store
   ) {
   }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-    if (!this.isLoaded) {
-      this.isLoaded = true;
+  resolve() {
+    if (!this.store.selectSnapshot(ProductsState.getProducts).length) {
       return this.productsService.fetchProducts().pipe(
         take(1)
       );

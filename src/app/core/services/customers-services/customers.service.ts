@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
+import { FetchCustomers } from '../../../ngxs/customers/customers.actions';
 import { CustomersState } from '../../../ngxs/customers/customers.state';
 import { CustomerModel } from '../../models/customer.model';
-import { CustomersRequestAction } from '../../../ngxs/requests/customers/customers-request.action';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class CustomersService {
   }
 
   fetchCustomers() {
-     return this.store.dispatch(new CustomersRequestAction());
+     return this.store.dispatch(new FetchCustomers());
   }
 
 }

@@ -1,4 +1,4 @@
-import { Action, NgxsOnInit, State, StateContext } from '@ngxs/store';
+import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
 
 import { CustomersRequestService } from '../../../core/services/customers-services/customers-request.service';
@@ -27,9 +27,13 @@ export class CustomersRequestState {
   ) {
   }
 
+  @Selector([CustomersRequestState])
+  static getLoad(state: CustomersRequestStateModel): boolean {
+    return state.load;
+  }
 
   @Action(CustomersRequestAction)
-  CustomersRequest(ctx: StateContext<CustomersRequestStateModel>, action: CustomersRequestAction) {
+  customersRequest(ctx: StateContext<CustomersRequestStateModel>, action: CustomersRequestAction) {
     ctx.patchState({
       loading: true,
       load: false,
