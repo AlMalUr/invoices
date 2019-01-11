@@ -5,19 +5,20 @@ import { Observable } from 'rxjs';
 import { FetchProducts } from '../../../ngxs/products/products.actions';
 import { ProductsState } from '../../../ngxs/products/products.state';
 import { ProductModel } from '../../../shared/models/product.model';
+import { FetchInvoiceItem } from '../../../ngxs/invoice-item/invoice-item.actions';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductsService {
+export class InvoiceItemService {
 
-  @Select(ProductsState.getProducts) products$: Observable<ProductModel[]>;
+  // @Select(ProductsState.getProducts) products$: Observable<ProductModel[]>;
 
   constructor(private store: Store) {
   }
 
-  fetchProducts() {
-    return this.store.dispatch(new FetchProducts());
+  fetchInvoiceview() {
+    return this.store.dispatch(new FetchInvoiceItem());
   }
 
 }

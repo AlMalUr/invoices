@@ -12,7 +12,7 @@ import { NgxsStateModule } from './ngxs/ngxs-state.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -21,7 +21,7 @@ import { NgxsStateModule } from './ngxs/ngxs-state.module';
     CoreModule,
     HeaderModule,
     NgxsStateModule,
-    TransferHttpCacheModule
+    TransferHttpCacheModule,
   ],
   bootstrap: [AppComponent]
 })

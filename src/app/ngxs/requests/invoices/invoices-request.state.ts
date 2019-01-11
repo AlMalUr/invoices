@@ -1,7 +1,7 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
 
-import { InvoicesRequestService } from '../../../core/services/invoices-services/invoices-request.service';
+import { RequestService } from '../../../core/services/request.service';
 import { FetchInvoicesFailed, FetchInvoicesSuccess } from '../../invoices/invoices.actions';
 import { IRequest } from '../requests.interface';
 
@@ -11,15 +11,11 @@ import {
   InvoicesRequestSuccessAction
 } from './invoices-request.action';
 
-export interface InvoicesRequestStateModel extends IRequest {
-
-}
-
-@State<InvoicesRequestStateModel>({
+@State<IRequest>({
   name: 'invoicesRequestState',
   defaults: {
     loading: false,
-    load: false,
+    loaded: false,
     status: '',
     data: null,
   },
@@ -27,25 +23,25 @@ export interface InvoicesRequestStateModel extends IRequest {
 export class InvoicesRequestState {
 
   constructor(
-    private invoicesRequestService: InvoicesRequestService,
+    private requestService: RequestService,
   ) {
   }
 
   @Selector()
-  static getLoad(state: InvoicesRequestStateModel): boolean {
-    return state.load;
+  static getLoad(state: IRequest): boolean {
+    return state.loaded;
   }
 
   @Action(InvoicesRequestAction)
-  invoicesRequest(ctx: StateContext<InvoicesRequestStateModel>, action: InvoicesRequestAction) {
+  invoicesRequest(ctx: StateContext<IRequest>, action: InvoicesRequestAction) {
     ctx.patchState({
       loading: true,
-      load: false,
+      loaded: false,
       status: '',
       data: null,
     });
-    return this.invoicesRequestService
-    .fetchInvoices()
+    return this.requestService
+    .fetch('invoices')
     .pipe(
       tap((res: any) => {
         return ctx.dispatch(new InvoicesRequestSuccessAction(res));
@@ -58,27 +54,27 @@ export class InvoicesRequestState {
 
   @Action(InvoicesRequestSuccessAction)
   invoicesRequestSuccess(
-    ctx: StateContext<InvoicesRequestStateModel>,
-    action: InvoicesRequestSuccessAction
+    ctx: StateContext<IRequest>,
+    {payload}: InvoicesRequestSuccessAction
   ) {
     ctx.patchState({
       loading: false,
-      load: true,
+      loaded: true,
       status: 'success',
-      data: action.payload.data,
+      data: payload,
     });
-    ctx.dispatch(new FetchInvoicesSuccess(action.payload));
+    ctx.dispatch(new FetchInvoicesSuccess(payload));
   }
 
   @Action(InvoicesRequestFailAction)
-  invoicesRequestFail(ctx: StateContext<InvoicesRequestStateModel>, action: InvoicesRequestFailAction) {
+  invoicesRequestFail(ctx: StateContext<IRequest>, {payload}: InvoicesRequestFailAction) {
     ctx.patchState({
       loading: false,
-      load: true,
+      loaded: true,
       status: 'fail',
-      data: action.payload,
+      data: payload,
     });
-    ctx.dispatch(new FetchInvoicesFailed(action.payload));
+    ctx.dispatch(new FetchInvoicesFailed(payload));
   }
 
 }

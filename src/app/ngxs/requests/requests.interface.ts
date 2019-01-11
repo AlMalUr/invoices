@@ -1,6 +1,6 @@
 export interface IRequest {
   loading: boolean;
-  load: boolean;
+  loaded: boolean;
   status: string;
   data: any;
 }

@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 import { CustomersState } from '../../../ngxs/customers/customers.state';
 import { FetchInvoices } from '../../../ngxs/invoices/invoices.actions';
 import { InvoicesState } from '../../../ngxs/invoices/invoices.state';
-import { CustomerModel } from '../../models/customer.model';
-import { InvoiceModel } from '../../models/invoice.model';
+import { CustomerModel } from '../../../shared/models/customer.model';
+import { InvoiceModel } from '../../../shared/models/invoice.model';
 
 @Injectable({
   providedIn: 'root'

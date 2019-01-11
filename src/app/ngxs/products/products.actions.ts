@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { ProductModel } from '../../core/models/product.model';
+import { ProductModel } from '../../shared/models/product.model';
 
 
 export class FetchProducts {

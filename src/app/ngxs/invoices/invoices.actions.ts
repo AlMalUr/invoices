@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { InvoiceModel } from '../../core/models/invoice.model';
+import { InvoiceModel } from '../../shared/models/invoice.model';
 
 
 export class FetchInvoices {

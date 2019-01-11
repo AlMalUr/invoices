@@ -7,9 +7,9 @@ import {
   FetchProducts,
   FetchProductsFailed,
   FetchProductsSuccess
-} from './products.actions';
+} from './invoice-item.actions';
 
-export class ProductsStateModel {
+export class InvoiceViewStateModel {
   products: { [ids: string]: ProductModel };
   productsIds: string[];
 }
@@ -21,7 +21,7 @@ export class ProductsStateModel {
     productsIds: []
   }
 })
-export class ProductsState {
+export class InvoiceItemState {
 
   constructor(
   ) {

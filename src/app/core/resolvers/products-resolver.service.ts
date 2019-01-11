@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { take } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
 
 import { ProductsState } from '../../ngxs/products/products.state';
-import { ProductModel } from '../models/product.model';
+
 import { ProductsService } from '../services/products-services/products.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductsResolverService implements Resolve<ProductModel[]> {
+export class ProductsResolverService implements Resolve<any> {
 
   constructor(
     private productsService: ProductsService,
@@ -18,14 +18,18 @@ export class ProductsResolverService implements Resolve<ProductModel[]> {
   ) {
   }
 
-  resolve() {
-    if (!this.store.selectSnapshot(ProductsState.getProducts).length) {
-      return this.productsService.fetchProducts().pipe(
-        take(1)
-      );
-    } else {
-      return this.store.selectSnapshot(ProductsState);
-    }
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+     return this.store.select(ProductsState.getProducts).pipe(
+       switchMap(products => {
+         if (products.length === 0) {
+          return this.productsService.fetchProducts();
+         } else { return products; }
+         }
+       ),
+       take(1)
+     ).subscribe();
   }
 }
+
+
 

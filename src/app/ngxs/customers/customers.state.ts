@@ -1,6 +1,6 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 
-import { CustomerModel } from '../../core/models/customer.model';
+import { CustomerModel } from '../../shared/models/customer.model';
 import { CustomersRequestAction } from '../requests/customers/customers-request.action';
 
 import {

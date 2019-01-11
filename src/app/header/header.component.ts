@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { InvoicesService } from '../core/services/invoices-services/invoices.service';
-import { InvoiceModel } from '../core/models/invoice.model';
 
 @Component({
   selector: 'app-header',
@@ -11,7 +11,7 @@ import { InvoiceModel } from '../core/models/invoice.model';
 })
 export class HeaderComponent implements OnInit {
 
-  invoicesCount$: Observable<InvoiceModel[]>;
+  invoicesCount$: Observable<number>;
 
   navLinks: { path: string, label: string }[] = [
     {path: '/products', label: 'Products'},
@@ -23,7 +23,9 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.invoicesCount$ = this.invoicesService.invoices$;
+    this.invoicesCount$ = this.invoicesService.invoices$.pipe(
+      map(invoices => invoices.length)
+    );
   }
 
 }

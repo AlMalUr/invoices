@@ -1,21 +1,18 @@
-import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
 
-import { CustomersRequestService } from '../../../core/services/customers-services/customers-request.service';
+import { RequestService } from '../../../core/services/request.service';
 import { FetchCustomersFailed, FetchCustomersSuccess } from '../../customers/customers.actions';
 import { IRequest } from '../requests.interface';
 
 import { CustomersRequestAction, CustomersRequestFailAction, CustomersRequestSuccessAction } from './customers-request.action';
 
-export interface CustomersRequestStateModel extends IRequest {
 
-}
-
-@State<CustomersRequestStateModel>({
+@State<IRequest>({
   name: 'customersRequestState',
   defaults: {
     loading: false,
-    load: false,
+    loaded: false,
     status: '',
     data: null,
   },
@@ -23,25 +20,25 @@ export interface CustomersRequestStateModel extends IRequest {
 export class CustomersRequestState {
 
   constructor(
-    private customersRequestService: CustomersRequestService,
+    private requestService: RequestService,
   ) {
   }
 
   @Selector([CustomersRequestState])
-  static getLoad(state: CustomersRequestStateModel): boolean {
-    return state.load;
+  static getLoad(state: IRequest): boolean {
+    return state.loaded;
   }
 
   @Action(CustomersRequestAction)
-  customersRequest(ctx: StateContext<CustomersRequestStateModel>, action: CustomersRequestAction) {
+  customersRequest(ctx: StateContext<IRequest>, action: CustomersRequestAction) {
     ctx.patchState({
       loading: true,
-      load: false,
+      loaded: false,
       status: '',
       data: null,
     });
-    return this.customersRequestService
-    .fetchCustomers()
+    return this.requestService
+    .fetch('customers')
     .pipe(
       tap((res: any) => {
         return ctx.dispatch(new CustomersRequestSuccessAction(res));
@@ -54,12 +51,12 @@ export class CustomersRequestState {
 
   @Action(CustomersRequestSuccessAction)
   customersRequestSuccess(
-    ctx: StateContext<CustomersRequestStateModel>,
+    ctx: StateContext<IRequest>,
     action: CustomersRequestSuccessAction
   ) {
     ctx.patchState({
       loading: false,
-      load: true,
+      loaded: true,
       status: 'success',
       data: action.payload.data,
     });
@@ -67,10 +64,10 @@ export class CustomersRequestState {
   }
 
   @Action(CustomersRequestFailAction)
-  customersRequestFail(ctx: StateContext<CustomersRequestStateModel>, action: CustomersRequestFailAction) {
+  customersRequestFail(ctx: StateContext<IRequest>, action: CustomersRequestFailAction) {
     ctx.patchState({
       loading: false,
-      load: true,
+      loaded: true,
       status: 'fail',
       data: action.payload,
     });

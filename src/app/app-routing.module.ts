@@ -2,29 +2,32 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { CustomersResolverService } from './core/resolvers/customers-resolver.service';
-import { InvoicesResolverService } from './core/resolvers/invoices-resolver.service';
 import { ProductsResolverService } from './core/resolvers/products-resolver.service';
 
 const routes: Routes = [
   {
     path: 'products',
-    loadChildren: './content/products/products.module#ProductsModule',
-    resolve: [ProductsResolverService]
+    loadChildren: './products/products.module#ProductsModule',
+    resolve: {
+      products: ProductsResolverService
+    }
   },
   {
     path: 'customers',
-    loadChildren: './content/customers/customers.module#CustomersModule',
-    resolve: [CustomersResolverService]
+    loadChildren: './customers/customers.module#CustomersModule',
+    resolve: {
+      customer: CustomersResolverService
+    }
   },
   {
     path: '',
-    loadChildren: './content/invoices/invoices.module#InvoicesModule',
-    resolve: [InvoicesResolverService, CustomersResolverService]
+    loadChildren: './invoices/invoices.module#InvoicesModule',
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: []
 })
 export class AppRoutingModule { }

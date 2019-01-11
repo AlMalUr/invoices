@@ -1,6 +1,6 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 
-import { InvoiceModel } from '../../core/models/invoice.model';
+import { InvoiceModel } from '../../shared/models/invoice.model';
 import { InvoicesRequestAction } from '../requests/invoices/invoices-request.action';
 
 import {

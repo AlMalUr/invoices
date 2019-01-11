@@ -1,6 +1,6 @@
 <div class="header-container">
   <mat-toolbar class="menu" color="primary">
-    <a class="logo" href="/">Custom Toolbar</a>
+    <a class="logo" routerLink="/">Custom Toolbar</a>
     <nav mat-tab-nav-bar color="warn">
       <a mat-tab-link
          *ngFor="let link of navLinks"
@@ -9,7 +9,7 @@
          [active]="rla.isActive"
          [routerLinkActiveOptions]="{exact: true}">
         {{link.label}}
-        <span *ngIf="(link.label === 'Invoices') && ((invoicesCount$ |async).length !== 0)">({{(invoicesCount$ | async).length}})</span>
+        <span *ngIf="(link.label === 'Invoices') && ((invoicesCount$ | async) !== 0)">({{invoicesCount$ | async}})</span>
       </a>
     </nav>
     <button mat-flat-button>new invoice</button>

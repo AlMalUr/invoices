@@ -5,18 +5,23 @@ import { map } from 'rxjs/operators';
 import { InvoicesService } from '../../core/services/invoices-services/invoices.service';
 
 @Component({
-  selector: 'app-invoices',
-  templateUrl: './invoices.component.html',
-  styleUrls: ['./invoices.component.scss']
+  selector: 'app-invoices-all',
+  templateUrl: './invoices-all.component.html',
+  styleUrls: ['./invoices-all.component.scss']
 })
-export class InvoicesComponent implements OnInit {
+export class InvoicesAllComponent implements OnInit {
 
+  selected;
   invoices$: Observable<any>;
 
   displayedColumns: string[] = ['number', 'customerId', 'customerName', 'discount', 'total', 'actions'];
 
   constructor(private invoicesService: InvoicesService) { }
 
+  selectedInvoice(invoice) {
+    this.selected = invoice;
+    console.log(invoice);
+  }
   ngOnInit() {
     this.invoices$ = combineLatest(this.invoicesService.invoices$, this.invoicesService.customers$).pipe(
       map( ([invoices, customers]) => invoices.map(invoice => ({
