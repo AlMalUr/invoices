@@ -11,7 +11,7 @@ export class RequestService {
   constructor(private http: HttpClient) { }
 
   fetch(url) {
-    return this.http.get<CustomerModel[]>(url);
+    return this.http.get<any>(url);
   }
 
 }

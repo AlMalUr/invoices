@@ -1,24 +1,20 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 
-import { ProductModel } from '../../shared/models/product.model';
-import { ProductsRequestAction } from '../requests/products/products-request.action';
+import { InvoiceItemModel } from '../../shared/models/invoice-item.model';
+import { InvoiceItemRequestAction } from '../requests/invoice-item/invoice-item-request.action';
 
-import {
-  FetchProducts,
-  FetchProductsFailed,
-  FetchProductsSuccess
-} from './invoice-item.actions';
+import { FetchInvoiceItem, FetchInvoiceItemFailed, FetchInvoiceItemSuccess } from './invoice-item.actions';
 
-export class InvoiceViewStateModel {
-  products: { [ids: string]: ProductModel };
-  productsIds: string[];
+export class InvoiceItemStateModel {
+  invoices: { [ids: string]: InvoiceItemModel };
+  invoicesIds: string[];
 }
 
-@State<ProductsStateModel>({
-  name: 'products',
+@State<InvoiceItemStateModel>({
+  name: 'invoiceItem',
   defaults: {
-    products: {},
-    productsIds: []
+    invoices: {},
+    invoicesIds: []
   }
 })
 export class InvoiceItemState {
@@ -28,37 +24,37 @@ export class InvoiceItemState {
   }
 
   @Selector()
-  static getProducts(state: ProductsStateModel) {
-    return state.productsIds.map(id => state.products[id]);
+  static getInvoiceItem(state: InvoiceItemStateModel) {
+    return state.invoicesIds.map(id => state.invoices[id]);
   }
 
-  @Action(FetchProducts)
-  fetchProducts({dispatch}: StateContext<ProductsStateModel>) {
-    dispatch(new ProductsRequestAction);
+  @Action(FetchInvoiceItem)
+  fetchInvoiceItem({dispatch}: StateContext<InvoiceItemModel>, {payload: id}: FetchInvoiceItem) {
+    dispatch(new InvoiceItemRequestAction(id));
   }
 
-  @Action(FetchProductsSuccess)
-  fetchProductsSuccess(
-    {setState}: StateContext<ProductsStateModel>,
-    {payload: prod}: FetchProductsSuccess
+  @Action(FetchInvoiceItemSuccess)
+  fetchInvoiceItemSuccess(
+    {patchState}: StateContext<InvoiceItemStateModel>,
+    {payload: invoiceItem}: FetchInvoiceItemSuccess
   ) {
-    setState({
-      products: prod.reduce((acc, item) => ({
+    patchState({
+      invoices: invoiceItem.reduce((acc, item) => ({
         ...acc,
         [item._id]: item
       }), {}),
-      productsIds: prod.map(item => item._id)
+      invoicesIds: invoiceItem.map(item => item._id)
     });
   }
 
 
-  @Action(FetchProductsFailed)
-  ProductsFailed(
-    {dispatch}: StateContext<ProductModel>,
-    {payload: error}: FetchProductsFailed
+  @Action(FetchInvoiceItemFailed)
+  InvoiceItemFailed(
+    {dispatch}: StateContext<InvoiceItemModel>,
+    {payload: error}: FetchInvoiceItemFailed
   ) {
 
-      console.error('An error occured: ', error.message)
+      console.error('An error occured: ', error.message);
 
   }
 

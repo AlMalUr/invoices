@@ -5,6 +5,8 @@ import { InvoiceItemModel } from '../../shared/models/invoice-item.model';
 
 export class FetchInvoiceItem {
   static readonly type = '[InvoiceItem] FetchInvoiceItem';
+  constructor(private payload: string) {
+  }
 }
 
 export class FetchInvoiceItemSuccess {

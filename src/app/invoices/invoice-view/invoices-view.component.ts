@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, find, map } from 'rxjs/operators';
 
 import { InvoicesService } from '../../core/services/invoices-services/invoices.service';
+import { InvoiceItemService } from '../../core/services/invoice-item-servises/invoice-item.service';
+import { ProductsService } from '../../core/services/products-services/products.service';
 
 @Component({
   selector: 'app-invoices-view',
@@ -13,33 +15,42 @@ import { InvoicesService } from '../../core/services/invoices-services/invoices.
 export class InvoicesViewComponent implements OnInit, OnDestroy {
 
   invoices$;
-  id;
+  invoiceId;
 
   displayedColumns: string[] = ['number', 'products', 'qty', 'price'];
 
-  constructor(private invoicesService: InvoicesService, private route: ActivatedRoute, private router: Router) { }
+  constructor(
+    private invoiceItemService: InvoiceItemService,
+    private invoicesService: InvoicesService,
+    private productsService: ProductsService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
+  }
+
 
   ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id');
-    console.log(this.id);
-    this.invoices$ = combineLatest(this.invoicesService.invoices$, this.invoicesService.customers$).pipe(
-      map( ([invoices, customers]) => invoices.map(invoice => ({
-          ...invoice,
-          customer: customers.find(customer => invoice.customer_id === customer._id)
+    this.invoicesService.selectedItem$.subscribe(invoiceId => this.invoiceId = invoiceId);
+    //  this.invoices$ = this.invoiceItemService.invoiceItem$;
+    this.invoices$ = combineLatest(
+      this.productsService.products$,
+      this.invoicesService.invoices$,
+      this.invoicesService.customers$,
+      this.invoiceItemService.invoiceItem$
+    ).pipe(
+      map(([products, invoices, customers, invoiceItem]) => invoiceItem.map(inv => ({
+        ...inv,
+        products: products.filter(x => x._id === inv.product_id),
+        invoices: invoices.filter(x => x._id === inv.invoice_id),
+        customers: customers.find(x => x._id === inv)
         }))
-      ),
-      map(invoices => invoices.filter(invoice => invoice.customer_id === this.id))
-    );
+      )
+    ).subscribe(x => console.log(x));
 
   }
-  ngOnDestroy() {
 
+  ngOnDestroy() {
+    this.invoices$.unsubscribe();
   }
 
 }
-
-// getHero(): void {
-//   const id = +this.route.snapshot.paramMap.get('id');
-// this.heroService.getHero(id)
-// .subscribe(hero => this.hero = hero);
-// }

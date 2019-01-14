@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 import { CustomersState } from '../../../ngxs/customers/customers.state';
 import { FetchInvoices } from '../../../ngxs/invoices/invoices.actions';
@@ -12,6 +12,8 @@ import { InvoiceModel } from '../../../shared/models/invoice.model';
   providedIn: 'root'
 })
 export class InvoicesService {
+
+  selectedItem$: BehaviorSubject<string> = new BehaviorSubject('');
 
   @Select(InvoicesState.getInvoices) invoices$: Observable<InvoiceModel[]>;
   @Select(CustomersState.getCustomers) customers$: Observable<CustomerModel[]>;

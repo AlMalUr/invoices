@@ -11,16 +11,14 @@ import { InvoicesService } from '../../core/services/invoices-services/invoices.
 })
 export class InvoicesAllComponent implements OnInit {
 
-  selected;
   invoices$: Observable<any>;
 
   displayedColumns: string[] = ['number', 'customerId', 'customerName', 'discount', 'total', 'actions'];
 
   constructor(private invoicesService: InvoicesService) { }
 
-  selectedInvoice(invoice) {
-    this.selected = invoice;
-    console.log(invoice);
+  selectedInvoice(invoiceId) {
+    this.invoicesService.selectedItem$.next(invoiceId);
   }
   ngOnInit() {
     this.invoices$ = combineLatest(this.invoicesService.invoices$, this.invoicesService.customers$).pipe(

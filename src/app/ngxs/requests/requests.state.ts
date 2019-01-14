@@ -4,6 +4,7 @@ import { CustomersRequestState } from './customers/customers-request.state';
 import { InvoicesRequestState } from './invoices/invoices-request.state';
 import { ProductsRequestState } from './products/products-request.state';
 import { IRequest } from './requests.interface';
+import { InvoiceItemRequestState } from './invoice-item/invoice-item-request.state';
 
 export class RequestsStateModel {
 }
@@ -14,14 +15,16 @@ export class RequestsStateModel {
   children: [
     CustomersRequestState,
     ProductsRequestState,
-    InvoicesRequestState
+    InvoicesRequestState,
+    InvoiceItemRequestState
   ]
 })
 export class RequestsState {
   @Selector([
     CustomersRequestState,
     ProductsRequestState,
-    InvoicesRequestState
+    InvoicesRequestState,
+    InvoiceItemRequestState
   ])
   static loadingStatus(...states: IRequest[]): boolean {
     return states

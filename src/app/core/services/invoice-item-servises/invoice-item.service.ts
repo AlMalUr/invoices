@@ -1,24 +1,33 @@
 import { Injectable } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
 
-import { FetchProducts } from '../../../ngxs/products/products.actions';
-import { ProductsState } from '../../../ngxs/products/products.state';
-import { ProductModel } from '../../../shared/models/product.model';
 import { FetchInvoiceItem } from '../../../ngxs/invoice-item/invoice-item.actions';
+import { ActivatedRoute } from '@angular/router';
+import { InvoicesService } from '../invoices-services/invoices.service';
+import { map } from 'rxjs/operators';
+import { InvoiceItemState } from '../../../ngxs/invoice-item/invoice-item.state';
+import { InvoiceItemModel } from '../../../shared/models/invoice-item.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InvoiceItemService {
 
-  // @Select(ProductsState.getProducts) products$: Observable<ProductModel[]>;
+  id;
 
-  constructor(private store: Store) {
+  @Select(InvoiceItemState.getInvoiceItem) invoiceItem$: Observable<InvoiceItemModel[]>;
+
+  constructor(
+    private store: Store,
+    private invoicesService: InvoicesService
+  ) {
+    this.invoicesService.selectedItem$.subscribe(id => this.id = id)
+    ;
   }
 
-  fetchInvoiceview() {
-    return this.store.dispatch(new FetchInvoiceItem());
+  fetchInvoiceView() {
+    return this.store.dispatch(new FetchInvoiceItem(this.id));
   }
 
 }

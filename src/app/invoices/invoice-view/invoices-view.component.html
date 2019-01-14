@@ -3,10 +3,10 @@
     <div class="invoice__info-area">
       <div class="info-area__id">
         <div class="info-area__title">
-        Invoice: <span class="info-area__customer-id">{{(invoices$ | async)[0].customer_id}}</span>
+        Invoice: <span class="info-area__customer-id">12<!--{{(invoices$ | async)[0]?.invoice_id}}--></span>
         </div>
 
-        <div class="info-area__customer-name">{{(invoices$ | async)[0].customer.name}}</div>
+        <div class="info-area__customer-name">name</div>
       </div>
 
         <mat-table [dataSource]="(invoices$ | async)" class="mat-elevation-z8">
@@ -22,7 +22,7 @@
 
           <ng-container matColumnDef="qty">
             <mat-header-cell class="qty" *matHeaderCellDef> Qty </mat-header-cell>
-            <mat-cell class="qty" *matCellDef="let element"> 1234 </mat-cell>
+            <mat-cell class="qty" *matCellDef="let element"> <!--{{element.quantity}}--> </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="price">
@@ -41,7 +41,7 @@
     </div>
     <div class="invoice__discount-area">
       <div class="discount-area__title">Discount %</div>
-      <div class="discount-area__amount">{{(invoices$ | async)[0].discount}}</div>
+      <div class="discount-area__amount">discount</div>
     </div>
   </div>
 </div>
