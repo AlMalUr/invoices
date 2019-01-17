@@ -1,36 +1,32 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 
 import { InvoiceItemModel } from '../../shared/models/invoice-item.model';
-import { InvoiceItemRequestAction } from '../requests/invoice-item/invoice-item-request.action';
+import { InvoiceItemRequest, InvoiceItemRequestReset } from '../requests/invoice-item/invoice-item-request.action';
 
-import { FetchInvoiceItem, FetchInvoiceItemFailed, FetchInvoiceItemSuccess } from './invoice-item.actions';
+import { FetchInvoiceItem, FetchInvoiceItemSuccess, ResetInvoiceItem, } from './invoice-item.actions';
 
 export class InvoiceItemStateModel {
-  invoices: { [ids: string]: InvoiceItemModel };
-  invoicesIds: string[];
+  invoice: { [ids: string]: InvoiceItemModel };
+  invoiceId: string[];
 }
 
 @State<InvoiceItemStateModel>({
   name: 'invoiceItem',
   defaults: {
-    invoices: {},
-    invoicesIds: []
+    invoice: {},
+    invoiceId: []
   }
 })
 export class InvoiceItemState {
 
-  constructor(
-  ) {
-  }
-
   @Selector()
   static getInvoiceItem(state: InvoiceItemStateModel) {
-    return state.invoicesIds.map(id => state.invoices[id]);
+    return state.invoiceId.map(id => state.invoice[id]);
   }
 
   @Action(FetchInvoiceItem)
   fetchInvoiceItem({dispatch}: StateContext<InvoiceItemModel>, {payload: id}: FetchInvoiceItem) {
-    dispatch(new InvoiceItemRequestAction(id));
+    dispatch(new InvoiceItemRequest(id));
   }
 
   @Action(FetchInvoiceItemSuccess)
@@ -39,23 +35,23 @@ export class InvoiceItemState {
     {payload: invoiceItem}: FetchInvoiceItemSuccess
   ) {
     patchState({
-      invoices: invoiceItem.reduce((acc, item) => ({
+      invoice: invoiceItem.reduce((acc, item) => ({
         ...acc,
         [item._id]: item
       }), {}),
-      invoicesIds: invoiceItem.map(item => item._id)
+      invoiceId: invoiceItem.map(item => item._id)
     });
   }
 
-
-  @Action(FetchInvoiceItemFailed)
-  InvoiceItemFailed(
-    {dispatch}: StateContext<InvoiceItemModel>,
-    {payload: error}: FetchInvoiceItemFailed
+  @Action(ResetInvoiceItem)
+  resetInvoiceItem(
+    {setState, dispatch}: StateContext<InvoiceItemStateModel>,
   ) {
-
-      console.error('An error occured: ', error.message);
-
+    setState({
+      invoice: {},
+      invoiceId: []
+    });
+    dispatch(new InvoiceItemRequestReset());
   }
 
 }

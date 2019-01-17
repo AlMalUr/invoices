@@ -1,14 +1,15 @@
-import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Action, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
 
 import { RequestService } from '../../../core/services/request.service';
-import { FetchInvoiceItemFailed, FetchInvoiceItemSuccess } from '../../invoice-item/invoice-item.actions';
+import { FetchInvoiceItemSuccess, } from '../../invoice-item/invoice-item.actions';
 import { IRequest } from '../requests.interface';
 
 import {
-  InvoiceItemRequestAction,
-  InvoiceItemRequestFailAction,
-  InvoiceItemRequestSuccessAction,
+  InvoiceItemRequest,
+  InvoiceItemRequestFail,
+  InvoiceItemRequestReset,
+  InvoiceItemRequestSuccess,
 } from './invoice-item-request.action';
 
 
@@ -28,13 +29,8 @@ export class InvoiceItemRequestState {
   ) {
   }
 
-  @Selector()
-  static getLoad(state: IRequest): boolean {
-    return state.loaded;
-  }
-
-  @Action(InvoiceItemRequestAction)
-  invoiceItemRequest(ctx: StateContext<IRequest>, {payload: id}: InvoiceItemRequestAction) {
+  @Action(InvoiceItemRequest)
+  invoiceItemRequest(ctx: StateContext<IRequest>, {payload: id}: InvoiceItemRequest) {
     ctx.patchState({
       loading: true,
       loaded: false,
@@ -42,21 +38,21 @@ export class InvoiceItemRequestState {
       data: null,
     });
     return this.requestService
-    .fetch('invoices/' + id + '/items')
+    .get('invoices/' + id + '/items')
     .pipe(
       tap((res: any) => {
-        return ctx.dispatch(new InvoiceItemRequestSuccessAction(res));
+        return ctx.dispatch(new InvoiceItemRequestSuccess(res));
       }),
       catchError(error => {
-        return ctx.dispatch(new InvoiceItemRequestFailAction(error));
+        return ctx.dispatch(new InvoiceItemRequestFail(error));
       }),
     );
   }
 
-  @Action(InvoiceItemRequestSuccessAction)
+  @Action(InvoiceItemRequestSuccess)
   invoiceItemRequestSuccess(
     ctx: StateContext<IRequest>,
-    {payload}: InvoiceItemRequestSuccessAction
+    {payload}: InvoiceItemRequestSuccess
   ) {
     ctx.patchState({
       loading: false,
@@ -67,15 +63,24 @@ export class InvoiceItemRequestState {
     ctx.dispatch(new FetchInvoiceItemSuccess(payload));
   }
 
-  @Action(InvoiceItemRequestFailAction)
-  invoiceItemRequestFail(ctx: StateContext<IRequest>, {payload}: InvoiceItemRequestFailAction) {
+  @Action(InvoiceItemRequestFail)
+  invoiceItemRequestFail(ctx: StateContext<IRequest>, {payload}: InvoiceItemRequestFail) {
     ctx.patchState({
       loading: false,
       loaded: true,
       status: 'fail',
       data: payload,
     });
-    ctx.dispatch(new FetchInvoiceItemFailed(payload));
+    console.error('An error occured: ', payload.message);
   }
 
+  @Action(InvoiceItemRequestReset)
+  invoiceItemRequestReset({patchState}: StateContext<IRequest>) {
+    patchState({
+      loading: false,
+      loaded: false,
+      status: 'reset',
+      data: null
+    });
+  }
 }

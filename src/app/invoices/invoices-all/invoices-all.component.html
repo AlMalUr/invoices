@@ -32,8 +32,7 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell class="actions" *matHeaderCellDef> Actions </mat-header-cell>
       <mat-cell class="actions" *matCellDef="let invoice">
-        <button color="primary" mat-flat-button routerLink="{{invoice._id}}/item"
-                (click)="selectedInvoice(invoice._id)">View</button>
+        <button color="primary" mat-flat-button routerLink="{{invoice._id}}/item">View</button>
         <button color="accent" mat-flat-button>Edit</button>
         <button color="warn" mat-flat-button>Delete</button>
       </mat-cell>

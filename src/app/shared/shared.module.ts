@@ -17,7 +17,7 @@ import { RouterModule } from '@angular/router';
     MatTabsModule,
     MatMenuModule,
     MatTableModule,
-    RouterModule
+    RouterModule,
   ],
   exports: [
     CommonModule,
@@ -26,7 +26,7 @@ import { RouterModule } from '@angular/router';
     MatTabsModule,
     MatMenuModule,
     MatTableModule,
-    RouterModule
+    RouterModule,
   ]
 })
 export class SharedModule { }

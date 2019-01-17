@@ -1,12 +1,11 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 
 import { CustomerModel } from '../../shared/models/customer.model';
-import { CustomersRequestAction } from '../requests/customers/customers-request.action';
+import { CustomersRequest } from '../requests/customers/customers-request.action';
 
 import {
   FetchCustomers,
-  FetchCustomersFailed,
-  FetchCustomersSuccess
+  FetchCustomersSuccess,
 } from './customers.actions';
 
 export class CustomersStateModel {
@@ -23,10 +22,6 @@ export class CustomersStateModel {
 })
 export class CustomersState {
 
-  constructor(
-  ) {
-  }
-
   @Selector()
   static getCustomers(state: CustomersStateModel) {
     return state.customersIds.map(id => state.customers[id]);
@@ -35,7 +30,7 @@ export class CustomersState {
 
   @Action(FetchCustomers)
   fetchCustomers({dispatch}: StateContext<CustomersStateModel>) {
-    dispatch(new CustomersRequestAction);
+    dispatch(new CustomersRequest);
   }
 
   @Action(FetchCustomersSuccess)
@@ -51,18 +46,6 @@ export class CustomersState {
       customersIds: custom.map(item => item._id)
     });
   }
-
-
-  @Action(FetchCustomersFailed)
-  CustomersFailed(
-    {dispatch}: StateContext<CustomerModel>,
-    {payload: error}: FetchCustomersFailed
-  ) {
-    dispatch(
-      console.error('An error occured: ', error.message)
-    );
-  }
-
 }
 
 

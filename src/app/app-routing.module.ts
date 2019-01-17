@@ -22,7 +22,8 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: './invoices/invoices.module#InvoicesModule',
-  }
+  },
+  {path: '**', redirectTo: '/invoices'}
 ];
 
 @NgModule({

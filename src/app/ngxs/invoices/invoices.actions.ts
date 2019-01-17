@@ -1,5 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
-
 import { InvoiceModel } from '../../shared/models/invoice.model';
 
 
@@ -11,12 +9,5 @@ export class FetchInvoicesSuccess {
   static readonly type = '[Invoices] FetchInvoicesSuccess';
 
   constructor(private payload: InvoiceModel[]) {
-  }
-}
-
-export class FetchInvoicesFailed {
-  static readonly type = '[Invoices] FetchInvoicesFailed';
-
-  constructor(private payload: HttpErrorResponse) {
   }
 }

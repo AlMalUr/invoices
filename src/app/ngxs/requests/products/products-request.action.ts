@@ -1,17 +1,21 @@
-export class ProductsRequestAction {
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { ProductModel } from '../../../shared/models/product.model';
+
+export class ProductsRequest {
   static type = '[ProductsRequest] ProductsRequest';
 }
 
-export class ProductsRequestSuccessAction {
+export class ProductsRequestSuccess {
   static type = '[ProductsRequest] ProductsRequestSuccess';
 
-  constructor(public payload: any) {
+  constructor(public payload: ProductModel[]) {
   }
 }
 
-export class ProductsRequestFailAction {
+export class ProductsRequestFail {
   static type = '[ProductsRequest] ProductsRequestFailed';
 
-  constructor(public payload: any) {
+  constructor(public payload: HttpErrorResponse) {
   }
 }

@@ -22,7 +22,7 @@ const routes: Routes = [
   },
   {
     path: 'invoices/:id/item',
-    loadChildren: './invoice-view/invoices-view.module#InvoicesViewModule',
+    loadChildren: './invoice-item/invoice-item.module#InvoiceItemModule',
     resolve: {
       invoices: InvoicesResolverService,
       customers: CustomersResolverService,

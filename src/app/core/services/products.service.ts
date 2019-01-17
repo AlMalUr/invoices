@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
-import { FetchProducts } from '../../../ngxs/products/products.actions';
-import { ProductsState } from '../../../ngxs/products/products.state';
-import { ProductModel } from '../../../shared/models/product.model';
+import { FetchProducts } from '../../ngxs/products/products.actions';
+import { ProductsState } from '../../ngxs/products/products.state';
+import { ProductModel } from '../../shared/models/product.model';
 
 @Injectable({
   providedIn: 'root'

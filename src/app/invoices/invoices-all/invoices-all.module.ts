@@ -8,7 +8,7 @@ import { InvoicesAllComponent } from './invoices-all.component';
 @NgModule({
   imports: [
     InvoicesAllRoutingModule,
-    SharedModule
+    SharedModule,
   ],
   declarations: [InvoicesAllComponent]
 })

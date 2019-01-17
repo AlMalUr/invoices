@@ -1,12 +1,11 @@
-import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Action, Selector, State, StateContext, } from '@ngxs/store';
 
-import { ProductModel } from '../../shared/models/product.model';
-import { ProductsRequestAction } from '../requests/products/products-request.action';
+import { ProductModel, } from '../../shared/models/product.model';
+import { ProductsRequest, } from '../requests/products/products-request.action';
 
 import {
   FetchProducts,
-  FetchProductsFailed,
-  FetchProductsSuccess
+  FetchProductsSuccess,
 } from './products.actions';
 
 export class ProductsStateModel {
@@ -23,10 +22,6 @@ export class ProductsStateModel {
 })
 export class ProductsState {
 
-  constructor(
-  ) {
-  }
-
   @Selector()
   static getProducts(state: ProductsStateModel) {
     return state.productsIds.map(id => state.products[id]);
@@ -34,33 +29,23 @@ export class ProductsState {
 
   @Action(FetchProducts)
   fetchProducts({dispatch}: StateContext<ProductsStateModel>) {
-    dispatch(new ProductsRequestAction);
+    dispatch(new ProductsRequest);
   }
 
   @Action(FetchProductsSuccess)
   fetchProductsSuccess(
     {setState}: StateContext<ProductsStateModel>,
-    {payload: prod}: FetchProductsSuccess
+    {payload: product}: FetchProductsSuccess
   ) {
-    setState({
-      products: prod.reduce((acc, item) => ({
+    const products = product.reduce((acc, item) => ({
         ...acc,
         [item._id]: item
-      }), {}),
-      productsIds: prod.map(item => item._id)
+      }), {});
+    const productsIds = product.map(item => item._id);
+    setState({
+      products,
+      productsIds,
     });
   }
-
-
-  @Action(FetchProductsFailed)
-  ProductsFailed(
-    {dispatch}: StateContext<ProductModel>,
-    {payload: error}: FetchProductsFailed
-  ) {
-
-      console.error('An error occured: ', error.message)
-
-  }
-
 }
 

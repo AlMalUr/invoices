@@ -23,7 +23,7 @@ import { RequestsState } from './requests/requests.state';
       CustomersRequestState,
       ProductsRequestState,
       InvoicesRequestState,
-      InvoiceItemRequestState
+      InvoiceItemRequestState,
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot()
   ]

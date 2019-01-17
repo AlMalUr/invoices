@@ -16,7 +16,7 @@ export class RequestsStateModel {
     CustomersRequestState,
     ProductsRequestState,
     InvoicesRequestState,
-    InvoiceItemRequestState
+    InvoiceItemRequestState,
   ]
 })
 export class RequestsState {

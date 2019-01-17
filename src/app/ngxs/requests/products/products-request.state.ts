@@ -1,14 +1,14 @@
-import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Action, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
 
 import { RequestService } from '../../../core/services/request.service';
-import { FetchProductsFailed, FetchProductsSuccess } from '../../products/products.actions';
+import { FetchProductsSuccess } from '../../products/products.actions';
 import { IRequest } from '../requests.interface';
 
 import {
-  ProductsRequestAction,
-  ProductsRequestFailAction,
-  ProductsRequestSuccessAction,
+  ProductsRequest,
+  ProductsRequestFail,
+  ProductsRequestSuccess,
 } from './products-request.action';
 
 
@@ -28,13 +28,8 @@ export class ProductsRequestState {
   ) {
   }
 
-  @Selector()
-  static getLoad(state: IRequest): boolean {
-    return state.loaded;
-  }
-
-  @Action(ProductsRequestAction)
-  productsRequest(ctx: StateContext<IRequest>, action: ProductsRequestAction) {
+  @Action(ProductsRequest)
+  productsRequest(ctx: StateContext<IRequest>, action: ProductsRequest) {
     ctx.patchState({
       loading: true,
       loaded: false,
@@ -42,21 +37,21 @@ export class ProductsRequestState {
       data: null,
     });
     return this.requestService
-    .fetch('products')
+    .get('products')
     .pipe(
       tap((res: any) => {
-        return ctx.dispatch(new ProductsRequestSuccessAction(res));
+        return ctx.dispatch(new ProductsRequestSuccess(res));
       }),
       catchError(error => {
-        return ctx.dispatch(new ProductsRequestFailAction(error));
+        return ctx.dispatch(new ProductsRequestFail(error));
       }),
     );
   }
 
-  @Action(ProductsRequestSuccessAction)
+  @Action(ProductsRequestSuccess)
   productsRequestSuccess(
     ctx: StateContext<IRequest>,
-    {payload}: ProductsRequestSuccessAction
+    {payload}: ProductsRequestSuccess
   ) {
     ctx.patchState({
       loading: false,
@@ -67,15 +62,14 @@ export class ProductsRequestState {
     ctx.dispatch(new FetchProductsSuccess(payload));
   }
 
-  @Action(ProductsRequestFailAction)
-  productsRequestFail(ctx: StateContext<IRequest>, {payload}: ProductsRequestFailAction) {
+  @Action(ProductsRequestFail)
+  productsRequestFail(ctx: StateContext<IRequest>, {payload}: ProductsRequestFail) {
     ctx.patchState({
       loading: false,
       loaded: true,
       status: 'fail',
       data: payload,
     });
-    ctx.dispatch(new FetchProductsFailed(payload));
+    console.error('An error occured: ', payload.message);
   }
-
 }

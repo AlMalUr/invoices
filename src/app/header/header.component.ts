@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { InvoicesService } from '../core/services/invoices-services/invoices.service';
+import { InvoicesService } from '../core/services/invoices.service';
 
 @Component({
   selector: 'app-header',

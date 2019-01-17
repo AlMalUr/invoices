@@ -1,5 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
-
 import { InvoiceItemModel } from '../../shared/models/invoice-item.model';
 
 
@@ -16,9 +14,6 @@ export class FetchInvoiceItemSuccess {
   }
 }
 
-export class FetchInvoiceItemFailed {
-  static readonly type = '[InvoiceItem] FetchInvoiceItemFailed';
-
-  constructor(private payload: HttpErrorResponse) {
-  }
+export class ResetInvoiceItem {
+  static readonly type = '[InvoiceItem] ResetInvoiceItem';
 }

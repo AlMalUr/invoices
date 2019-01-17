@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
-import { Select, Store } from '@ngxs/store';
-import { take } from 'rxjs/operators';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { Store } from '@ngxs/store';
+
+import { Observable, of } from 'rxjs';
+import { filter, switchMap, take } from 'rxjs/operators';
 
 import { CustomersState } from '../../ngxs/customers/customers.state';
-import { CustomersRequestState } from '../../ngxs/requests/customers/customers-request.state';
-import { CustomersService } from '../services/customers-services/customers.service';
+import { CustomerModel } from '../../shared/models/customer.model';
+import { CustomersService } from '../services/customers.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class CustomersResolverService implements Resolve<any> {
-
-  @Select(CustomersRequestState.getLoad) load$: boolean;
+export class CustomersResolverService implements Resolve<CustomerModel[]> {
 
   constructor(
     private customersService: CustomersService,
@@ -21,13 +21,15 @@ export class CustomersResolverService implements Resolve<any> {
   ) {
   }
 
-  resolve() {
-    if (!this.store.selectSnapshot(CustomersState.getCustomers).length) {
-      return this.customersService.fetchCustomers().pipe(
-        take(1)
-      );
-    } else {
-      return this.store.selectSnapshot(CustomersState);
-    }
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<CustomerModel[]> {
+    return this.store.select(CustomersState.getCustomers).pipe(
+      switchMap(customers => {
+        return customers.length ? of(customers) : this.customersService.fetchCustomers();
+        }
+      ),
+      filter(customers => customers && customers.length),
+      take(1)
+    );
   }
 }
+

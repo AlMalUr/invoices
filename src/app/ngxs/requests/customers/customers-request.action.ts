@@ -1,15 +1,15 @@
-export class CustomersRequestAction {
+export class CustomersRequest {
   static type = '[CustomersRequest] CustomersRequest';
 }
 
-export class CustomersRequestSuccessAction {
+export class CustomersRequestSuccess {
   static type = '[CustomersRequest] CustomersRequestSuccess';
 
   constructor(public payload: any) {
   }
 }
 
-export class CustomersRequestFailAction {
+export class CustomersRequestFail {
   static type = '[CustomersRequest] CustomersRequestFailed';
 
   constructor(public payload: any) {

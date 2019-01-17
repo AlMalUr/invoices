@@ -8,7 +8,7 @@ import { CustomersComponent } from './customers.component';
 @NgModule({
   imports: [
     CustomersRoutingModule,
-    SharedModule
+    SharedModule,
   ],
   declarations: [CustomersComponent]
 })

@@ -1,12 +1,11 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 
 import { InvoiceModel } from '../../shared/models/invoice.model';
-import { InvoicesRequestAction } from '../requests/invoices/invoices-request.action';
+import { InvoicesRequest } from '../requests/invoices/invoices-request.action';
 
 import {
   FetchInvoices,
-  FetchInvoicesFailed,
-  FetchInvoicesSuccess
+  FetchInvoicesSuccess,
 } from './invoices.actions';
 
 export class InvoicesStateModel {
@@ -23,10 +22,6 @@ export class InvoicesStateModel {
 })
 export class InvoicesState {
 
-  constructor(
-  ) {
-  }
-
   @Selector()
   static getInvoices(state: InvoicesStateModel) {
     return state.invoicesIds.map(id => state.invoices[id]);
@@ -34,7 +29,7 @@ export class InvoicesState {
 
   @Action(FetchInvoices)
   fetchInvoices({dispatch}: StateContext<InvoicesStateModel>) {
-    dispatch(new InvoicesRequestAction);
+    dispatch(new InvoicesRequest);
   }
 
   @Action(FetchInvoicesSuccess)
@@ -50,17 +45,5 @@ export class InvoicesState {
       invoicesIds: inv.map(item => item._id)
     });
   }
-
-
-  @Action(FetchInvoicesFailed)
-  InvoicesFailed(
-    {dispatch}: StateContext<InvoiceModel>,
-    {payload: error}: FetchInvoicesFailed
-  ) {
-    dispatch(
-      console.error('An error occured: ', error.message)
-    );
-  }
-
 }
 

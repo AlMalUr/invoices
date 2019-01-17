@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { InvoicesViewComponent } from './invoices-view.component';
+import { InvoiceItemComponent } from './invoice-item.component';
 
 const routes: Routes = [
-  { path: '', component: InvoicesViewComponent },
+  { path: '', component: InvoiceItemComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class InvoicesViewRoutingModule { }
+export class InvoiceItemRoutingModule { }

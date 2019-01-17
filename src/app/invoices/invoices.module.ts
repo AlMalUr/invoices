@@ -4,10 +4,9 @@ import { NgModule } from '@angular/core';
 import { InvoicesRoutingModule } from './invoices-routing.module';
 
 @NgModule({
-  declarations: [],
   imports: [
     CommonModule,
-    InvoicesRoutingModule
+    InvoicesRoutingModule,
   ]
 })
 export class InvoicesModule { }
