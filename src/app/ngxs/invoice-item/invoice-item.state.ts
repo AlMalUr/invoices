@@ -6,22 +6,22 @@ import { InvoiceItemRequest, InvoiceItemRequestReset } from '../requests/invoice
 import { FetchInvoiceItem, FetchInvoiceItemSuccess, ResetInvoiceItem, } from './invoice-item.actions';
 
 export class InvoiceItemStateModel {
-  invoice: { [ids: string]: InvoiceItemModel };
-  invoiceId: string[];
+  entities: { [ids: string]: InvoiceItemModel };
+  collectionIds: string[];
 }
 
 @State<InvoiceItemStateModel>({
   name: 'invoiceItem',
   defaults: {
-    invoice: {},
-    invoiceId: []
+    entities: {},
+    collectionIds: []
   }
 })
 export class InvoiceItemState {
 
   @Selector()
   static getInvoiceItem(state: InvoiceItemStateModel) {
-    return state.invoiceId.map(id => state.invoice[id]);
+    return state.collectionIds.map(id => state.entities[id]);
   }
 
   @Action(FetchInvoiceItem)
@@ -35,11 +35,11 @@ export class InvoiceItemState {
     {payload: invoiceItem}: FetchInvoiceItemSuccess
   ) {
     patchState({
-      invoice: invoiceItem.reduce((acc, item) => ({
+      entities: invoiceItem.reduce((acc, item) => ({
         ...acc,
         [item._id]: item
       }), {}),
-      invoiceId: invoiceItem.map(item => item._id)
+      collectionIds: invoiceItem.map(item => item._id)
     });
   }
 
@@ -48,8 +48,8 @@ export class InvoiceItemState {
     {setState, dispatch}: StateContext<InvoiceItemStateModel>,
   ) {
     setState({
-      invoice: {},
-      invoiceId: []
+      entities: {},
+      collectionIds: []
     });
     dispatch(new InvoiceItemRequestReset());
   }

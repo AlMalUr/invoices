@@ -29,6 +29,14 @@ const routes: Routes = [
       invoiceItem: InvoiceItemResolverService,
       products: ProductsResolverService
     }
+  },
+  {
+    path: 'invoice-new',
+    loadChildren: './invoice-new/invoice-new.module#InvoiceNewModule',
+    resolve: {
+      products: ProductsResolverService,
+      customers: CustomersResolverService
+    }
   }
 ];
 

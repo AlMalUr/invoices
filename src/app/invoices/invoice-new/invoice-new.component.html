@@ -1,0 +1,39 @@
+<form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()">
+
+  <div>
+    Id: #
+    <span>1</span>
+  </div>
+
+
+  <div>
+    Product:
+    <select formArrayName="products">
+      <option *ngFor="let product of (products$ | async)" value="product.name">
+        {{product.name}}
+      </option>
+    </select>
+  </div>
+
+
+  <div>
+    Name:
+    <input type="text" formControlName="name">
+  </div>
+
+  <div>
+    Discount:
+    <input type="text" formControlName="discount">
+  </div>
+
+  <div>
+    Quantity:
+    <input type="text" formControlName="quantity">
+  </div>
+
+  <div>
+    Total:
+    <span ></span>
+  </div>
+  <button type="submit" [disabled]="!invoiceForm.valid">Submit</button>
+</form>

@@ -20,7 +20,8 @@ export class InvoiceItemService {
   }
 
   fetchInvoiceItem(id) {
-    return this.store.dispatch(new FetchInvoiceItem(id));
+    this.store.dispatch(new FetchInvoiceItem(id));
+    return this.invoiceItem$;
   }
 
   resetInvoiceItem() {

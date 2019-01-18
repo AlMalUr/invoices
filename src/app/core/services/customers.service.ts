@@ -17,7 +17,8 @@ export class CustomersService {
   }
 
   fetchCustomers() {
-     return this.store.dispatch(new FetchCustomers());
+    this.store.dispatch(new FetchCustomers());
+    return this.customers$;
   }
 
 }

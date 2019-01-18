@@ -9,22 +9,22 @@ import {
 } from './invoices.actions';
 
 export class InvoicesStateModel {
-  invoices: { [ids: string]: InvoiceModel };
-  invoicesIds: string[];
+  entities: { [ids: string]: InvoiceModel };
+  collectionIds: string[];
 }
 
 @State<InvoicesStateModel>({
   name: 'invoices',
   defaults: {
-    invoices: {},
-    invoicesIds: []
+    entities: {},
+    collectionIds: []
   }
 })
 export class InvoicesState {
 
   @Selector()
   static getInvoices(state: InvoicesStateModel) {
-    return state.invoicesIds.map(id => state.invoices[id]);
+    return state.collectionIds.map(id => state.entities[id]);
   }
 
   @Action(FetchInvoices)
@@ -38,11 +38,11 @@ export class InvoicesState {
     {payload: inv}: FetchInvoicesSuccess
   ) {
     setState({
-      invoices: inv.reduce((acc, item) => ({
+      entities: inv.reduce((acc, item) => ({
         ...acc,
         [item._id]: item
       }), {}),
-      invoicesIds: inv.map(item => item._id)
+      collectionIds: inv.map(item => item._id)
     });
   }
 }

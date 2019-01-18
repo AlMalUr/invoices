@@ -9,22 +9,22 @@ import {
 } from './products.actions';
 
 export class ProductsStateModel {
-  products: { [ids: string]: ProductModel };
-  productsIds: string[];
+  entities: { [ids: string]: ProductModel };
+  collectionIds: string[];
 }
 
 @State<ProductsStateModel>({
   name: 'products',
   defaults: {
-    products: {},
-    productsIds: []
+    entities: {},
+    collectionIds: []
   }
 })
 export class ProductsState {
 
   @Selector()
   static getProducts(state: ProductsStateModel) {
-    return state.productsIds.map(id => state.products[id]);
+    return state.collectionIds.map(id => state.entities[id]);
   }
 
   @Action(FetchProducts)
@@ -37,14 +37,14 @@ export class ProductsState {
     {setState}: StateContext<ProductsStateModel>,
     {payload: product}: FetchProductsSuccess
   ) {
-    const products = product.reduce((acc, item) => ({
+    const entities = product.reduce((acc, item) => ({
         ...acc,
         [item._id]: item
       }), {});
-    const productsIds = product.map(item => item._id);
+    const collectionIds = product.map(item => item._id);
     setState({
-      products,
-      productsIds,
+      entities,
+      collectionIds,
     });
   }
 }

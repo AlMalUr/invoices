@@ -17,7 +17,8 @@ export class ProductsService {
   }
 
   fetchProducts() {
-    return this.store.dispatch(new FetchProducts());
+    this.store.dispatch(new FetchProducts());
+    return this.products$;
   }
 
 }

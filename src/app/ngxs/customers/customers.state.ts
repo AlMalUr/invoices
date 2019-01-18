@@ -9,22 +9,22 @@ import {
 } from './customers.actions';
 
 export class CustomersStateModel {
-  customers: { [ids: string]: CustomerModel };
-  customersIds: string[];
+  entities: { [ids: string]: CustomerModel };
+  collectionIds: string[];
 }
 
 @State<CustomersStateModel>({
   name: 'customers',
   defaults: {
-    customers: {},
-    customersIds: []
+    entities: {},
+    collectionIds: []
   }
 })
 export class CustomersState {
 
   @Selector()
   static getCustomers(state: CustomersStateModel) {
-    return state.customersIds.map(id => state.customers[id]);
+    return state.collectionIds.map(id => state.entities[id]);
   }
 
 
@@ -39,11 +39,11 @@ export class CustomersState {
     {payload: custom}: FetchCustomersSuccess
   ) {
     setState({
-      customers: custom.reduce((acc, item) => ({
+      entities: custom.reduce((acc, item) => ({
         ...acc,
         [item._id]: item
       }), {}),
-      customersIds: custom.map(item => item._id)
+      collectionIds: custom.map(item => item._id)
     });
   }
 }

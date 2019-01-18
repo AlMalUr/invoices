@@ -14,13 +14,14 @@ import { InvoiceModel } from '../../shared/models/invoice.model';
 export class InvoicesService {
 
   @Select(InvoicesState.getInvoices) invoices$: Observable<InvoiceModel[]>;
-  @Select(CustomersState.getCustomers) customers$: Observable<CustomerModel[]>;
+//  @Select(CustomersState.getCustomers) customers$: Observable<CustomerModel[]>;
 
   constructor(private store: Store) {
   }
 
   fetchInvoices() {
-    return this.store.dispatch(new FetchInvoices());
+    this.store.dispatch(new FetchInvoices());
+    return this.invoices$;
   }
 
 }

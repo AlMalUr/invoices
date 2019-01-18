@@ -4,6 +4,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { InvoicesService } from '../../core/services/invoices.service';
+import { CustomersService } from '../../core/services/customers.service';
 
 @Component({
   selector: 'app-invoices-all',
@@ -16,12 +17,12 @@ export class InvoicesAllComponent implements OnInit {
 
   displayedColumns: string[] = ['number', 'customerId', 'customerName', 'discount', 'total', 'actions'];
 
-  constructor(private invoicesService: InvoicesService) { }
+  constructor(private invoicesService: InvoicesService, private customersService: CustomersService) { }
 
   ngOnInit() {
     this.invoices$ = combineLatest(
       this.invoicesService.invoices$,
-      this.invoicesService.customers$,
+      this.customersService.customers$,
     ).pipe(
       map( ([invoices, customers]) => invoices.map(invoice => ({
         ...invoice,

@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { InvoiceItemService } from '../../core/services/invoice-item.service';
 import { InvoicesService } from '../../core/services/invoices.service';
 import { ProductsService } from '../../core/services/products.service';
+import { CustomersService } from '../../core/services/customers.service';
 
 @Component({
   selector: 'app-invoice-item',
@@ -22,6 +23,7 @@ export class InvoiceItemComponent implements OnInit, OnDestroy {
     private invoiceItemService: InvoiceItemService,
     private invoicesService: InvoicesService,
     private productsService: ProductsService,
+    private customersService: CustomersService
   ) {
   }
 
@@ -30,17 +32,17 @@ export class InvoiceItemComponent implements OnInit, OnDestroy {
     this.invoice$ = combineLatest(
       this.productsService.products$,
       this.invoicesService.invoices$,
-      this.invoicesService.customers$,
+      this.customersService.customers$,
       this.invoiceItemService.invoiceItem$
     ).pipe(
       map(([products, invoices, customers, invoiceItem]) => invoiceItem.map(inv => ({
         ...inv,
-        product: products.filter(x => x._id === inv.product_id),
+        product: products.filter(x => x._id === inv.product_id), // .map(selected => selected.name),
         invoice: invoices.filter(x => x._id === inv.invoice_id),
         customer: customers.filter(customer => customer._id === invoices.find(x => x._id === inv.invoice_id).customer_id)
         }))
       )
-    ); // .subscribe(x => console.log(x));
+    );
 
   }
 
