@@ -1,46 +1,52 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 
-import { InvoiceItemModel } from '../../shared/models/invoice-item.model';
-import { InvoiceItemRequest, InvoiceItemRequestReset } from '../requests/invoice-item/invoice-item-request.action';
+import { CustomerItemRequest, InvoiceItemRequest, InvoiceItemRequestReset } from '../requests/invoice-item/invoice-item-request.action';
 
-import { FetchInvoiceItem, FetchInvoiceItemSuccess, ResetInvoiceItem, } from './invoice-item.actions';
+import {
+  FetchCustomerItem,
+  FetchCustomerItemSuccess,
+  FetchInvoiceItem,
+  FetchInvoiceItemSuccess,
+  ResetInvoiceItem,
+} from './invoice-item.actions';
+import { InvoiceModel } from '../../shared/models/invoice.model';
+import { InvoiceItemModel } from '../../shared/models/invoice-item.model';
 
 export class InvoiceItemStateModel {
-  entities: { [ids: string]: InvoiceItemModel };
-  collectionIds: string[];
+  entity: InvoiceModel;
+  customer_name: string;
 }
 
 @State<InvoiceItemStateModel>({
   name: 'invoiceItem',
   defaults: {
-    entities: {},
-    collectionIds: []
+    entity: null,
+    customer_name: ''
   }
 })
 export class InvoiceItemState {
 
   @Selector()
   static getInvoiceItem(state: InvoiceItemStateModel) {
-    return state.collectionIds.map(id => state.entities[id]);
+    return state.entity;
   }
 
   @Action(FetchInvoiceItem)
-  fetchInvoiceItem({dispatch}: StateContext<InvoiceItemModel>, {payload: id}: FetchInvoiceItem) {
+  fetchInvoiceItem({dispatch}: StateContext<InvoiceItemStateModel>, {payload: id}: FetchInvoiceItem) {
     dispatch(new InvoiceItemRequest(id));
   }
 
   @Action(FetchInvoiceItemSuccess)
   fetchInvoiceItemSuccess(
-    {patchState}: StateContext<InvoiceItemStateModel>,
-    {payload: invoiceItem}: FetchInvoiceItemSuccess
+    {patchState, dispatch, getState}: StateContext<InvoiceItemStateModel>,
+    {payload}: FetchInvoiceItemSuccess
   ) {
+   // console.log(payload);
     patchState({
-      entities: invoiceItem.reduce((acc, item) => ({
-        ...acc,
-        [item._id]: item
-      }), {}),
-      collectionIds: invoiceItem.map(item => item._id)
+      entity: payload
     });
+   dispatch(new FetchCustomerItem(getState().entity.customer_id));
+    //console.log(getState().entity.customer_id);
   }
 
   @Action(ResetInvoiceItem)
@@ -48,10 +54,26 @@ export class InvoiceItemState {
     {setState, dispatch}: StateContext<InvoiceItemStateModel>,
   ) {
     setState({
-      entities: {},
-      collectionIds: []
+      entity: null,
+      customer_name: ''
     });
     dispatch(new InvoiceItemRequestReset());
+  }
+
+  @Action(FetchCustomerItem)
+  fetchCustomerItem({dispatch}: StateContext<InvoiceItemStateModel>, {payload}: FetchCustomerItem) {
+    dispatch(new CustomerItemRequest(payload));
+  }
+
+  @Action(FetchCustomerItemSuccess)
+  fetchCustomerItemSuccess(
+    {patchState, getState}: StateContext<InvoiceItemStateModel>,
+    {payload}: FetchCustomerItemSuccess
+  ) {
+    const state = getState()
+    patchState({
+      customer_name: payload.name
+    });
   }
 
 }

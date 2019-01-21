@@ -14,7 +14,6 @@ import { InvoiceModel } from '../../shared/models/invoice.model';
 export class InvoicesService {
 
   @Select(InvoicesState.getInvoices) invoices$: Observable<InvoiceModel[]>;
-//  @Select(CustomersState.getCustomers) customers$: Observable<CustomerModel[]>;
 
   constructor(private store: Store) {
   }

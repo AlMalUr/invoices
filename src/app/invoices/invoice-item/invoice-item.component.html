@@ -1,49 +1,54 @@
-<div class="invoice-container">
-  <div class="invoice-template">
-    <div class="invoice__info-area">
-      <div class="info-area__id">
-        <div class="info-area__title">
-        Invoice: <span class="info-area__customer-id">{{(invoice$ | async)[0].invoice_id}}</span>
-        </div>
+<div>{{(invoice$ | async)._id}}</div>
+<div>{{(invoice$ | async).customer_id}}</div>
+<div>{{(invoice$ | async).discount}}</div>
+<div>{{(invoice$ | async).total}}</div>
+<div class="adf"></div>
+<!--<div class="invoice-container">-->
+  <!--<div class="invoice-template">-->
+    <!--<div class="invoice__info-area">-->
+      <!--<div class="info-area__id">-->
+        <!--<div class="info-area__title">-->
+        <!--Invoice: <span class="info-area__customer-id">{{(invoice$ | async)[0].invoice_id}}</span>-->
+        <!--</div>-->
 
-        <div class="info-area__customer-name">{{(invoice$ | async)[0].customer[0].name}}</div>
-      </div>
+        <!--<div class="info-area__customer-name">{{(invoice$ | async)[0].customer[0].name}}</div>-->
+      <!--</div>-->
 
-        <mat-table [dataSource]="(invoice$ | async)" class="mat-elevation-z8">
-          <ng-container matColumnDef="number">
-            <mat-header-cell class="number" *matHeaderCellDef> № </mat-header-cell>
-            <mat-cell class="number" *matCellDef="let i = index"> {{i + 1}} </mat-cell>
-          </ng-container>
+        <!--<mat-table [dataSource]="(invoice$ | async)" class="mat-elevation-z8">-->
+          <!--<ng-container matColumnDef="number">-->
+            <!--<mat-header-cell class="number" *matHeaderCellDef> № </mat-header-cell>-->
+            <!--<mat-cell class="number" *matCellDef="let i = index"> {{i + 1}} </mat-cell>-->
+          <!--</ng-container>-->
 
-          <ng-container matColumnDef="products">
-            <mat-header-cell class="products" *matHeaderCellDef> Products </mat-header-cell>
-            <mat-cell class="products" *matCellDef="let element">{{element.product[0].name}}</mat-cell>
-          </ng-container>
+          <!--<ng-container matColumnDef="products">-->
+            <!--<mat-header-cell class="products" *matHeaderCellDef> Products </mat-header-cell>-->
+            <!--<mat-cell class="products" *matCellDef="let element">{{element.product[0].name}}</mat-cell>-->
+          <!--</ng-container>-->
 
-          <ng-container matColumnDef="qty">
-            <mat-header-cell class="qty" *matHeaderCellDef> Qty </mat-header-cell>
-            <mat-cell class="qty" *matCellDef="let element"> {{element.quantity}} </mat-cell>
-          </ng-container>
+          <!--<ng-container matColumnDef="qty">-->
+            <!--<mat-header-cell class="qty" *matHeaderCellDef> Qty </mat-header-cell>-->
+            <!--<mat-cell class="qty" *matCellDef="let element"> {{element.quantity}} </mat-cell>-->
+          <!--</ng-container>-->
 
-          <ng-container matColumnDef="price">
-            <mat-header-cell class="price" *matHeaderCellDef> Price </mat-header-cell>
-            <mat-cell class="price" *matCellDef="let element">$ {{element.product[0].price}}</mat-cell>
-          </ng-container>
+          <!--<ng-container matColumnDef="price">-->
+            <!--<mat-header-cell class="price" *matHeaderCellDef> Price </mat-header-cell>-->
+            <!--<mat-cell class="price" *matCellDef="let element">$ {{element.product[0].price}}</mat-cell>-->
+          <!--</ng-container>-->
 
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-        </mat-table>
-        <div class="info-area__total-area">
-          <div class="total-area__title">Total</div>
-          <div class="total-area__value">$ {{(invoice$ |async)[0].invoice[0].total}}</div>
-        </div>
+          <!--<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>-->
+          <!--<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>-->
+        <!--</mat-table>-->
+        <!--<div class="info-area__total-area">-->
+          <!--<div class="total-area__title">Total</div>-->
+          <!--<div class="total-area__value">$ {{(invoice$ |async)[0].invoice[0].total}}</div>-->
+        <!--</div>-->
 
-    </div>
-    <div class="invoice__discount-area">
-      <div class="discount-area__title">Discount %</div>
-      <div class="discount-area__amount">{{((invoice$ |async)[0].invoice[0].discount) || '0'}}</div>
-    </div>
-  </div>
-</div>
+    <!--</div>-->
+    <!--<div class="invoice__discount-area">-->
+      <!--<div class="discount-area__title">Discount %</div>-->
+      <!--<div class="discount-area__amount">{{((invoice$ |async)[0].invoice[0].discount) || '0'}}</div>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
 
 

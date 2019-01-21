@@ -24,10 +24,10 @@ const routes: Routes = [
     path: 'invoices/:id/item',
     loadChildren: './invoice-item/invoice-item.module#InvoiceItemModule',
     resolve: {
-      invoices: InvoicesResolverService,
-      customers: CustomersResolverService,
+    //  invoices: InvoicesResolverService,
+    //  customers: CustomersResolverService,
       invoiceItem: InvoiceItemResolverService,
-      products: ProductsResolverService
+    //  products: ProductsResolverService
     }
   },
   {

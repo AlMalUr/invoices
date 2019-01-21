@@ -29,20 +29,22 @@ export class InvoiceItemComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.invoice$ = combineLatest(
-      this.productsService.products$,
-      this.invoicesService.invoices$,
-      this.customersService.customers$,
-      this.invoiceItemService.invoiceItem$
-    ).pipe(
-      map(([products, invoices, customers, invoiceItem]) => invoiceItem.map(inv => ({
-        ...inv,
-        product: products.filter(x => x._id === inv.product_id), // .map(selected => selected.name),
-        invoice: invoices.filter(x => x._id === inv.invoice_id),
-        customer: customers.filter(customer => customer._id === invoices.find(x => x._id === inv.invoice_id).customer_id)
-        }))
-      )
-    );
+    this.invoice$ = this.invoiceItemService.invoiceItem$; // .subscribe(x => console.log(x));
+
+  //  this.invoice$ = combineLatest(
+  //    this.productsService.products$,
+  //    this.invoicesService.invoices$,
+  //    this.customersService.customers$,
+  //    this.invoiceItemService.invoiceItem$
+  //  ).pipe(
+  //    map(([products, invoices, customers, invoiceItem]) => invoiceItem.map(inv => ({
+  //      ...inv,
+  //      product: products.filter(x => x._id === inv.product_id), // .map(selected => selected.name),
+  //      invoice: invoices.filter(x => x._id === inv.invoice_id),
+  //      customer: customers.filter(customer => customer._id === invoices.find(x => x._id === inv.invoice_id).customer_id)
+  //      }))
+  //    )
+  //  );
 
   }
 
