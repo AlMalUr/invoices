@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
+
 import { Observable } from 'rxjs';
 
-import { CustomersState } from '../../ngxs/customers/customers.state';
 import { FetchInvoices } from '../../ngxs/invoices/invoices.actions';
 import { InvoicesState } from '../../ngxs/invoices/invoices.state';
-import { CustomerModel } from '../../shared/models/customer.model';
+import { InvoicesRequestState } from '../../ngxs/requests/invoices/invoices-request.state';
 import { InvoiceModel } from '../../shared/models/invoice.model';
 
 @Injectable({
@@ -13,13 +13,18 @@ import { InvoiceModel } from '../../shared/models/invoice.model';
 })
 export class InvoicesService {
 
+  isLoaded;
   @Select(InvoicesState.getInvoices) invoices$: Observable<InvoiceModel[]>;
+  @Select(InvoicesRequestState.isLoaded) isLoaded$: Observable<boolean>;
 
   constructor(private store: Store) {
+    this.isLoaded$.subscribe(loaded => this.isLoaded = loaded);
   }
 
   fetchInvoices() {
-    this.store.dispatch(new FetchInvoices());
+    if (!this.isLoaded ) {
+      this.store.dispatch(new FetchInvoices());
+    }
     return this.invoices$;
   }
 

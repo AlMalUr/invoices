@@ -11,3 +11,9 @@ export class FetchProductsSuccess {
   constructor(private payload: ProductModel[]) {
   }
 }
+export class FetchSelectedProduct {
+  static readonly type = '[Products] FetchSelectedProduct';
+
+  constructor(private payload: string[]) {
+  }
+}

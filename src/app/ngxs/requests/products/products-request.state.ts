@@ -1,4 +1,4 @@
-import { Action, State, StateContext } from '@ngxs/store';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
 
 import { RequestService } from '../../../core/services/request.service';
@@ -22,6 +22,11 @@ import {
   },
 })
 export class ProductsRequestState {
+
+  @Selector()
+  static isLoaded(state: IRequest) {
+    return state.loaded;
+  }
 
   constructor(
     private requestService: RequestService,

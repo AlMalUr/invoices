@@ -10,4 +10,11 @@ export class FetchCustomersSuccess {
 
   constructor(private payload: CustomerModel[]) {
   }
+
+}
+export class FetchSelectedCustomer {
+  static readonly type = '[Customers] FetchSelectedCustomer';
+
+  constructor(private payload: CustomerModel) {
+  }
 }

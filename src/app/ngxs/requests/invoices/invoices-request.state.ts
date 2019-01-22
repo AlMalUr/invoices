@@ -28,7 +28,7 @@ export class InvoicesRequestState {
   }
 
   @Selector()
-  static getLoad(state: IRequest): boolean {
+  static isLoaded(state: IRequest): boolean {
     return state.loaded;
   }
 

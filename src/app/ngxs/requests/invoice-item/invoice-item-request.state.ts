@@ -2,11 +2,10 @@ import { Action, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
 
 import { RequestService } from '../../../core/services/request.service';
-import { FetchCustomerItemSuccess, FetchInvoiceItemSuccess, } from '../../invoice-item/invoice-item.actions';
+import { FetchInvoiceItemSuccess, } from '../../invoice-item/invoice-item.actions';
 import { IRequest } from '../requests.interface';
 
 import {
-  CustomerItemRequest, CustomerItemRequestSuccess,
   InvoiceItemRequest,
   InvoiceItemRequestFail,
   InvoiceItemRequestReset,
@@ -39,7 +38,7 @@ export class InvoiceItemRequestState {
       data: null,
     });
     return this.requestService
-    .get('invoices/' + id)
+    .get('invoices/' + id + '/items')
     // .get('invoices/' + id + '/items')
     .pipe(
       tap((res: any) => {
@@ -84,33 +83,5 @@ export class InvoiceItemRequestState {
       status: 'reset',
       data: null
     });
-  }
-
-  @Action(CustomerItemRequest)
-  customerItemRequest(ctx: StateContext<IRequest>, {payload: id}: CustomerItemRequest) {
-    return this.requestService
-    .get('customers/' + id)
-    // .get('invoices/' + id + '/items')
-    .pipe(
-      tap((res: any) => {
-        return ctx.dispatch(new CustomerItemRequestSuccess(res));
-      }),
-    //  catchError(error => {
-    //    return ctx.dispatch(new InvoiceItemRequestFail(error));
-    //  }),
-    );
-  }
-  @Action(CustomerItemRequestSuccess)
-  customerItemRequestSuccess(
-    ctx: StateContext<IRequest>,
-    {payload}: CustomerItemRequestSuccess
-  ) {
-    ctx.patchState({
-      loading: false,
-      loaded: true,
-      status: 'success',
-      data: payload,
-    });
-    ctx.dispatch(new FetchCustomerItemSuccess(payload));
   }
 }

@@ -21,16 +21,3 @@ export class InvoiceItemRequestFail {
 export class InvoiceItemRequestReset {
   static type = '[InvoiceItemRequest] InvoiceItemRequestReset';
 }
-
-export class CustomerItemRequest {
-  static type = '[InvoiceItemRequest] CustomerItemRequest';
-  constructor(public payload: string) {
-  }
-}
-
-export class CustomerItemRequestSuccess {
-  static type = '[InvoiceItemRequest] CustomerItemRequestSuccess';
-
-  constructor(public payload: any) {
-  }
-}

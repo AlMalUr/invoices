@@ -5,19 +5,23 @@ import { ProductsRequest, } from '../requests/products/products-request.action';
 
 import {
   FetchProducts,
-  FetchProductsSuccess,
+  FetchProductsSuccess, FetchSelectedProduct,
 } from './products.actions';
+import { FetchSelectedCustomer } from '../customers/customers.actions';
+import { CustomersStateModel } from '../customers/customers.state';
 
 export class ProductsStateModel {
   entities: { [ids: string]: ProductModel };
   collectionIds: string[];
+  selectedProducts;
 }
 
 @State<ProductsStateModel>({
   name: 'products',
   defaults: {
     entities: {},
-    collectionIds: []
+    collectionIds: [],
+    selectedProducts: null
   }
 })
 export class ProductsState {
@@ -43,8 +47,22 @@ export class ProductsState {
       }), {});
     const collectionIds = product.map(item => item._id);
     setState({
-      entities,
-      collectionIds,
+      entities: entities,
+      collectionIds: collectionIds,
+      selectedProducts: 1
+    });
+  }
+
+  @Action(FetchSelectedProduct)
+  fetchSelectedInvoice (
+    {patchState, getState}: StateContext<ProductsStateModel>,
+    {payload: product_ids}: FetchSelectedProduct
+  ) {
+    console.log(product_ids);
+    const product = Object.values(getState().entities)
+    .filter(prod => prod._id === String(product_ids));
+    patchState({
+      selectedProducts: product
     });
   }
 }
