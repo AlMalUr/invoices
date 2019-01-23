@@ -7,8 +7,6 @@ import {
   FetchProducts,
   FetchProductsSuccess, FetchSelectedProduct,
 } from './products.actions';
-import { FetchSelectedCustomer } from '../customers/customers.actions';
-import { CustomersStateModel } from '../customers/customers.state';
 
 export class ProductsStateModel {
   entities: { [ids: string]: ProductModel };
@@ -20,7 +18,7 @@ export class ProductsStateModel {
   name: 'products',
   defaults: {
     entities: {},
-    collectionIds: [],
+    collectionIds: null,
     selectedProducts: null
   }
 })
@@ -49,7 +47,7 @@ export class ProductsState {
     setState({
       entities: entities,
       collectionIds: collectionIds,
-      selectedProducts: 1
+      selectedProducts: null
     });
   }
 
@@ -58,9 +56,14 @@ export class ProductsState {
     {patchState, getState}: StateContext<ProductsStateModel>,
     {payload: product_ids}: FetchSelectedProduct
   ) {
-    console.log(product_ids);
     const product = Object.values(getState().entities)
-    .filter(prod => prod._id === String(product_ids));
+    .filter(prod => {
+      for (let x = 0; x < product_ids.length; x++) {
+        if (product_ids[x] === prod._id) {
+          return prod;
+        }
+      }
+    });
     patchState({
       selectedProducts: product
     });

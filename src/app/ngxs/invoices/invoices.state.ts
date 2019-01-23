@@ -18,7 +18,7 @@ export class InvoicesStateModel {
   name: 'invoices',
   defaults: {
     entities: {},
-    collectionIds: [],
+    collectionIds: null,
     selectedInvoice: null,
   }
 })

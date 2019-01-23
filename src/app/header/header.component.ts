@@ -25,7 +25,9 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.invoicesCount$ = this.invoicesService.invoices$.pipe(
-      map(invoices => invoices.length)
+      map(invoices =>
+        invoices ? invoices.length : 0
+      )
     );
   }
 

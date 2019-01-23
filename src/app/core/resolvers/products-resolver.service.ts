@@ -2,20 +2,16 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 
 import { Observable } from 'rxjs';
-import { filter, take } from 'rxjs/operators';
+import { filter, switchMap, take } from 'rxjs/operators';
 
 import { ProductModel } from '../../shared/models/product.model';
 import { ProductsService } from '../services/products.service';
-import { Select } from '@ngxs/store';
-import { ProductsRequestState } from '../../ngxs/requests/products/products-request.state';
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductsResolverService implements Resolve<any> {
-
-  @Select(ProductsRequestState)
-  productsRequestState$;
+export class ProductsResolverService implements Resolve<ProductModel[]> {
 
   constructor(
     private productsService: ProductsService,
@@ -23,8 +19,11 @@ export class ProductsResolverService implements Resolve<any> {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ProductModel[]> {
-    return this.productsService.fetchProducts().pipe(
-      filter(products => {if (products && products.length) {return true; }}),
+    return this.productsService.products$.pipe(
+      switchMap((products) =>
+        products ? this.productsService.products$ : this.productsService.fetchProducts()
+      ),
+      filter(products => !!products),
       take(1)
     );
   }

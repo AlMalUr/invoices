@@ -7,8 +7,6 @@ import {
   FetchCustomers,
   FetchCustomersSuccess, FetchSelectedCustomer,
 } from './customers.actions';
-import { FetchSelectedInvoice } from '../invoices/invoices.actions';
-import { InvoicesStateModel } from '../invoices/invoices.state';
 
 export class CustomersStateModel {
   entities: { [ids: string]: CustomerModel };
@@ -20,7 +18,7 @@ export class CustomersStateModel {
   name: 'customers',
   defaults: {
     entities: {},
-    collectionIds: [],
+    collectionIds: null,
     selectedCustomerName: '',
   }
 })

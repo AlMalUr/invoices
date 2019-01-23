@@ -1,10 +1,11 @@
 import { Selector, State } from '@ngxs/store';
 
 import { CustomersRequestState } from './customers/customers-request.state';
+import { InvoiceItemsRequestState } from './invoice-items/invoice-items-request.state';
+import { InvoiceRequestState } from './invoice/invoice-request.state';
 import { InvoicesRequestState } from './invoices/invoices-request.state';
 import { ProductsRequestState } from './products/products-request.state';
 import { IRequest } from './requests.interface';
-import { InvoiceItemRequestState } from './invoice-item/invoice-item-request.state';
 
 export class RequestsStateModel {
 }
@@ -15,16 +16,18 @@ export class RequestsStateModel {
   children: [
     CustomersRequestState,
     ProductsRequestState,
+    InvoiceRequestState,
     InvoicesRequestState,
-    InvoiceItemRequestState,
+    InvoiceItemsRequestState,
   ]
 })
 export class RequestsState {
   @Selector([
     CustomersRequestState,
     ProductsRequestState,
+    InvoiceRequestState,
     InvoicesRequestState,
-    InvoiceItemRequestState
+    InvoiceItemsRequestState,
   ])
   static loadingStatus(...states: IRequest[]): boolean {
     return states

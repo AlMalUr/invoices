@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { CustomersResolverService } from '../core/resolvers/customers-resolver.service';
-import { InvoiceItemResolverService } from '../core/resolvers/invoice-item-resolver.service';
+import { InvoiceResolverService } from '../core/resolvers/invoice-resolver.service';
 import { InvoicesResolverService } from '../core/resolvers/invoices-resolver.service';
 import { ProductsResolverService } from '../core/resolvers/products-resolver.service';
+import { InvoiceItemsResolverService } from '../core/resolvers/invoice-items-resolver.service';
 
 const routes: Routes = [
   {
@@ -21,13 +22,13 @@ const routes: Routes = [
     }
   },
   {
-    path: 'invoices/:id/item',
-    loadChildren: './invoice-item/invoice-item.module#InvoiceItemModule',
+    path: 'invoices/:id',
+    loadChildren: './invoice-view/invoice-view.module#InvoiceViewModule',
     resolve: {
-    //  invoices: InvoicesResolverService,
-    //  customers: CustomersResolverService,
-      invoiceItem: InvoiceItemResolverService,
-    //  products: ProductsResolverService
+      invoice: InvoiceResolverService,
+      customers: CustomersResolverService,
+      invoiceItems: InvoiceItemsResolverService,
+      products: ProductsResolverService
     }
   },
   {
