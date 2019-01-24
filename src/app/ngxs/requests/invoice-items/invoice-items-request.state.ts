@@ -4,6 +4,12 @@ import { catchError, tap } from 'rxjs/operators';
 import { RequestService } from '../../../core/services/request.service';
 import { FetchInvoiceItemsSuccess, } from '../../invoice-items/invoice-items.actions';
 import { IRequest } from '../requests.interface';
+import {
+  requestEntitiesDefault,
+  requestEntitiesFail,
+  requestEntitiesLoading,
+  requestEntitiesSuccess
+} from '../shared/requests-entities';
 
 import {
   InvoiceItemsRequest,
@@ -15,12 +21,7 @@ import {
 
 @State<IRequest>({
   name: 'invoiceItemsRequestState',
-  defaults: {
-    loading: false,
-    loaded: false,
-    status: '',
-    data: null,
-  },
+  defaults: requestEntitiesDefault,
 })
 export class InvoiceItemsRequestState {
 
@@ -31,14 +32,9 @@ export class InvoiceItemsRequestState {
 
   @Action(InvoiceItemsRequest)
   invoiceItemsRequest(ctx: StateContext<IRequest>, {payload: id}: InvoiceItemsRequest) {
-    ctx.patchState({
-      loading: true,
-      loaded: false,
-      status: '',
-      data: null,
-    });
+    ctx.patchState(requestEntitiesLoading);
     return this.requestService
-    .get('invoices/' + id + '/items')
+    .get(`invoices/${id}/items`)
     .pipe(
       tap((res: any) => {
         return ctx.dispatch(new InvoiceItemsRequestSuccess(res));
@@ -54,33 +50,18 @@ export class InvoiceItemsRequestState {
     ctx: StateContext<IRequest>,
     {payload}: InvoiceItemsRequestSuccess
   ) {
-    ctx.patchState({
-      loading: false,
-      loaded: true,
-      status: 'success',
-      data: payload,
-    });
+    ctx.patchState({...requestEntitiesSuccess, data: payload});
     ctx.dispatch(new FetchInvoiceItemsSuccess(payload));
   }
 
   @Action(InvoiceItemsRequestFail)
   invoiceItemsRequestFail(ctx: StateContext<IRequest>, {payload}: InvoiceItemsRequestFail) {
-    ctx.patchState({
-      loading: false,
-      loaded: true,
-      status: 'fail',
-      data: payload,
-    });
+    ctx.patchState({...requestEntitiesFail, data: payload});
     console.error('An error occured: ', payload.message);
   }
 
   @Action(InvoiceItemsRequestReset)
   invoiceItemsRequestReset({patchState}: StateContext<IRequest>) {
-    patchState({
-      loading: false,
-      loaded: false,
-      status: 'reset',
-      data: null
-    });
+    patchState(requestEntitiesDefault);
   }
 }

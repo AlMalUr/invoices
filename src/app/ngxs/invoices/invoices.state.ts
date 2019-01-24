@@ -5,21 +5,19 @@ import { InvoicesRequest } from '../requests/invoices/invoices-request.action';
 
 import {
   FetchInvoices,
-  FetchInvoicesSuccess, FetchSelectedInvoice,
+  FetchInvoicesSuccess
 } from './invoices.actions';
 
 export class InvoicesStateModel {
   entities: { [ids: string]: InvoiceModel };
   collectionIds: string[];
-  selectedInvoice;
 }
 
 @State<InvoicesStateModel>({
   name: 'invoices',
   defaults: {
     entities: {},
-    collectionIds: null,
-    selectedInvoice: null,
+    collectionIds: null
   }
 })
 export class InvoicesState {
@@ -27,11 +25,6 @@ export class InvoicesState {
   @Selector()
   static getInvoices(state: InvoicesStateModel) {
     return state.collectionIds.map(id => state.entities[id]);
-  }
-
-  @Selector()
-  static getCustomerId(state: InvoicesStateModel) {
-    return state.selectedInvoice.customer_id;
   }
 
   @Action(FetchInvoices)
@@ -49,19 +42,7 @@ export class InvoicesState {
         ...acc,
         [item._id]: item
       }), {}),
-      collectionIds: inv.map(item => item._id),
-      selectedInvoice: null
-    });
-  }
-
-  @Action(FetchSelectedInvoice)
-  fetchSelectedInvoice (
-    {patchState, getState}: StateContext<InvoicesStateModel>,
-    {payload: id}: FetchSelectedInvoice
-  ) {
-
-    patchState({
-      selectedInvoice: getState().entities[id]
+      collectionIds: inv.map(item => item._id)
     });
   }
 }

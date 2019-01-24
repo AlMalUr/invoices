@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
+import { combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { CustomersService } from '../../core/services/customers.service';
 import { InvoiceItemsService } from '../../core/services/invoice-items.service';
 import { InvoiceService } from '../../core/services/invoice.service';
-import { combineLatest } from 'rxjs';
-import { CustomersService } from '../../core/services/customers.service';
 import { ProductsService } from '../../core/services/products.service';
-import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-invoice-item',
@@ -15,6 +16,7 @@ import { map, switchMap } from 'rxjs/operators';
 export class InvoiceViewComponent implements OnInit, OnDestroy {
 
   viewItems$;
+  viewItem$;
 
   displayedColumns: string[] = ['number', 'products', 'qty', 'price'];
 
@@ -28,21 +30,25 @@ export class InvoiceViewComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-   // this.invoice$ = this.invoiceService.invoice$;
    this.viewItems$ = combineLatest(
-     this.invoiceService.invoice$,
      this.invoiceItemsService.invoiceItems$,
-     this.customersService.customers$,
      this.productsService.products$
    ).pipe(
-     map(([invoice, invoiceItems, customers, products]) => invoiceItems.map(inv => ({
-       ...inv,
-       discount: invoice.discount,
-       total: invoice.total,
-       customer: customers.find(customer => invoice.customer_id === customer._id),
+     map(([invoiceItems, products]) => invoiceItems.map(invItm => ({
+       ...invItm,
+       product: products.find(product => product._id === invItm.product_id)
      }))
    )
-   ).subscribe(x => console.log(x));
+   );
+    this.viewItem$ = combineLatest(
+      this.invoiceService.invoice$,
+      this.customersService.customers$
+    ).pipe(
+     map(([invoice, customers]) => ({
+       ...invoice,
+       customer: customers.find(customer => customer._id === invoice.customer_id)
+     }))
+    );
   }
 
   ngOnDestroy() {
@@ -52,12 +58,3 @@ export class InvoiceViewComponent implements OnInit, OnDestroy {
 
 }
 
-// ).pipe(
-//   map(([products, invoices, customers, invoiceItem]) => invoiceItem.map(inv => ({
-//       ...inv,
-//       product: products.filter(x => x._id === inv.product_id), // .map(selected => selected.name),
-//       invoice: invoices.filter(x => x._id === inv.invoice_id),
-//       customer: customers.filter(customer => customer._id === invoices.find(x => x._id === inv.invoice_id).customer_id)
-//     }))
-//   )
-// );

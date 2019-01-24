@@ -4,6 +4,12 @@ import { catchError, tap } from 'rxjs/operators';
 import { RequestService } from '../../../core/services/request.service';
 import { FetchInvoicesSuccess } from '../../invoices/invoices.actions';
 import { IRequest } from '../requests.interface';
+import {
+  requestEntitiesDefault,
+  requestEntitiesFail,
+  requestEntitiesLoading,
+  requestEntitiesSuccess
+} from '../shared/requests-entities';
 
 import {
   InvoicesRequest,
@@ -13,12 +19,7 @@ import {
 
 @State<IRequest>({
   name: 'invoicesRequestState',
-  defaults: {
-    loading: false,
-    loaded: false,
-    status: '',
-    data: null,
-  },
+  defaults: requestEntitiesDefault,
 })
 export class InvoicesRequestState {
 
@@ -27,19 +28,9 @@ export class InvoicesRequestState {
   ) {
   }
 
-  @Selector()
-  static isLoaded(state: IRequest): boolean {
-    return state.loaded;
-  }
-
   @Action(InvoicesRequest)
   invoicesRequest(ctx: StateContext<IRequest>, action: InvoicesRequest) {
-    ctx.patchState({
-      loading: true,
-      loaded: false,
-      status: '',
-      data: null,
-    });
+    ctx.patchState(requestEntitiesLoading);
     return this.requestService
     .get('invoices')
     .pipe(
@@ -57,23 +48,13 @@ export class InvoicesRequestState {
     ctx: StateContext<IRequest>,
     {payload}: InvoicesRequestSuccess
   ) {
-    ctx.patchState({
-      loading: false,
-      loaded: true,
-      status: 'success',
-      data: payload,
-    });
+    ctx.patchState({...requestEntitiesSuccess, data: payload});
     ctx.dispatch(new FetchInvoicesSuccess(payload));
   }
 
   @Action(InvoicesRequestFail)
   invoicesRequestFail(ctx: StateContext<IRequest>, {payload}: InvoicesRequestFail) {
-    ctx.patchState({
-      loading: false,
-      loaded: true,
-      status: 'fail',
-      data: payload,
-    });
+    ctx.patchState({...requestEntitiesFail, data: payload});
     console.error('An error occured: ', payload.message);
   }
 

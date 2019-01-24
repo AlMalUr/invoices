@@ -8,8 +8,9 @@
 
   <div>
     Product:
-    <select formArrayName="products">
-      <option *ngFor="let product of (products$ | async)" value="product.name">
+    <select formArrayName="product_id" (change)="changeSelect($event.target.value)">
+      <option [ngValue]="null"></option>
+      <option *ngFor="let product of (products$ | async)" [ngValue]="product.name">
         {{product.name}}
       </option>
     </select>
@@ -18,7 +19,14 @@
 
   <div>
     Name:
-    <input type="text" formControlName="name">
+    <select formControlName="customer_id">
+      <option *ngFor="let customer of (customers$ | async)" [ngValue]="customer.name">
+        {{customer.name}}
+      </option>
+    </select>
+
+
+    <!--<input type="text" formControlName="name">-->
   </div>
 
   <div>

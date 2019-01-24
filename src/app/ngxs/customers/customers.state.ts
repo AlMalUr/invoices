@@ -5,21 +5,19 @@ import { CustomersRequest } from '../requests/customers/customers-request.action
 
 import {
   FetchCustomers,
-  FetchCustomersSuccess, FetchSelectedCustomer,
+  FetchCustomersSuccess,
 } from './customers.actions';
 
 export class CustomersStateModel {
   entities: { [ids: string]: CustomerModel };
   collectionIds: string[];
-  selectedCustomerName: string;
 }
 
 @State<CustomersStateModel>({
   name: 'customers',
   defaults: {
     entities: {},
-    collectionIds: null,
-    selectedCustomerName: '',
+    collectionIds: null
   }
 })
 export class CustomersState {
@@ -45,20 +43,7 @@ export class CustomersState {
         ...acc,
         [item._id]: item
       }), {}),
-      collectionIds: custom.map(item => item._id),
-      selectedCustomerName: ''
-    });
-  }
-
-  @Action(FetchSelectedCustomer)
-  fetchSelectedInvoice (
-    {patchState, getState}: StateContext<CustomersStateModel>,
-    {payload: customer_id}: FetchSelectedCustomer
-  ) {
-    const name = Object.values(getState().entities)
-    .find(customer => customer._id === String(customer_id)).name;
-    patchState({
-      selectedCustomerName: name
+      collectionIds: custom.map(item => item._id)
     });
   }
 }

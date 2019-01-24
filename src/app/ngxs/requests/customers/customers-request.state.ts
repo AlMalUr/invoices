@@ -1,28 +1,27 @@
-import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Action, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
 
 import { RequestService } from '../../../core/services/request.service';
 import { FetchCustomersSuccess } from '../../customers/customers.actions';
 import { IRequest } from '../requests.interface';
+import {
+  requestEntitiesDefault,
+  requestEntitiesFail,
+  requestEntitiesLoading,
+  requestEntitiesSuccess
+} from '../shared/requests-entities';
 
-import { CustomersRequest, CustomersRequestFail, CustomersRequestSuccess } from './customers-request.action';
+import {
+  CustomersRequest,
+  CustomersRequestFail,
+  CustomersRequestSuccess } from './customers-request.action';
 
 
 @State<IRequest>({
   name: 'customersRequestState',
-  defaults: {
-    loading: false,
-    loaded: false,
-    status: '',
-    data: null,
-  },
+  defaults: requestEntitiesDefault,
 })
 export class CustomersRequestState {
-
-  @Selector()
-  static isLoaded(state: IRequest) {
-    return state.loaded;
-  }
 
   constructor(
     private requestService: RequestService,
@@ -31,12 +30,7 @@ export class CustomersRequestState {
 
   @Action(CustomersRequest)
   customersRequest(ctx: StateContext<IRequest>) {
-    ctx.patchState({
-      loading: true,
-      loaded: false,
-      status: '',
-      data: null,
-    });
+    ctx.patchState( requestEntitiesLoading );
     return this.requestService
     .get('customers')
     .pipe(
@@ -52,25 +46,15 @@ export class CustomersRequestState {
   @Action(CustomersRequestSuccess)
   customersRequestSuccess(
     ctx: StateContext<IRequest>,
-    action: CustomersRequestSuccess
+    {payload}: CustomersRequestSuccess
   ) {
-    ctx.patchState({
-      loading: false,
-      loaded: true,
-      status: 'success',
-      data: action.payload.data,
-    });
-    ctx.dispatch(new FetchCustomersSuccess(action.payload));
+    ctx.patchState( {...requestEntitiesSuccess, data: payload} );
+    ctx.dispatch(new FetchCustomersSuccess(payload));
   }
 
   @Action(CustomersRequestFail)
   customersRequestFail(ctx: StateContext<IRequest>, {payload}: CustomersRequestFail) {
-    ctx.patchState({
-      loading: false,
-      loaded: true,
-      status: 'fail',
-      data: payload,
-    });
+    ctx.patchState( {...requestEntitiesFail, data: payload} );
     console.error('An error occured: ', payload.message);
   }
 

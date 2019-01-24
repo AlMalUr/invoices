@@ -8,7 +8,6 @@ export class FetchInvoice {
 
 export class FetchInvoiceSuccess {
   static readonly type = '[Invoice] FetchInvoiceSuccess';
-
   constructor(private payload: InvoiceModel) {
   }
 }

@@ -1,3 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { InvoiceItemModel } from '../../../shared/models/invoice-item.model';
+
 export class InvoiceItemsRequest {
   static type = '[InvoiceItemsRequest] InvoiceItemsRequest';
   constructor(public payload: string) {
@@ -7,14 +11,14 @@ export class InvoiceItemsRequest {
 export class InvoiceItemsRequestSuccess {
   static type = '[InvoiceItemsRequest] InvoiceItemsRequestSuccess';
 
-  constructor(public payload: any) {
+  constructor(public payload: InvoiceItemModel[]) {
   }
 }
 
 export class InvoiceItemsRequestFail {
   static type = '[InvoiceItemsRequest] InvoiceItemsRequestFailed';
 
-  constructor(public payload: any) {
+  constructor(public payload: HttpErrorResponse) {
   }
 }
 

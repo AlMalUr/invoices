@@ -12,6 +12,6 @@
         <span *ngIf="(link.label === 'Invoices') && ((invoicesCount$ | async) !== 0)">({{invoicesCount$ | async}})</span>
       </a>
     </nav>
-    <button mat-flat-button>new invoice</button>
+    <button mat-flat-button [routerLink]="'/invoice-new'">new invoice</button>
   </mat-toolbar>
 </div>

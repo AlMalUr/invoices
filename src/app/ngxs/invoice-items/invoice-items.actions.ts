@@ -1,3 +1,5 @@
+import { InvoiceItemModel } from '../../shared/models/invoice-item.model';
+
 export class FetchInvoiceItems {
   static readonly type = '[InvoiceItems] FetchInvoiceItems';
   constructor(private payload: string) {
@@ -7,7 +9,7 @@ export class FetchInvoiceItems {
 export class FetchInvoiceItemsSuccess {
   static readonly type = '[InvoiceItems] FetchInvoiceItemsSuccess';
 
-  constructor(private payload: any) {
+  constructor(private payload: InvoiceItemModel[]) {
   }
 }
 

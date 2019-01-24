@@ -9,23 +9,23 @@ import {
   ResetInvoice,
 } from './invoice.actions';
 
+const entityDefault = {
+  entity: null
+};
+
 export class InvoiceStateModel {
-  entities: {[ids: string]: InvoiceModel};
-  collectionIds: string[];
+  entity: InvoiceModel;
 }
 
 @State<InvoiceStateModel>({
   name: 'invoice',
-  defaults: {
-    entities: null,
-    collectionIds: null,
-  }
+  defaults: entityDefault
 })
 export class InvoiceState {
 
   @Selector()
   static getInvoice(state: InvoiceStateModel) {
-    return state.collectionIds.map(id => state.entities[id]);
+    return state.entity;
   }
 
   @Action(FetchInvoice)
@@ -38,10 +38,7 @@ export class InvoiceState {
     {setState}: StateContext<InvoiceStateModel>,
     {payload}: FetchInvoiceSuccess
   ) {
-    setState({
-      entities: {[payload._id]: payload},
-      collectionIds: [].concat(payload._id)
-    });
+    setState({entity: payload});
   }
 
 
@@ -49,10 +46,7 @@ export class InvoiceState {
   resetInvoice(
     {setState, dispatch}: StateContext<InvoiceStateModel>,
   ) {
-    setState({
-      entities: null,
-      collectionIds: null
-    });
+    setState(entityDefault);
     dispatch(new InvoiceRequestReset());
   }
 }

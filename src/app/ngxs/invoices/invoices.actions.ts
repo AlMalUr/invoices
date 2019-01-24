@@ -11,10 +11,3 @@ export class FetchInvoicesSuccess {
   constructor(private payload: InvoiceModel[]) {
   }
 }
-
-export class FetchSelectedInvoice {
-  static readonly type = '[Invoices] FetchSelectedInvoice';
-
-  constructor(private payload: string) {
-  }
-}

@@ -9,6 +9,11 @@ import {
   ResetInvoiceItems,
 } from './invoice-items.actions';
 
+const entitiesDefault = {
+  entities: null,
+  collectionIds: null
+};
+
 export class InvoiceItemsStateModel {
   entities: { [ids: string]: InvoiceItemModel };
   collectionIds: string[];
@@ -16,10 +21,7 @@ export class InvoiceItemsStateModel {
 
 @State<InvoiceItemsStateModel>({
   name: 'invoiceItems',
-  defaults: {
-    entities: null,
-    collectionIds: null,
-  }
+  defaults: entitiesDefault
 })
 export class InvoiceItemsState {
 
@@ -27,11 +29,6 @@ export class InvoiceItemsState {
   static getInvoiceItems(state: InvoiceItemsStateModel) {
     return state.collectionIds.map(id => state.entities[id]);
   }
-
- // @Selector()
- // static getProductIds(state: InvoiceItemsStateModel) {
- //   return state.collectionIds.map(id => state.entities[id].product_id);
- // }
 
   @Action(FetchInvoiceItems)
   fetchInvoiceItems({dispatch}: StateContext<InvoiceItemsStateModel>, {payload: id}: FetchInvoiceItems) {
@@ -52,17 +49,11 @@ export class InvoiceItemsState {
     });
   }
 
-
-
-
   @Action(ResetInvoiceItems)
   resetInvoiceItems(
     {setState, dispatch}: StateContext<InvoiceItemsStateModel>,
   ) {
-   setState({
-     entities: null,
-     collectionIds: null
-    });
+   setState(entitiesDefault);
     dispatch(new InvoiceItemsRequestReset());
   }
 }
