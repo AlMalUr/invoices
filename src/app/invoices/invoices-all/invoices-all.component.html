@@ -9,7 +9,7 @@
 
     <ng-container matColumnDef="customerId">
       <mat-header-cell class="invoiceId" *matHeaderCellDef> Invoice Id </mat-header-cell>
-      <mat-cell class="invoiceId" *matCellDef="let element"> {{element.customer_id}} </mat-cell>
+      <mat-cell class="invoiceId" *matCellDef="let element"> {{element._id}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="customerName">

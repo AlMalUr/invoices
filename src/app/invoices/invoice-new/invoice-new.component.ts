@@ -1,13 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
+import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
 import { CustomersService } from '../../core/services/customers.service';
+import { InvoicesService } from '../../core/services/invoices.service';
 import { ProductsService } from '../../core/services/products.service';
+import { AddInvoice } from '../../ngxs/invoices/invoices.actions';
 import { CustomerModel } from '../../shared/models/customer.model';
+import { InvoiceModel } from '../../shared/models/invoice.model';
 import { ProductModel } from '../../shared/models/product.model';
-import { find, map, tap } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-invoice-new',
@@ -16,59 +21,68 @@ import { find, map, tap } from 'rxjs/operators';
 })
 export class InvoiceNewComponent implements OnInit {
 
-  productPrice = 0;
   products$: Observable<ProductModel[]>;
   customers$: Observable<CustomerModel[]>;
+ // invoices$: Observable<InvoiceModel[]>;
   invoiceForm;
- //   _id: new FormControl(7),
- //   customer_id: new FormControl(''),
- //   quantity: new FormArray([
- //    // new FormControl()
- //   ]),
- //   discount: new FormControl(0),
- //   product_id: new FormArray([
- //    // new FormControl()
- //   ]),
- //   total: new FormControl(5657556)
 
-  changeSelect(v) {
-    const prods = this.invoiceForm.get('product_id') as FormArray;
-    prods.push(this.fb.control(v));
-  }
 
- // addProduct() {
- //   this.product.push(this.fb.control(''));
- // }
   constructor(private productsService: ProductsService,
               private customersService: CustomersService,
-              private fb: FormBuilder
+             // private invoicesService: InvoicesService,
+              private router: Router,
+              private fb: FormBuilder,
+              private store: Store
               ) {
   }
 
   ngOnInit() {
+
       this.products$ = this.productsService.products$;
       this.customers$ = this.customersService.customers$;
+     // this.invoices$ = this.invoicesService.invoices$;
       this.invoiceForm = this.fb.group({
         _id: [''],
         customer: ['', Validators.required],
-        product: ['', Validators.required],
-       // product_id: this.fb.array([
-       //   this.fb.control('')
-       // ]),
-        quantity:  ['', [Validators.min(1), Validators.required]],
-        // quantity: this.fb.array([
-        //   this.fb.control('')
-        // ]),
-        discount: ['', [Validators.min(0), Validators.max(50)]],
+        products: this.fb.array([
+          this.initProducts()
+        ]),
+        discount: [0, [Validators.min(0), Validators.max(50)]],
         total: ['']
       });
+      this.invoiceForm.get('_id').setValue(
+        this.generateId()
+      );
   }
+
   onSubmit() {
+    const date = new Date();
+    console.log((date.getTimezoneOffset()));
+    console.log(date.getDate());
     console.log(this.invoiceForm.value);
+    this.store.dispatch( new AddInvoice(this.invoiceForm.value));
+    this.router.navigate(['invoices']);
   }
-  get items(): FormArray {
-    return this.invoiceForm.get('items') as FormArray;
+
+  initProducts(): FormGroup {
+    return this.fb.group({
+      product : ['', Validators.required],
+      quantity : [1],
+    });
   }
+
+  addProductField(): void {
+    const prod = <FormArray>this.invoiceForm.controls.products;
+    prod.push(this.initProducts());
+  }
+
+  deleteProductField(index) {
+    const prod = <FormArray>this.invoiceForm.controls.products;
+    if (prod.length > 1) {
+      prod.removeAt(index);
+    }
+  }
+
   get quantity() {
     return this.invoiceForm.get('quantity').value;
   }
@@ -76,15 +90,20 @@ export class InvoiceNewComponent implements OnInit {
     return this.invoiceForm.get('discount').value;
   }
 
-   getProductPrice(price) {
-     this.productPrice = price;
-  }
   get total() {
-    const ttl = (this.productPrice * this.quantity / 100 * (100 - this.discount)).toFixed(2);
-   // this.invoiceForm.set('total').value = ttl;
+    const itemTtl = this.invoiceForm.controls.products.value
+    .map( prod =>
+      (prod.product.price || 0) * prod.quantity / 100 * (100 - this.discount)
+    );
+    const ttl = itemTtl.reduce((acc, next) =>  acc + next).toFixed(2);
+    this.invoiceForm.get('total').setValue(ttl);
     return ttl;
   }
 
+  generateId() {
+    const id = '5i' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    return id;
+  }
 }
 
 

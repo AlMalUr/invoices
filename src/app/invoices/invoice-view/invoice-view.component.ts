@@ -37,17 +37,17 @@ export class InvoiceViewComponent implements OnInit, OnDestroy {
      map(([invoiceItems, products]) => invoiceItems.map(invItm => ({
        ...invItm,
        product: products.find(product => product._id === invItm.product_id)
-     }))
-   )
+     })))
    );
+
     this.viewItem$ = combineLatest(
       this.invoiceService.invoice$,
       this.customersService.customers$
     ).pipe(
-     map(([invoice, customers]) => ({
-       ...invoice,
-       customer: customers.find(customer => customer._id === invoice.customer_id)
-     }))
+      map(([invoice, customers]) => ({
+        ...invoice,
+        customer: customers.find(customer => customer._id === invoice.customer_id)
+      }))
     );
   }
 

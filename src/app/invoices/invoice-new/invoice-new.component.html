@@ -3,7 +3,7 @@
     <div class="invoice__info-area">
       <div class="info-area__id">
         <div class="info-area__title">
-          Invoice: <span class="info-area__customer-id">2ujyh4uo2h34u2gh3i42g34</span>
+          Invoice: <span class="info-area__customer-id">{{ invoiceForm.get('_id').value }}</span>
         </div>
 
         <div class="info-area__customer-name">
@@ -26,11 +26,13 @@
           <div class="product__cell product__cell-qty">Qty</div>
           <div class="product__cell product__cell-price">Price</div>
         </div>
-        <div class="product__body">
-          <div class="product__item">
+        <div class="product__body" formArrayName="products">
+          <div class="product__item" [formGroupName]="i"
+               *ngFor="let prod of invoiceForm.controls.products.controls; let i = index">
+
             <div class="product__cell product__cell-product">
               <mat-form-field product__form-fied-product>
-                <mat-select placeholder="Select product" formControlName="product" (selectionChange)="getProductPrice($event.source.value.price)">
+                <mat-select placeholder="Select product" formControlName="product">
                   <mat-option *ngFor="let product of (products$ | async)" [value]="product">
                     {{product.name}}
                   </mat-option>
@@ -42,16 +44,21 @@
                 <input matInput type="number" min="1" formControlName="quantity">
               </mat-form-field>
             </div>
-            <div class="product__cell product__cell-price">$ {{productPrice}}</div>
+            <div class="product__cell product__cell-price">$ {{prod.value.product.price}}</div>
+            <button class="invoice__submit-btn" mat-button mat-raised-button color="warn" type="button" (click)="deleteProductField(i)">delete</button>
+
           </div>
         </div>
       </div>
+
+
       <div class="info-area__total-area">
         <div class="total-area__title">Total</div>
         <div class="total-area__value" >$ {{total}}</div>
       </div>
       <div class="invoice__submit-btn-wrap">
-        <button class="invoice__submit-btn" mat-button mat-raised-button type="submit" [disabled]="!invoiceForm.valid">Submit</button>
+        <button class="invoice__submit-btn" mat-button mat-raised-button color="primary" type="submit" [disabled]="!invoiceForm.valid">Save Invoice</button>
+        <button class="invoice__submit-btn" mat-button mat-raised-button color="accent" type="button" (click)="addProductField()">Add Product</button>
       </div>
     </div>
     <div class="invoice__discount-area">
@@ -61,75 +68,11 @@
           <input placeholder="discount" matInput id="qqq" type="number" min="0" max="50" formControlName="discount">
         </mat-form-field>
       </div>
+
     </div>
 
   </form>
 </div>
-
-
-<!--<form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()">-->
-
-  <!--<div>-->
-    <!--Id: #-->
-    <!--<span>1</span>-->
-  <!--</div>-->
-
-
-  <!--<div>-->
-    <!--Product:-->
-    <!--<select formArrayName="product_id">-->
-      <!--<option disabled selected hidden [ngValue]="null"></option>-->
-      <!--<option *ngFor="let product of (products$ | async)" [ngValue]="product.name">-->
-        <!--{{product.name}}-->
-      <!--</option>-->
-    <!--</select>-->
-  <!--</div>-->
-
-
-  <!--<div>-->
-    <!--<select formControlName="customer_id">-->
-      <!--<option value="" disabled selected hidden>Select Name</option>-->
-      <!--<option *ngFor="let customer of (customers$ | async)" > &lt;!&ndash;[ngValue]="customer.name"&ndash;&gt;-->
-        <!--{{customer.name}}-->
-      <!--</option>-->
-    <!--</select>-->
-    <!--&lt;!&ndash;<select class="form-control"&ndash;&gt;-->
-    <!--&lt;!&ndash;id="stateId"&ndash;&gt;-->
-    <!--&lt;!&ndash;[(ngModel)]="customer.state"&ndash;&gt;-->
-    <!--&lt;!&ndash;name="state">&ndash;&gt;-->
-    <!--&lt;!&ndash;<option value=""&ndash;&gt;-->
-    <!--&lt;!&ndash;disabled&ndash;&gt;-->
-    <!--&lt;!&ndash;selected&ndash;&gt;-->
-    <!--&lt;!&ndash;hidden>Select a State...</option>&ndash;&gt;-->
-    <!--&lt;!&ndash;<option value="AL">Alabama</option>&ndash;&gt;-->
-    <!--&lt;!&ndash;<option value="AK">Alaska</option>&ndash;&gt;-->
-    <!--&lt;!&ndash;<option value="AZ">Arizona</option>&ndash;&gt;-->
-    <!--&lt;!&ndash;<option value="AR">Arkansas</option>&ndash;&gt;-->
-    <!--&lt;!&ndash;<option value="CA">California</option>&ndash;&gt;-->
-    <!--&lt;!&ndash;<option value="CO">Colorado</option>&ndash;&gt;-->
-    <!--&lt;!&ndash;<option value="WI">Wisconsin</option>&ndash;&gt;-->
-    <!--&lt;!&ndash;<option value="WY">Wyoming</option>&ndash;&gt;-->
-    <!--&lt;!&ndash;</select>&ndash;&gt;-->
-
-    <!--&lt;!&ndash;<input type="text" formControlName="name">&ndash;&gt;-->
-  <!--</div>-->
-
-  <!--<div>-->
-    <!--Discount:-->
-    <!--<input type="text" formControlName="discount">-->
-  <!--</div>-->
-
-  <!--<div>-->
-    <!--Quantity:-->
-    <!--<input type="text" formControlName="quantity">-->
-  <!--</div>-->
-
-  <!--<div>-->
-    <!--Total:-->
-    <!--<span ></span>-->
-  <!--</div>-->
-  <!--<button type="submit" [disabled]="!invoiceForm.valid">Submit</button>-->
-<!--</form>-->
 
 
 

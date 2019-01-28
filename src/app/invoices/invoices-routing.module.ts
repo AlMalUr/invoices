@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { CustomersResolverService } from '../core/resolvers/customers-resolver.service';
+import { InvoiceItemsResolverService } from '../core/resolvers/invoice-items-resolver.service';
 import { InvoiceResolverService } from '../core/resolvers/invoice-resolver.service';
 import { InvoicesResolverService } from '../core/resolvers/invoices-resolver.service';
 import { ProductsResolverService } from '../core/resolvers/products-resolver.service';
-import { InvoiceItemsResolverService } from '../core/resolvers/invoice-items-resolver.service';
 
 const routes: Routes = [
   {
@@ -36,7 +36,8 @@ const routes: Routes = [
     loadChildren: './invoice-new/invoice-new.module#InvoiceNewModule',
     resolve: {
       products: ProductsResolverService,
-      customers: CustomersResolverService
+      customers: CustomersResolverService,
+      invoices: InvoicesResolverService
     }
   }
 ];

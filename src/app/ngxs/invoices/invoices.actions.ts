@@ -11,3 +11,9 @@ export class FetchInvoicesSuccess {
   constructor(private payload: InvoiceModel[]) {
   }
 }
+
+export class AddInvoice {
+  static  readonly type = '[InvoiceItems] AddInvoice';
+  constructor(private payload: any) {
+  }
+}
