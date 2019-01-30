@@ -27,7 +27,7 @@
 
           <ng-container matColumnDef="price">
             <mat-header-cell class="price" *matHeaderCellDef> Price </mat-header-cell>
-            <mat-cell class="price" *matCellDef="let element">$ {{element.product.price}}</mat-cell>
+            <mat-cell class="price" *matCellDef="let element">$ {{element.price}}</mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

@@ -32,11 +32,15 @@ export class InvoiceViewComponent implements OnInit, OnDestroy {
   ngOnInit() {
    this.viewItems$ = combineLatest(
      this.invoiceItemsService.invoiceItems$,
-     this.productsService.products$
+     this.productsService.products$,
+     this.invoiceService.invoice$
    ).pipe(
-     map(([invoiceItems, products]) => invoiceItems.map(invItm => ({
+     map(([invoiceItems, products, invoice]) => invoiceItems.map(invItm => ({
        ...invItm,
-       product: products.find(product => product._id === invItm.product_id)
+       product: products.find(product => product._id === invItm.product_id),
+       price: (
+         (invItm.quantity * products.find(product => product._id === invItm.product_id).price) / 100 * (100 - (invoice.discount || 0)))
+       .toFixed(2)
      })))
    );
 
