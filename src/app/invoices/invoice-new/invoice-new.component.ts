@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-
 import { Store } from '@ngxs/store';
 import { combineLatest, Observable } from 'rxjs';
 import { startWith } from 'rxjs/operators';
@@ -21,7 +20,8 @@ export class InvoiceNewComponent implements OnInit {
   products$: Observable<ProductModel[]>;
   customers$: Observable<CustomerModel[]>;
   invoiceForm;
-  itemsTotal;
+  itemsPrice;
+  totalPrice;
 
 
   constructor(
@@ -29,6 +29,10 @@ export class InvoiceNewComponent implements OnInit {
     private customersService: CustomersService,
     private store: Store
   ) {
+  }
+
+  get total() {
+    return this.invoiceForm.get('total') as FormControl;
   }
 
   get items() {
@@ -43,23 +47,31 @@ export class InvoiceNewComponent implements OnInit {
     this.products$ = this.productsService.products$;
     this.customers$ = this.customersService.customers$;
     this.initForm();
-    this.itemsTotal = combineLatest(
-      this.discount.valueChanges.pipe(startWith(0)),
+    this.itemsPrice = combineLatest(
       this.items.valueChanges,
       this.products$
-    ).subscribe(([discount, items, products]) => {
+    ).subscribe(([items, products]) => {
       const itemForm = items.map(item => {
         const price = item.product_id ?
-          products.find(p => p._id === item.product_id).price * item.quantity / 100 * (100 - discount) : 0;
-        return item.price = price;
+          products.find(p => p._id === item.product_id).price * item.quantity : 0;
+         item.price = price;
+         return item;
       });
-
       this.items.patchValue(itemForm, {emitEvent: false});
     });
+    this.totalPrice = combineLatest(
+      this.items.valueChanges,
+      this.discount.valueChanges.pipe(startWith(0))
+    ).subscribe(([itemsPrice, discount]) => {
+      const itemsPriceTotal = itemsPrice.map( item => item.price).reduce((acc, val) => acc + val);
+      const total = (itemsPriceTotal / 100 * (100 - discount)).toFixed(2);
+      this.total.patchValue(total, {emitEvent: false});
+    });
+
   }
 
   onSubmit() {
-    console.log(this.items);
+    console.log(this.total);
     // this.store.dispatch( new AddInvoice(this.invoiceForm.value));
   }
 
