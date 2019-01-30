@@ -5,8 +5,8 @@ import { RequestService } from '../../../core/services/request.service';
 import { FetchInvoiceItemsSuccess, } from '../../invoice-items/invoice-items.actions';
 import { IRequest } from '../requests.interface';
 import {
-  requestEntitiesDefault,
   requestEntitiesFail,
+  requestEntitiesInitial,
   requestEntitiesLoading,
   requestEntitiesSuccess
 } from '../shared/requests-entities';
@@ -21,7 +21,7 @@ import {
 
 @State<IRequest>({
   name: 'invoiceItemsRequestState',
-  defaults: requestEntitiesDefault,
+  defaults: requestEntitiesInitial(),
 })
 export class InvoiceItemsRequestState {
 
@@ -32,7 +32,7 @@ export class InvoiceItemsRequestState {
 
   @Action(InvoiceItemsRequest)
   invoiceItemsRequest(ctx: StateContext<IRequest>, {payload: id}: InvoiceItemsRequest) {
-    ctx.patchState(requestEntitiesLoading);
+    ctx.patchState(requestEntitiesLoading());
     return this.requestService
     .get(`invoices/${id}/items`)
     .pipe(
@@ -50,18 +50,18 @@ export class InvoiceItemsRequestState {
     ctx: StateContext<IRequest>,
     {payload}: InvoiceItemsRequestSuccess
   ) {
-    ctx.patchState({...requestEntitiesSuccess, data: payload});
+    ctx.patchState(requestEntitiesSuccess(payload));
     ctx.dispatch(new FetchInvoiceItemsSuccess(payload));
   }
 
   @Action(InvoiceItemsRequestFail)
   invoiceItemsRequestFail(ctx: StateContext<IRequest>, {payload}: InvoiceItemsRequestFail) {
-    ctx.patchState({...requestEntitiesFail, data: payload});
+    ctx.patchState(requestEntitiesFail(payload));
     console.error('An error occured: ', payload.message);
   }
 
   @Action(InvoiceItemsRequestReset)
   invoiceItemsRequestReset({patchState}: StateContext<IRequest>) {
-    patchState(requestEntitiesDefault);
+    patchState(requestEntitiesInitial());
   }
 }

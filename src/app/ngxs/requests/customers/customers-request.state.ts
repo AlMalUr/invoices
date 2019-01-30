@@ -5,8 +5,8 @@ import { RequestService } from '../../../core/services/request.service';
 import { FetchCustomersSuccess } from '../../customers/customers.actions';
 import { IRequest } from '../requests.interface';
 import {
-  requestEntitiesDefault,
   requestEntitiesFail,
+  requestEntitiesInitial,
   requestEntitiesLoading,
   requestEntitiesSuccess
 } from '../shared/requests-entities';
@@ -19,7 +19,7 @@ import {
 
 @State<IRequest>({
   name: 'customersRequestState',
-  defaults: requestEntitiesDefault,
+  defaults: requestEntitiesInitial(),
 })
 export class CustomersRequestState {
 
@@ -30,7 +30,7 @@ export class CustomersRequestState {
 
   @Action(CustomersRequest)
   customersRequest(ctx: StateContext<IRequest>) {
-    ctx.patchState( requestEntitiesLoading );
+    ctx.patchState( requestEntitiesLoading() );
     return this.requestService
     .get('customers')
     .pipe(
@@ -48,13 +48,13 @@ export class CustomersRequestState {
     ctx: StateContext<IRequest>,
     {payload}: CustomersRequestSuccess
   ) {
-    ctx.patchState( {...requestEntitiesSuccess, data: payload} );
+    ctx.patchState( requestEntitiesSuccess(payload) );
     ctx.dispatch(new FetchCustomersSuccess(payload));
   }
 
   @Action(CustomersRequestFail)
   customersRequestFail(ctx: StateContext<IRequest>, {payload}: CustomersRequestFail) {
-    ctx.patchState( {...requestEntitiesFail, data: payload} );
+    ctx.patchState( requestEntitiesFail(payload) );
     console.error('An error occured: ', payload.message);
   }
 

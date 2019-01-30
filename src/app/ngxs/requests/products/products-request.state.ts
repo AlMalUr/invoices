@@ -5,8 +5,8 @@ import { RequestService } from '../../../core/services/request.service';
 import { FetchProductsSuccess } from '../../products/products.actions';
 import { IRequest } from '../requests.interface';
 import {
-  requestEntitiesDefault,
   requestEntitiesFail,
+  requestEntitiesInitial,
   requestEntitiesLoading,
   requestEntitiesSuccess
 } from '../shared/requests-entities';
@@ -20,7 +20,7 @@ import {
 
 @State<IRequest>({
   name: 'productsRequestState',
-  defaults: requestEntitiesDefault,
+  defaults: requestEntitiesInitial(),
 })
 export class ProductsRequestState {
 
@@ -31,7 +31,7 @@ export class ProductsRequestState {
 
   @Action(ProductsRequest)
   productsRequest(ctx: StateContext<IRequest>, action: ProductsRequest) {
-    ctx.patchState(requestEntitiesLoading);
+    ctx.patchState(requestEntitiesLoading());
     return this.requestService
     .get('products')
     .pipe(
@@ -49,14 +49,13 @@ export class ProductsRequestState {
     ctx: StateContext<IRequest>,
     {payload}: ProductsRequestSuccess
   ) {
-    ctx.patchState({...requestEntitiesSuccess,
-      data: payload});
+    ctx.patchState(requestEntitiesSuccess(payload));
     ctx.dispatch(new FetchProductsSuccess(payload));
   }
 
   @Action(ProductsRequestFail)
   productsRequestFail(ctx: StateContext<IRequest>, {payload}: ProductsRequestFail) {
-    ctx.patchState({...requestEntitiesFail, data: payload});
+    ctx.patchState(requestEntitiesFail(payload));
     console.error('An error occured: ', payload.message);
   }
 }

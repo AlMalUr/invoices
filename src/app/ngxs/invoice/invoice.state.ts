@@ -10,11 +10,11 @@ import {
 } from './invoice.actions';
 
 const entityDefault = {
-  entity: null
+  invoice: null
 };
 
 export class InvoiceStateModel {
-  entity: InvoiceModel;
+  invoice: InvoiceModel;
 }
 
 @State<InvoiceStateModel>({
@@ -25,7 +25,7 @@ export class InvoiceState {
 
   @Selector()
   static getInvoice(state: InvoiceStateModel) {
-    return state.entity;
+    return state.invoice;
   }
 
   @Action(FetchInvoice)
@@ -38,7 +38,7 @@ export class InvoiceState {
     {setState}: StateContext<InvoiceStateModel>,
     {payload}: FetchInvoiceSuccess
   ) {
-    setState({entity: payload});
+    setState({invoice: payload});
   }
 
 
