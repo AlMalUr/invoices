@@ -1,13 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material';
 import { Store } from '@ngxs/store';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, of, Subscription } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 
 import { CustomersService } from '../../core/services/customers.service';
 import { ProductsService } from '../../core/services/products.service';
 import { CustomerModel } from '../../shared/models/customer.model';
 import { ProductModel } from '../../shared/models/product.model';
+import { ModalWindowComponent } from '../../modal-window/modal-window.component';
+import { ModalService } from '../../core/services/modal.service';
 
 
 @Component({
@@ -15,18 +18,21 @@ import { ProductModel } from '../../shared/models/product.model';
   templateUrl: './invoice-new.component.html',
   styleUrls: ['./invoice-new.component.scss']
 })
-export class InvoiceNewComponent implements OnInit {
+export class InvoiceNewComponent implements OnInit, OnDestroy {
 
+  leavePageModal = false;
   products$: Observable<ProductModel[]>;
   customers$: Observable<CustomerModel[]>;
-  invoiceForm;
-  itemsPrice;
-  totalPrice;
+  invoiceForm: FormGroup;
+  itemsPrice: Subscription;
+  totalPrice: Subscription;
 
 
   constructor(
     private productsService: ProductsService,
     private customersService: CustomersService,
+    public dialog: MatDialog,
+    private modalService: ModalService,
     private store: Store
   ) {
   }
@@ -54,8 +60,8 @@ export class InvoiceNewComponent implements OnInit {
       const itemForm = items.map(item => {
         const price = item.product_id ?
           products.find(p => p._id === item.product_id).price * item.quantity : 0;
-         item.price = price;
-         return item;
+        item.price = price;
+        return item;
       });
       this.items.patchValue(itemForm, {emitEvent: false});
     });
@@ -63,15 +69,19 @@ export class InvoiceNewComponent implements OnInit {
       this.items.valueChanges,
       this.discount.valueChanges.pipe(startWith(0))
     ).subscribe(([itemsPrice, discount]) => {
-      const itemsPriceTotal = itemsPrice.map( item => item.price).reduce((acc, val) => acc + val);
-      const total = (itemsPriceTotal / 100 * (100 - discount)).toFixed(2);
-      this.total.patchValue(total, {emitEvent: false});
+        const itemsPriceTotal = itemsPrice.map(item => item.price).reduce((acc, val) => acc + val);
+        const total = (itemsPriceTotal / 100 * (100 - discount));
+        this.total.patchValue(total, {emitEvent: false});
     });
 
   }
 
+  ngOnDestroy() {
+    this.itemsPrice.unsubscribe();
+    this.totalPrice.unsubscribe();
+  }
+
   onSubmit() {
-    console.log(this.total);
     // this.store.dispatch( new AddInvoice(this.invoiceForm.value));
   }
 
@@ -103,6 +113,36 @@ export class InvoiceNewComponent implements OnInit {
     }
   }
 
+  openDialog(): void {
+    const dialogRef = this.dialog.open(ModalWindowComponent, {
+      width: '350px',
+      data: { leavePageModal: this.leavePageModal}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.leavePageModal = result;
+    });
+  }
+
+ // confirm() {
+ //   return !this.leavePageModal || !this.invoiceForm.dirty;
+ // }
+// canDeactivate() {
+//   console.log('i am navigating away');
+//   this.openDialog();
+
+// //  // if the editName !== this.user.name
+// //  if ( this.invoiceForm.dirty) {
+// //    this.openDialog();
+// //  }
+
+//   return false;
+// }
+  canDeactivate(): Observable<boolean> | boolean {
+    if ((this.invoiceForm.touched)) {
+      return this.modalService.confirmModal();
+    }
+    return of(true);
+
+  }
 }
-
-

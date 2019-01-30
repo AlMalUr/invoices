@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import {
   MatAutocompleteModule,
-  MatButtonModule, MatFormFieldModule, MatInputModule,
+  MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule,
   MatMenuModule, MatSelectModule,
   MatTableModule,
   MatTabsModule,
@@ -23,6 +23,7 @@ import { RouterModule } from '@angular/router';
     MatFormFieldModule,
     MatInputModule,
     MatAutocompleteModule,
+    MatDialogModule,
   ],
   exports: [
     CommonModule,
@@ -36,6 +37,7 @@ import { RouterModule } from '@angular/router';
     MatFormFieldModule,
     MatInputModule,
     MatAutocompleteModule,
+    MatDialogModule,
   ]
 })
 export class SharedModule { }

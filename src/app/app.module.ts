@@ -7,22 +7,27 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { HeaderModule } from './header/header.module';
+import { ModalWindowComponent } from './modal-window/modal-window.component';
 import { NgxsStateModule } from './ngxs/ngxs-state.module';
+import { SharedModule } from './shared/shared.module';
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    ModalWindowComponent
   ],
   imports: [
     AppRoutingModule,
     BrowserModule.withServerTransition({appId: 'invoice-app'}),
     BrowserAnimationsModule,
     CoreModule,
+    SharedModule,
     HeaderModule,
     NgxsStateModule,
     TransferHttpCacheModule,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ModalWindowComponent],
 })
 export class AppModule { }

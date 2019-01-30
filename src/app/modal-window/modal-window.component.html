@@ -1,0 +1,14 @@
+
+<!--<mat-dialog-actions align="center">-->
+  <!--<button mat-raised-button color="primary" (click)="onConfirmClick()" tabindex="1">{{confirmButtonText}}</button>-->
+  <!--<button mat-raised-button mat-dialog-close tabindex="-1">{{cancelButtonText}}</button>-->
+<!--</mat-dialog-actions>-->
+
+<h1 mat-dialog-title>Are you shure yo want to leave this page?</h1>
+<div mat-dialog-content>
+  <p>All unsaved data will be lost</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="leaveOrNot(false)" cdkFocusInitial>Stay</button>
+  <button mat-button (click)="leaveOrNot(true)">Leave</button>
+</div>
