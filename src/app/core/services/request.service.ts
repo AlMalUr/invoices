@@ -12,5 +12,8 @@ export class RequestService {
     return this.http.get<any>(url);
   }
 
+  post(url, newInvoice) {
+    return this.http.post<any>(url, newInvoice);
+  }
 }
 
