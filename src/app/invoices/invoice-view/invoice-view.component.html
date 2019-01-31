@@ -35,7 +35,7 @@
         </mat-table>
         <div class="info-area__total-area">
           <div class="total-area__title">Total</div>
-          <div class="total-area__value">$ {{(viewItem$ | async).total}}</div>
+          <div class="total-area__value">$ {{(viewItem$ | async).total | number : '1.2-2'}}</div>
         </div>
 
     </div>
