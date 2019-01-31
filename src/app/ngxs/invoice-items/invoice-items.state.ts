@@ -4,7 +4,6 @@ import { InvoiceItemModel } from '../../shared/models/invoice-item.model';
 import { InvoiceItemsRequest, InvoiceItemsRequestReset } from '../requests/invoice-items/invoice-items-request.action';
 
 import {
-  AddInvoice,
   FetchInvoiceItems,
   FetchInvoiceItemsSuccess,
   ResetInvoiceItems,

@@ -17,9 +17,5 @@ export class ResetInvoiceItems {
   static readonly type = '[InvoiceItems] ResetInvoiceItems';
 }
 
-export class AddInvoice {
-  static readonly type = '[InvoiceItems] AddInvoice';
-  constructor(private payload: any) {
-  }
-}
+
 

@@ -57,5 +57,4 @@ export class InvoicesRequestState {
     ctx.patchState(requestEntitiesFail(payload));
     console.error('An error occured: ', payload.message);
   }
-
 }

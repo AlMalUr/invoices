@@ -19,4 +19,3 @@ export class InvoicesRequestFail {
   constructor(public payload: HttpErrorResponse) {
   }
 }
-

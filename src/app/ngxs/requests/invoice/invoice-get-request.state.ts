@@ -12,56 +12,56 @@ import {
 } from '../shared/requests-entities';
 
 import {
-  InvoiceRequest,
-  InvoiceRequestFail,
-  InvoiceRequestReset,
-  InvoiceRequestSuccess
-} from './invoice-request.action';
+  InvoiceGetRequest,
+  InvoiceGetRequestFail,
+  InvoiceGetRequestReset,
+  InvoiceGetRequestSuccess
+} from './invoice-get-request.action';
 
 
 @State<IRequest>({
-  name: 'invoiceRequestState',
+  name: 'invoiceGetRequestState',
   defaults: requestEntitiesInitial(),
 })
-export class InvoiceRequestState {
+export class InvoiceGetRequestState {
 
   constructor(
     private requestService: RequestService,
   ) {
   }
 
-  @Action(InvoiceRequest)
-  invoiceRequest(ctx: StateContext<IRequest>, {payload: id}: InvoiceRequest) {
+  @Action(InvoiceGetRequest)
+  invoiceGetRequest(ctx: StateContext<IRequest>, {payload: id}: InvoiceGetRequest) {
     ctx.patchState(requestEntitiesLoading());
     return this.requestService
     .get(`invoices/${id}`)
     .pipe(
       tap((res: any) => {
-        return ctx.dispatch(new InvoiceRequestSuccess(res));
+        return ctx.dispatch(new InvoiceGetRequestSuccess(res));
       }),
       catchError(error => {
-        return ctx.dispatch(new InvoiceRequestFail(error));
+        return ctx.dispatch(new InvoiceGetRequestFail(error));
       }),
     );
   }
 
-  @Action(InvoiceRequestSuccess)
-  invoiceRequestSuccess(
+  @Action(InvoiceGetRequestSuccess)
+  invoiceGetRequestSuccess(
     ctx: StateContext<IRequest>,
-    {payload}: InvoiceRequestSuccess
+    {payload}: InvoiceGetRequestSuccess
   ) {
     ctx.patchState(requestEntitiesSuccess(payload));
     ctx.dispatch(new FetchInvoiceSuccess(payload));
   }
 
-  @Action(InvoiceRequestFail)
-  invoiceRequestFail(ctx: StateContext<IRequest>, {payload}: InvoiceRequestFail) {
+  @Action(InvoiceGetRequestFail)
+  invoiceGetRequestFail(ctx: StateContext<IRequest>, {payload}: InvoiceGetRequestFail) {
     ctx.patchState(requestEntitiesFail(payload));
     console.error('An error occured: ', payload.message);
   }
 
-  @Action(InvoiceRequestReset)
-  invoiceRequestReset({patchState}: StateContext<IRequest>) {
+  @Action(InvoiceGetRequestReset)
+  invoiceGetRequestReset({patchState}: StateContext<IRequest>) {
     patchState(requestEntitiesInitial());
   }
 }

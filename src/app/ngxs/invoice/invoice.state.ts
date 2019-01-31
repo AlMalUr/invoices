@@ -1,7 +1,7 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 
 import { InvoiceModel } from '../../shared/models/invoice.model';
-import { InvoiceRequest, InvoiceRequestReset } from '../requests/invoice/invoice-request.action';
+import { InvoiceGetRequest, InvoiceGetRequestReset } from '../requests/invoice/invoice-get-request.action';
 
 import {
   FetchInvoice,
@@ -30,7 +30,7 @@ export class InvoiceState {
 
   @Action(FetchInvoice)
   fetchInvoice({dispatch}: StateContext<InvoiceStateModel>, {payload: id}: FetchInvoice) {
-    dispatch(new InvoiceRequest(id));
+    dispatch(new InvoiceGetRequest(id));
   }
 
   @Action(FetchInvoiceSuccess)
@@ -47,7 +47,6 @@ export class InvoiceState {
     {setState, dispatch}: StateContext<InvoiceStateModel>,
   ) {
     setState(entityDefault);
-    dispatch(new InvoiceRequestReset());
+    dispatch(new InvoiceGetRequestReset());
   }
 }
-
