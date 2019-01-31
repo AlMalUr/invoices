@@ -1,16 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material';
+
 import { Store } from '@ngxs/store';
-import { combineLatest, Observable, of, Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 
 import { CustomersService } from '../../core/services/customers.service';
+import { ModalService } from '../../core/services/modal.service';
 import { ProductsService } from '../../core/services/products.service';
+import { PostInvoice } from '../../ngxs/invoice/invoice-post.actions';
 import { CustomerModel } from '../../shared/models/customer.model';
 import { ProductModel } from '../../shared/models/product.model';
-import { ModalWindowComponent } from '../../modal-window/modal-window.component';
-import { ModalService } from '../../core/services/modal.service';
 
 
 @Component({
@@ -20,19 +20,18 @@ import { ModalService } from '../../core/services/modal.service';
 })
 export class InvoiceNewComponent implements OnInit, OnDestroy {
 
-  leavePageModal = false;
   products$: Observable<ProductModel[]>;
   customers$: Observable<CustomerModel[]>;
   invoiceForm: FormGroup;
   itemsPrice: Subscription;
   totalPrice: Subscription;
+  submitted = new BehaviorSubject(false);
 
 
   constructor(
     private productsService: ProductsService,
     private customersService: CustomersService,
-    public dialog: MatDialog,
-    private modalService: ModalService,
+    public modalService: ModalService,
     private store: Store
   ) {
   }
@@ -82,7 +81,9 @@ export class InvoiceNewComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    // this.store.dispatch( new AddInvoice(this.invoiceForm.value));
+    this.submitted.next(true);
+    this.store.dispatch( new PostInvoice(this.invoiceForm.value));
+   // this.store.dispatch( new PostInvoiceItems(this.invoiceForm.value.items));
   }
 
   initForm() {
@@ -113,36 +114,10 @@ export class InvoiceNewComponent implements OnInit, OnDestroy {
     }
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(ModalWindowComponent, {
-      width: '350px',
-      data: { leavePageModal: this.leavePageModal}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.leavePageModal = result;
-    });
-  }
-
- // confirm() {
- //   return !this.leavePageModal || !this.invoiceForm.dirty;
- // }
-// canDeactivate() {
-//   console.log('i am navigating away');
-//   this.openDialog();
-
-// //  // if the editName !== this.user.name
-// //  if ( this.invoiceForm.dirty) {
-// //    this.openDialog();
-// //  }
-
-//   return false;
-// }
   canDeactivate(): Observable<boolean> | boolean {
-    if ((this.invoiceForm.touched)) {
-      return this.modalService.confirmModal();
+    if ((this.invoiceForm.touched && this.submitted.getValue()) || !this.invoiceForm.touched) {
+      return true;
     }
-    return of(true);
-
+    return this.modalService.confirmModal();
   }
 }
