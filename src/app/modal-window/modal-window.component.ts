@@ -11,12 +11,9 @@ import { InvoiceNewComponent } from '../invoices/invoice-new/invoice-new.compone
 })
 export class ModalWindowComponent {
 
-  leavePageModal: boolean;
   constructor(
-    public dialogRef: MatDialogRef<InvoiceNewComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    public dialogRef: MatDialogRef<InvoiceNewComponent>
   ) {
-   // this.leavePageModal = this.data.leavePageModal;
   }
 
   leaveOrNot(value): void {

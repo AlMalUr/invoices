@@ -1,0 +1,16 @@
+.modal {
+  &__title {
+    text-align: center;
+  }
+  &__text {
+    text-align: center;
+    color: orangered;
+  }
+  &__area-wrap {
+    display: flex;
+    justify-content: space-around;
+  }
+  &__btn {
+    width: 80px;
+  }
+}

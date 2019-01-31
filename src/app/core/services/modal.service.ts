@@ -13,8 +13,9 @@ export class ModalService {
   ) {}
 
   confirmModal() {
-    return this.dialog.open(
-      ModalWindowComponent)
+    return this.dialog.open(ModalWindowComponent, {
+      width: '350px'
+    })
     .afterClosed();
   }
 }

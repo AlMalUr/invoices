@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanDeactivate, RouterStateSnapshot } from '@angular/router';
+import { Observable } from 'rxjs';
 
 import { InvoiceNewComponent } from '../../invoices/invoice-new/invoice-new.component';
-import { Observable } from 'rxjs';
 
 
 @Injectable({

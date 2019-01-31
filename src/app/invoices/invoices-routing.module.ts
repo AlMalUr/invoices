@@ -39,10 +39,7 @@ const routes: Routes = [
       products: ProductsResolverService,
       customers: CustomersResolverService,
       invoices: InvoicesResolverService
-    },
-    canDeactivate: [
-      InvoiceNewGuard
-    ]
+    }
   }
 ];
 
