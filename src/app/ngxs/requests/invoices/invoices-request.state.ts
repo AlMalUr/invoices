@@ -1,4 +1,4 @@
-import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Action, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
 
 import { RequestService } from '../../../core/services/request.service';
@@ -19,7 +19,7 @@ import {
 
 @State<IRequest>({
   name: 'invoicesRequestState',
-  defaults: requestEntitiesInitial(),
+  defaults: requestEntitiesInitial,
 })
 export class InvoicesRequestState {
 
@@ -29,8 +29,8 @@ export class InvoicesRequestState {
   }
 
   @Action(InvoicesRequest)
-  invoicesRequest(ctx: StateContext<IRequest>, action: InvoicesRequest) {
-    ctx.patchState(requestEntitiesLoading());
+  invoicesRequest(ctx: StateContext<IRequest>) {
+    ctx.patchState(requestEntitiesLoading);
     return this.requestService
     .get('invoices')
     .pipe(

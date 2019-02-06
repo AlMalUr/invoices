@@ -4,7 +4,7 @@ import { InvoiceItemModel } from '../../../shared/models/invoice-item.model';
 
 export class InvoiceItemsPostRequest {
   static type = '[InvoiceItemsRequest] InvoiceItemsPostRequest';
-  constructor(public id: string, public items: any) {
+  constructor(public payload: string) {
   }
 }
 

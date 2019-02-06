@@ -1,5 +1,5 @@
 <div class="invoice-container">
-  <form class="invoice-template" [formGroup]="invoiceForm" (ngSubmit)="onSubmit()">
+  <form class="invoice-template" [formGroup]="invoiceForm" (ngSubmit)="createInvoice()">
     <div class="invoice__info-area">
 
       <div class="info-area__id">
@@ -34,15 +34,16 @@
             <div class="product__cell product__cell-qty">
               <mat-form-field>
                 <input matInput type="number" min="1" formControlName="quantity">
+                <!--<mat-error *ngIf="emailFormControl.hasError('required')">-->
+
+
                 <mat-error
-                  *ngIf="item.get('quantity').invalid
-                   && (item.get('quantity').dirty || item.get('quantity').touched)
-                   && item.get('quantity').errors.required"
+                  *ngIf="(item.get('quantity').dirty || item.get('quantity').touched)
+                   && item.get('quantity').hasError('required')"
                 > required </mat-error>
                 <mat-error
-                  *ngIf="item.get('quantity').invalid
-                   && (item.get('quantity').dirty || item.get('quantity').touched)
-                   && item.get('quantity').errors.min "
+                  *ngIf="(item.get('quantity').dirty || item.get('quantity').touched)
+                   && item.get('quantity').hasError('min')"
                 > min 1</mat-error>
               </mat-form-field>
             </div>
@@ -91,13 +92,13 @@
         <mat-form-field>
           <input matInput type="number" min="0" max="50" formControlName="discount">
           <mat-error
-            *ngIf="discount.invalid && (discount.dirty || discount.touched) && discount.errors.min"
+            *ngIf="(discount.dirty || discount.touched) && discount.hasError('min')"
           > must be 0 or more </mat-error>
           <mat-error
-            *ngIf="discount.invalid && (discount.dirty || discount.touched) && discount.errors.max"
+            *ngIf="(discount.dirty || discount.touched) && discount.hasError('max')"
           > must be under 50 </mat-error>
           <mat-error
-            *ngIf="discount.invalid && (discount.dirty || discount.touched) && discount.errors.required"
+            *ngIf="(discount.dirty || discount.touched) && discount.hasError('required')"
           > required field </mat-error>
         </mat-form-field>
       </div>

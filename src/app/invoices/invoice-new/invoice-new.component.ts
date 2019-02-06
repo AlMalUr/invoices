@@ -3,15 +3,15 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Store } from '@ngxs/store';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
-import { startWith } from 'rxjs/operators';
+import { startWith, withLatestFrom } from 'rxjs/operators';
 
 import { CustomersService } from '../../core/services/customers.service';
 import { ModalService } from '../../core/services/modal.service';
 import { ProductsService } from '../../core/services/products.service';
 
+import { CreateInvoice } from '../../ngxs/invoices/invoices.actions';
 import { CustomerModel } from '../../shared/models/customer.model';
 import { ProductModel } from '../../shared/models/product.model';
-import { CreateInvoice } from '../../ngxs/invoices/invoices.actions';
 
 
 @Component({
@@ -24,8 +24,8 @@ export class InvoiceNewComponent implements OnInit, OnDestroy {
   products$: Observable<ProductModel[]>;
   customers$: Observable<CustomerModel[]>;
   invoiceForm: FormGroup;
-  itemsPrice: Subscription;
-  totalPrice: Subscription;
+  itemsPriceSubscription: Subscription;
+  totalPriceSubscription: Subscription;
   submitted = new BehaviorSubject(false);
 
 
@@ -53,10 +53,8 @@ export class InvoiceNewComponent implements OnInit, OnDestroy {
     this.products$ = this.productsService.products$;
     this.customers$ = this.customersService.customers$;
     this.initForm();
-    this.itemsPrice = combineLatest(
-      this.items.valueChanges,
-      this.products$
-    ).subscribe(([items, products]) => {
+    this.itemsPriceSubscription = this.items.valueChanges.pipe(withLatestFrom(this.products$))
+    .subscribe(([items, products]) => {
       const itemForm = items.map(item => {
         const price = item.product_id ?
           products.find(p => p._id === item.product_id).price * item.quantity : 0;
@@ -65,25 +63,25 @@ export class InvoiceNewComponent implements OnInit, OnDestroy {
       });
       this.items.patchValue(itemForm, {emitEvent: false});
     });
-    this.totalPrice = combineLatest(
-      this.items.valueChanges,
-      this.discount.valueChanges.pipe(startWith(0))
+    this.totalPriceSubscription = this.items.valueChanges.pipe(withLatestFrom(this.discount.valueChanges.pipe(startWith(0)))
     ).subscribe(([itemsPrice, discount]) => {
-        const itemsPriceTotal = itemsPrice.map(item => item.price).reduce((acc, val) => acc + val);
-        const total = (itemsPriceTotal / 100 * (100 - discount));
-        this.total.patchValue(total, {emitEvent: false});
+      const itemsPriceTotal = itemsPrice.map(item => item.price).reduce((acc, val) => acc + val);
+      const total = (itemsPriceTotal / 100 * (100 - discount));
+      this.total.patchValue(total, {emitEvent: false});
     });
 
   }
 
   ngOnDestroy() {
-    this.itemsPrice.unsubscribe();
-    this.totalPrice.unsubscribe();
+    this.itemsPriceSubscription.unsubscribe();
+    this.totalPriceSubscription.unsubscribe();
   }
 
-  onSubmit() {
+  createInvoice() {
     this.submitted.next(true);
-    this.store.dispatch( new CreateInvoice(this.invoiceForm.value));
+    this.store.dispatch([
+      new CreateInvoice(this.invoiceForm.value)
+    ]);
   }
 
   initForm() {

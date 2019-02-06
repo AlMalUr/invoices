@@ -1,7 +1,8 @@
-import { Action, State, StateContext } from '@ngxs/store';
+import { Action, State, StateContext, Store } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
 
 import { RequestService } from '../../../core/services/request.service';
+import { InvoiceItemsState } from '../../invoice-items/invoice-items.state';
 import { IRequest } from '../requests.interface';
 import {
   requestEntitiesFail,
@@ -15,25 +16,26 @@ import {
   InvoiceItemsPostRequestFail,
   InvoiceItemsPostRequestSuccess,
 } from './invoice-items-post-request.action';
-import { PostInvoiceItemsSuccess } from '../../invoice-items/invoice-items-post.actions';
 
 
 @State<IRequest>({
   name: 'invoiceItemsPostRequestState',
-  defaults: requestEntitiesInitial(),
+  defaults: requestEntitiesInitial,
 })
 export class InvoiceItemsPostRequestState {
 
   constructor(
     private requestService: RequestService,
+    private store: Store,
   ) {
   }
 
   @Action(InvoiceItemsPostRequest)
-  invoiceItemsPostRequest(ctx: StateContext<IRequest>, {id, items}: InvoiceItemsPostRequest) {
-    ctx.patchState(requestEntitiesLoading());
+  invoiceItemsPostRequest(ctx: StateContext<IRequest>, {payload: id}: InvoiceItemsPostRequest) {
+    ctx.patchState(requestEntitiesLoading);
+    const items = this.store.selectSnapshot(InvoiceItemsState.getNewItems);
     return this.requestService
-    .post(`invoices/${id}/items`, items.items)
+    .post(`invoices/${id}/items`, items)
     .pipe(
       tap((res: any) => {
         return ctx.dispatch(new InvoiceItemsPostRequestSuccess(res));
@@ -50,7 +52,6 @@ export class InvoiceItemsPostRequestState {
     {payload}: InvoiceItemsPostRequestSuccess
   ) {
     ctx.patchState(requestEntitiesSuccess(payload));
-    ctx.dispatch(new PostInvoiceItemsSuccess(payload));
   }
 
   @Action(InvoiceItemsPostRequestFail)

@@ -2,8 +2,7 @@ import { Action, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
 
 import { RequestService } from '../../../core/services/request.service';
-import { PostInvoiceItems } from '../../invoice-items/invoice-items-post.actions';
-
+import { CreateInvoiceSuccess } from '../../invoices/invoices.actions';
 import { IRequest } from '../requests.interface';
 import {
   requestEntitiesFail,
@@ -17,12 +16,11 @@ import {
   PostInvoiceRequestFail,
   PostInvoiceRequestSuccess
 } from './invoice-post-request.action';
-import { CreateInvoiceSuccess } from '../../invoices/invoices.actions';
 
 
 @State<IRequest>({
-  name: 'PostInvoiceRequestState',
-  defaults: requestEntitiesInitial(),
+  name: 'postInvoiceRequestState',
+  defaults: requestEntitiesInitial,
 })
 export class PostInvoiceRequestState {
 
@@ -33,12 +31,11 @@ export class PostInvoiceRequestState {
 
   @Action(PostInvoiceRequest)
   postInvoiceRequest(ctx: StateContext<IRequest>, {payload: newInvoice}: PostInvoiceRequest) {
-    ctx.patchState(requestEntitiesLoading());
+    ctx.patchState(requestEntitiesLoading);
     return this.requestService
     .post('invoices', newInvoice)
     .pipe(
       tap((res: any) => {
-        ctx.dispatch(new PostInvoiceItems(res._id, newInvoice));
         return ctx.dispatch(new PostInvoiceRequestSuccess(res));
       }),
       catchError(error => {

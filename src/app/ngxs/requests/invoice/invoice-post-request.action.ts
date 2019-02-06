@@ -3,7 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 export class PostInvoiceRequest {
   static type = '[PostInvoiceRequest] PostInvoiceRequest';
-  constructor(public payload: string) {
+  constructor(public payload: any) {
   }
 }
 

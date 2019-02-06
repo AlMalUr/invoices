@@ -19,7 +19,7 @@ import {
 
 @State<IRequest>({
   name: 'customersRequestState',
-  defaults: requestEntitiesInitial(),
+  defaults: requestEntitiesInitial,
 })
 export class CustomersRequestState {
 
@@ -30,7 +30,7 @@ export class CustomersRequestState {
 
   @Action(CustomersRequest)
   customersRequest(ctx: StateContext<IRequest>) {
-    ctx.patchState( requestEntitiesLoading() );
+    ctx.patchState( requestEntitiesLoading );
     return this.requestService
     .get('customers')
     .pipe(

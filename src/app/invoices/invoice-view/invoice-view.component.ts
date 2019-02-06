@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 
 import { CustomersService } from '../../core/services/customers.service';
 import { InvoiceItemsService } from '../../core/services/invoice-items.service';
@@ -33,7 +33,7 @@ export class InvoiceViewComponent implements OnInit, OnDestroy {
    this.viewItems$ = combineLatest(
      this.invoiceItemsService.invoiceItems$,
      this.productsService.products$,
-     this.invoiceService.invoice$
+     this.invoiceService.invoice$.pipe(filter(invoice => !!invoice))
    ).pipe(
      map(([invoiceItems, products, invoice]) => invoiceItems.map(invItm => ({
        ...invItm,
@@ -45,7 +45,7 @@ export class InvoiceViewComponent implements OnInit, OnDestroy {
    );
 
     this.viewItem$ = combineLatest(
-      this.invoiceService.invoice$,
+      this.invoiceService.invoice$.pipe(filter(invoice => !!invoice)),
       this.customersService.customers$
     ).pipe(
       map(([invoice, customers]) => ({

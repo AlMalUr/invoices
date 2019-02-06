@@ -18,4 +18,17 @@ export class ResetInvoiceItems {
 }
 
 
+export class SaveNewInvoiceItems {
+  static readonly type = '[InvoiceItems] CreateInvoiceItems';
+
+  constructor( private payload: InvoiceItemModel[] ) {
+  }
+}
+
+export class PostInvoiceItems {
+  static readonly type = '[InvoiceItems] PostInvoiceItems';
+
+  constructor(private payload: string) {
+  }
+}
 

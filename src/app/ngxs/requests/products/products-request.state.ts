@@ -20,7 +20,7 @@ import {
 
 @State<IRequest>({
   name: 'productsRequestState',
-  defaults: requestEntitiesInitial(),
+  defaults: requestEntitiesInitial,
 })
 export class ProductsRequestState {
 
@@ -30,8 +30,8 @@ export class ProductsRequestState {
   }
 
   @Action(ProductsRequest)
-  productsRequest(ctx: StateContext<IRequest>, action: ProductsRequest) {
-    ctx.patchState(requestEntitiesLoading());
+  productsRequest(ctx: StateContext<IRequest>) {
+    ctx.patchState(requestEntitiesLoading);
     return this.requestService
     .get('products')
     .pipe(

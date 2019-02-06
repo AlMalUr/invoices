@@ -21,7 +21,7 @@ import {
 
 @State<IRequest>({
   name: 'getInvoiceRequestState',
-  defaults: requestEntitiesInitial(),
+  defaults: requestEntitiesInitial,
 })
 export class GetInvoiceRequestState {
 
@@ -32,7 +32,7 @@ export class GetInvoiceRequestState {
 
   @Action(GetInvoiceRequest)
   getInvoiceRequest(ctx: StateContext<IRequest>, {payload: id}: GetInvoiceRequest) {
-    ctx.patchState(requestEntitiesLoading());
+    ctx.patchState(requestEntitiesLoading);
     return this.requestService
     .get(`invoices/${id}`)
     .pipe(
@@ -62,6 +62,6 @@ export class GetInvoiceRequestState {
 
   @Action(GetInvoiceRequestReset)
   getInvoiceRequestReset({patchState}: StateContext<IRequest>) {
-    patchState(requestEntitiesInitial());
+    patchState(requestEntitiesInitial);
   }
 }

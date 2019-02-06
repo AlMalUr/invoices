@@ -1,22 +1,27 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 
 import { InvoiceItemModel } from '../../shared/models/invoice-item.model';
+import { InvoiceItemsPostRequest } from '../requests/invoice-items/invoice-items-post-request.action';
 import { InvoiceItemsRequest, InvoiceItemsRequestReset } from '../requests/invoice-items/invoice-items-request.action';
 
 import {
   FetchInvoiceItems,
   FetchInvoiceItemsSuccess,
+  PostInvoiceItems,
   ResetInvoiceItems,
+  SaveNewInvoiceItems,
 } from './invoice-items.actions';
 
 const entitiesDefault = {
   entities: null,
-  collectionIds: null
+  collectionIds: null,
+  newItems: null,
 };
 
 export class InvoiceItemsStateModel {
   entities: { [ids: string]: InvoiceItemModel };
   collectionIds: string[];
+  newItems: InvoiceItemModel[];
 }
 
 @State<InvoiceItemsStateModel>({
@@ -28,6 +33,11 @@ export class InvoiceItemsState {
   @Selector()
   static getInvoiceItems(state: InvoiceItemsStateModel) {
     return state.collectionIds.map(id => state.entities[id]);
+  }
+
+  @Selector()
+  static getNewItems(state: InvoiceItemsStateModel) {
+    return state.newItems;
   }
 
   @Action(FetchInvoiceItems)
@@ -45,7 +55,8 @@ export class InvoiceItemsState {
         ...acc,
         [item._id]: item
       }), {}),
-      collectionIds: custom.map(item => item._id)
+      collectionIds: custom.map(item => item._id),
+      newItems: null
     });
   }
 
@@ -53,9 +64,21 @@ export class InvoiceItemsState {
   resetInvoiceItems(
     {setState, dispatch}: StateContext<InvoiceItemsStateModel>,
   ) {
-   setState(entitiesDefault);
+    setState(entitiesDefault);
     dispatch(new InvoiceItemsRequestReset());
   }
 
+  @Action(SaveNewInvoiceItems)
+  createInvoiceItems({patchState}: StateContext<InvoiceItemsStateModel>, {payload}: SaveNewInvoiceItems) {
+    patchState({
+      newItems: payload
+    });
+  }
+
+  @Action(PostInvoiceItems)
+  postInvoiceItems({dispatch, getState}: StateContext<InvoiceItemsStateModel>, {payload}: PostInvoiceItems) {
+    dispatch(new InvoiceItemsPostRequest(payload));
+  }
 }
+
 

@@ -2,7 +2,9 @@ import { Router } from '@angular/router';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 
 import { InvoiceModel } from '../../shared/models/invoice.model';
+import { SaveNewInvoiceItems, PostInvoiceItems } from '../invoice-items/invoice-items.actions';
 import { GetInvoiceRequest, GetInvoiceRequestReset } from '../requests/invoice/invoice-get-request.action';
+import { PostInvoiceRequest } from '../requests/invoice/invoice-post-request.action';
 import { InvoicesRequest } from '../requests/invoices/invoices-request.action';
 
 import {
@@ -14,7 +16,7 @@ import {
   ResetInvoice,
   UpdateInvoices,
 } from './invoices.actions';
-import { PostInvoiceRequest } from '../requests/invoice/invoice-post-request.action';
+import { Navigate } from '@ngxs/router-plugin';
 
 
 export class InvoicesStateModel {
@@ -33,7 +35,8 @@ export class InvoicesStateModel {
 })
 export class InvoicesState {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+  }
 
   @Selector()
   static getInvoices(state: InvoicesStateModel) {
@@ -42,7 +45,7 @@ export class InvoicesState {
 
   @Selector()
   static getInvoice(state: InvoicesStateModel) {
-     return state.invoice;
+    return state.invoice;
   }
 
   @Action(FetchInvoices)
@@ -66,12 +69,12 @@ export class InvoicesState {
   }
 
   @Action(UpdateInvoices)
-  updateInvoices({getState, patchState}: StateContext<InvoicesStateModel>, {payload: newInvoice}: UpdateInvoices) {
+  updateInvoices({getState, patchState, dispatch}: StateContext<InvoicesStateModel>, {payload: newInvoice}: UpdateInvoices) {
     patchState({
       entities: {...getState().entities, [newInvoice._id]: newInvoice},
       collectionIds: [...getState().collectionIds, newInvoice._id],
     });
-    this.router.navigate(['/invoices']);
+    dispatch(new Navigate(['/invoices']));
   }
 
   // invoice get & reset
@@ -87,18 +90,15 @@ export class InvoicesState {
     {payload}: FetchInvoiceSuccess
   ) {
     patchState({
-      ...getState(),
       invoice: payload
     });
   }
-
 
   @Action(ResetInvoice)
   resetInvoice(
     {patchState, getState, dispatch}: StateContext<InvoicesStateModel>,
   ) {
     patchState({
-      ...getState(),
       invoice: null
     });
     dispatch(new GetInvoiceRequestReset());
@@ -108,7 +108,7 @@ export class InvoicesState {
 
   @Action(CreateInvoice)
   createInvoice({dispatch}: StateContext<InvoicesStateModel>, {payload: newInvoice}: CreateInvoice) {
-    dispatch(new PostInvoiceRequest(newInvoice));
+    dispatch([new SaveNewInvoiceItems(newInvoice.items), new PostInvoiceRequest(newInvoice)]);
   }
 
   @Action(CreateInvoiceSuccess)
@@ -116,7 +116,7 @@ export class InvoicesState {
     {dispatch}: StateContext<InvoicesStateModel>,
     {payload}: CreateInvoiceSuccess
   ) {
-    dispatch(new UpdateInvoices(payload));
+    dispatch([new UpdateInvoices(payload), new PostInvoiceItems(payload._id)]);
   }
 
 }
