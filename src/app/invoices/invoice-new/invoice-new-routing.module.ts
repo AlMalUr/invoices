@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { InvoiceNewGuard } from '../../core/services/invoice-new.guard';
+import { InvoiceNewGuard } from '../../core/guards/invoice-new.guard';
 
 import { InvoiceNewComponent } from './invoice-new.component';
 

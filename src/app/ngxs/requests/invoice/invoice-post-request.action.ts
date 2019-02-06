@@ -1,21 +1,21 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
 
-export class InvoicePostRequest {
-  static type = '[InvoicePostRequest] InvoicePostRequest';
+export class PostInvoiceRequest {
+  static type = '[PostInvoiceRequest] PostInvoiceRequest';
   constructor(public payload: string) {
   }
 }
 
-export class InvoicePostRequestSuccess {
-  static type = '[InvoicePostRequest] InvoicePostRequestSuccess';
+export class PostInvoiceRequestSuccess {
+  static type = '[PostInvoiceRequest] PostInvoiceRequestSuccess';
 
   constructor(public payload: any) {
   }
 }
 
-export class InvoicePostRequestFail {
-  static type = '[InvoicePostRequest] InvoicePostRequestFailed';
+export class PostInvoiceRequestFail {
+  static type = '[PostInvoiceRequest] PostInvoiceRequestFailed';
 
   constructor(public payload: HttpErrorResponse) {
   }

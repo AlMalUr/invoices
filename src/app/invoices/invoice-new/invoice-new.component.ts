@@ -8,9 +8,10 @@ import { startWith } from 'rxjs/operators';
 import { CustomersService } from '../../core/services/customers.service';
 import { ModalService } from '../../core/services/modal.service';
 import { ProductsService } from '../../core/services/products.service';
-import { PostInvoice } from '../../ngxs/invoice/invoice-post.actions';
+
 import { CustomerModel } from '../../shared/models/customer.model';
 import { ProductModel } from '../../shared/models/product.model';
+import { CreateInvoice } from '../../ngxs/invoices/invoices.actions';
 
 
 @Component({
@@ -82,8 +83,7 @@ export class InvoiceNewComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.submitted.next(true);
-    this.store.dispatch( new PostInvoice(this.invoiceForm.value));
-   // this.store.dispatch( new PostInvoiceItems(this.invoiceForm.value.items));
+    this.store.dispatch( new CreateInvoice(this.invoiceForm.value));
   }
 
   initForm() {

@@ -2,26 +2,26 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import { InvoiceModel } from '../../../shared/models/invoice.model';
 
-export class InvoiceGetRequest {
-  static type = '[InvoiceGetRequest] InvoiceGetRequest';
+export class GetInvoiceRequest {
+  static type = '[GetInvoiceRequest] GetInvoiceRequest';
   constructor(public payload: string) {
   }
 }
 
-export class InvoiceGetRequestSuccess {
-  static type = '[InvoiceGetRequest] InvoiceGetRequestSuccess';
+export class GetInvoiceRequestSuccess {
+  static type = '[GetInvoiceRequest] GetInvoiceRequestSuccess';
 
   constructor(public payload: InvoiceModel) {
   }
 }
 
-export class InvoiceGetRequestFail {
-  static type = '[InvoiceGetRequest] InvoiceGetRequestFailed';
+export class GetInvoiceRequestFail {
+  static type = '[GetInvoiceRequest] GetInvoiceRequestFailed';
 
   constructor(public payload: HttpErrorResponse) {
   }
 }
 
-export class InvoiceGetRequestReset {
-  static type = '[InvoiceGetRequest] InvoiceGetRequestReset';
+export class GetInvoiceRequestReset {
+  static type = '[GetInvoiceRequest] GetInvoiceRequestReset';
 }

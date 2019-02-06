@@ -62,13 +62,15 @@
 
       <div class="info-area__total-area">
         <div class="total-area__title">Total</div>
-        <div class="total-area__value">$ {{invoiceForm.get('total').value | number : '1.2-2'}}</div>
+        <div class="total-area__value">$ {{total.value | number : '1.2-2'}}</div>
       </div>
       <div class="invoice__submit-btn-wrap">
         <button
-          mat-button mat-raised-button
+          mat-button
+          mat-raised-button
           class="invoice__submit-btn"
-          color="primary" type="submit"
+          color="primary"
+          type="submit"
           [disabled]="!invoiceForm.valid"
         >Save Invoice
         </button>

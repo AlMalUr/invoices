@@ -1,13 +1,13 @@
 import { Selector, State } from '@ngxs/store';
 
 import { CustomersRequestState } from './customers/customers-request.state';
+import { InvoiceItemsPostRequestState } from './invoice-items/invoice-items-post-request.state';
 import { InvoiceItemsRequestState } from './invoice-items/invoice-items-request.state';
-import { InvoiceGetRequestState } from './invoice/invoice-get-request.state';
+import { GetInvoiceRequestState } from './invoice/invoice-get-request.state';
+import { PostInvoiceRequestState } from './invoice/invoice-post-request.state';
 import { InvoicesRequestState } from './invoices/invoices-request.state';
 import { ProductsRequestState } from './products/products-request.state';
 import { IRequest } from './requests.interface';
-import { InvoicePostRequestState } from './invoice/invoice-post-request.state';
-import { InvoiceItemsPostRequestState } from './invoice-items/invoice-items-post-request.state';
 
 export class RequestsStateModel {
 }
@@ -18,8 +18,8 @@ export class RequestsStateModel {
   children: [
     CustomersRequestState,
     ProductsRequestState,
-    InvoiceGetRequestState,
-    InvoicePostRequestState,
+    GetInvoiceRequestState,
+    PostInvoiceRequestState,
     InvoicesRequestState,
     InvoiceItemsRequestState,
     InvoiceItemsPostRequestState
@@ -29,8 +29,8 @@ export class RequestsState {
   @Selector([
     CustomersRequestState,
     ProductsRequestState,
-    InvoiceGetRequestState,
-    InvoicePostRequestState,
+    GetInvoiceRequestState,
+    PostInvoiceRequestState,
     InvoicesRequestState,
     InvoiceItemsRequestState,
     InvoiceItemsPostRequestState

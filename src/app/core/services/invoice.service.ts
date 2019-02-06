@@ -3,8 +3,8 @@ import { Select, Store } from '@ngxs/store';
 
 import { Observable } from 'rxjs';
 
-import { FetchInvoice, ResetInvoice } from '../../ngxs/invoice/invoice.actions';
-import { InvoiceState } from '../../ngxs/invoice/invoice.state';
+import { FetchInvoice, ResetInvoice } from '../../ngxs/invoices/invoices.actions';
+import { InvoicesState } from '../../ngxs/invoices/invoices.state';
 import { InvoiceModel } from '../../shared/models/invoice.model';
 
 @Injectable({
@@ -12,7 +12,7 @@ import { InvoiceModel } from '../../shared/models/invoice.model';
 })
 export class InvoiceService {
 
-  @Select(InvoiceState.getInvoice) invoice$: Observable<InvoiceModel>;
+  @Select(InvoicesState.getInvoice) invoice$: Observable<InvoiceModel>;
 
   constructor(private store: Store) {
   }

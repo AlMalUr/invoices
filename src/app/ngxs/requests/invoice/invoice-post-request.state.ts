@@ -3,7 +3,7 @@ import { catchError, tap } from 'rxjs/operators';
 
 import { RequestService } from '../../../core/services/request.service';
 import { PostInvoiceItems } from '../../invoice-items/invoice-items-post.actions';
-import { PostInvoiceSuccess } from '../../invoice/invoice-post.actions';
+
 import { IRequest } from '../requests.interface';
 import {
   requestEntitiesFail,
@@ -13,50 +13,51 @@ import {
 } from '../shared/requests-entities';
 
 import {
-  InvoicePostRequest,
-  InvoicePostRequestFail,
-  InvoicePostRequestSuccess
+  PostInvoiceRequest,
+  PostInvoiceRequestFail,
+  PostInvoiceRequestSuccess
 } from './invoice-post-request.action';
+import { CreateInvoiceSuccess } from '../../invoices/invoices.actions';
 
 
 @State<IRequest>({
-  name: 'invoicePostRequestState',
+  name: 'PostInvoiceRequestState',
   defaults: requestEntitiesInitial(),
 })
-export class InvoicePostRequestState {
+export class PostInvoiceRequestState {
 
   constructor(
     private requestService: RequestService,
   ) {
   }
 
-  @Action(InvoicePostRequest)
-  invoicePostRequest(ctx: StateContext<IRequest>, {payload: newInvoice}: InvoicePostRequest) {
+  @Action(PostInvoiceRequest)
+  postInvoiceRequest(ctx: StateContext<IRequest>, {payload: newInvoice}: PostInvoiceRequest) {
     ctx.patchState(requestEntitiesLoading());
     return this.requestService
     .post('invoices', newInvoice)
     .pipe(
       tap((res: any) => {
         ctx.dispatch(new PostInvoiceItems(res._id, newInvoice));
-        return ctx.dispatch(new InvoicePostRequestSuccess(res));
+        return ctx.dispatch(new PostInvoiceRequestSuccess(res));
       }),
       catchError(error => {
-        return ctx.dispatch(new InvoicePostRequestFail(error));
+        return ctx.dispatch(new PostInvoiceRequestFail(error));
       }),
     );
   }
 
-  @Action(InvoicePostRequestSuccess)
-  invoicePostRequestSuccess(
+  @Action(PostInvoiceRequestSuccess)
+  postInvoiceRequestSuccess(
     ctx: StateContext<IRequest>,
-    {payload}: InvoicePostRequestSuccess
+    {payload}: PostInvoiceRequestSuccess
   ) {
     ctx.patchState(requestEntitiesSuccess(payload));
-    ctx.dispatch(new PostInvoiceSuccess(payload));
+    ctx.dispatch(new CreateInvoiceSuccess(payload));
   }
 
-  @Action(InvoicePostRequestFail)
-  invoicePostRequestFail(ctx: StateContext<IRequest>, {payload}: InvoicePostRequestFail) {
+  @Action(PostInvoiceRequestFail)
+  postInvoiceRequestFail(ctx: StateContext<IRequest>, {payload}: PostInvoiceRequestFail) {
     ctx.patchState(requestEntitiesFail(payload));
     console.error('An error occured: ', payload.message);
   }

@@ -2,7 +2,7 @@ import { Action, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
 
 import { RequestService } from '../../../core/services/request.service';
-import { FetchInvoiceSuccess } from '../../invoice/invoice.actions';
+import { FetchInvoiceSuccess } from '../../invoices/invoices.actions';
 import { IRequest } from '../requests.interface';
 import {
   requestEntitiesFail,
@@ -12,56 +12,56 @@ import {
 } from '../shared/requests-entities';
 
 import {
-  InvoiceGetRequest,
-  InvoiceGetRequestFail,
-  InvoiceGetRequestReset,
-  InvoiceGetRequestSuccess
+  GetInvoiceRequest,
+  GetInvoiceRequestFail,
+  GetInvoiceRequestReset,
+  GetInvoiceRequestSuccess
 } from './invoice-get-request.action';
 
 
 @State<IRequest>({
-  name: 'invoiceGetRequestState',
+  name: 'getInvoiceRequestState',
   defaults: requestEntitiesInitial(),
 })
-export class InvoiceGetRequestState {
+export class GetInvoiceRequestState {
 
   constructor(
     private requestService: RequestService,
   ) {
   }
 
-  @Action(InvoiceGetRequest)
-  invoiceGetRequest(ctx: StateContext<IRequest>, {payload: id}: InvoiceGetRequest) {
+  @Action(GetInvoiceRequest)
+  getInvoiceRequest(ctx: StateContext<IRequest>, {payload: id}: GetInvoiceRequest) {
     ctx.patchState(requestEntitiesLoading());
     return this.requestService
     .get(`invoices/${id}`)
     .pipe(
       tap((res: any) => {
-        return ctx.dispatch(new InvoiceGetRequestSuccess(res));
+        return ctx.dispatch(new GetInvoiceRequestSuccess(res));
       }),
       catchError(error => {
-        return ctx.dispatch(new InvoiceGetRequestFail(error));
+        return ctx.dispatch(new GetInvoiceRequestFail(error));
       }),
     );
   }
 
-  @Action(InvoiceGetRequestSuccess)
-  invoiceGetRequestSuccess(
+  @Action(GetInvoiceRequestSuccess)
+  getInvoiceRequestSuccess(
     ctx: StateContext<IRequest>,
-    {payload}: InvoiceGetRequestSuccess
+    {payload}: GetInvoiceRequestSuccess
   ) {
     ctx.patchState(requestEntitiesSuccess(payload));
     ctx.dispatch(new FetchInvoiceSuccess(payload));
   }
 
-  @Action(InvoiceGetRequestFail)
-  invoiceGetRequestFail(ctx: StateContext<IRequest>, {payload}: InvoiceGetRequestFail) {
+  @Action(GetInvoiceRequestFail)
+  getInvoiceRequestFail(ctx: StateContext<IRequest>, {payload}: GetInvoiceRequestFail) {
     ctx.patchState(requestEntitiesFail(payload));
     console.error('An error occured: ', payload.message);
   }
 
-  @Action(InvoiceGetRequestReset)
-  invoiceGetRequestReset({patchState}: StateContext<IRequest>) {
+  @Action(GetInvoiceRequestReset)
+  getInvoiceRequestReset({patchState}: StateContext<IRequest>) {
     patchState(requestEntitiesInitial());
   }
 }
