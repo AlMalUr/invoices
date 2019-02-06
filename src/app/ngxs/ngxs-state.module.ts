@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { NgxsModule } from '@ngxs/store';
 
 import { CustomersState } from './customers/customers.state';
-import { PostInvoiceItemsState } from './invoice-items/invoice-items-post.state';
 import { InvoiceItemsState } from './invoice-items/invoice-items.state';
 import { InvoicesState } from './invoices/invoices.state';
 import { ProductsState } from './products/products.state';
@@ -24,7 +24,6 @@ import { RequestsState } from './requests/requests.state';
       CustomersState,
       InvoicesState,
       InvoiceItemsState,
-      PostInvoiceItemsState,
       RequestsState,
       CustomersRequestState,
       ProductsRequestState,
@@ -34,7 +33,8 @@ import { RequestsState } from './requests/requests.state';
       InvoiceItemsRequestState,
       InvoiceItemsPostRequestState,
     ]),
-    NgxsReduxDevtoolsPluginModule.forRoot()
+    NgxsReduxDevtoolsPluginModule.forRoot(),
+    NgxsRouterPluginModule.forRoot()
   ]
 })
 export class NgxsStateModule { }
