@@ -50,12 +50,15 @@ export class ProductsRequestState {
     {payload}: ProductsRequestSuccess
   ) {
     ctx.patchState(requestEntitiesSuccess(payload));
-    ctx.dispatch(new FetchProductsSuccess(payload));
+    return ctx.dispatch(new FetchProductsSuccess(payload));
   }
 
   @Action(ProductsRequestFail)
-  productsRequestFail(ctx: StateContext<IRequest>, {payload}: ProductsRequestFail) {
+  productsRequestFail(
+    ctx: StateContext<IRequest>,
+    {payload}: ProductsRequestFail
+  ) {
     ctx.patchState(requestEntitiesFail(payload));
-    console.error('An error occured: ', payload.message);
+    return console.error('An error occured: ', payload.message);
   }
 }

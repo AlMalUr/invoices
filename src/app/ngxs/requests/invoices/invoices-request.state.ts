@@ -49,12 +49,15 @@ export class InvoicesRequestState {
     {payload}: InvoicesRequestSuccess
   ) {
     ctx.patchState(requestEntitiesSuccess(payload));
-    ctx.dispatch(new FetchInvoicesSuccess(payload));
+    return ctx.dispatch(new FetchInvoicesSuccess(payload));
   }
 
   @Action(InvoicesRequestFail)
-  invoicesRequestFail(ctx: StateContext<IRequest>, {payload}: InvoicesRequestFail) {
+  invoicesRequestFail(
+    ctx: StateContext<IRequest>,
+    {payload}: InvoicesRequestFail
+  ) {
     ctx.patchState(requestEntitiesFail(payload));
-    console.error('An error occured: ', payload.message);
+    return console.error('An error occured: ', payload.message);
   }
 }

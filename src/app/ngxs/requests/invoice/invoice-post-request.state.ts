@@ -1,4 +1,4 @@
-import { Action, State, StateContext } from '@ngxs/store';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
 
 import { RequestService } from '../../../core/services/request.service';
@@ -16,6 +16,7 @@ import {
   PostInvoiceRequestFail,
   PostInvoiceRequestSuccess
 } from './invoice-post-request.action';
+import { InvoiceItemsPostRequest } from '../invoice-items/invoice-items-post-request.action';
 
 
 @State<IRequest>({
@@ -29,8 +30,16 @@ export class PostInvoiceRequestState {
   ) {
   }
 
+  @Selector()
+  static getStatus(state: InvoiceItemsPostRequest) {
+    return state;
+  }
+
   @Action(PostInvoiceRequest)
-  postInvoiceRequest(ctx: StateContext<IRequest>, {payload: newInvoice}: PostInvoiceRequest) {
+  postInvoiceRequest(
+    ctx: StateContext<IRequest>,
+    { payload: newInvoice }: PostInvoiceRequest
+  ) {
     ctx.patchState(requestEntitiesLoading);
     return this.requestService
     .post('invoices', newInvoice)
@@ -54,8 +63,11 @@ export class PostInvoiceRequestState {
   }
 
   @Action(PostInvoiceRequestFail)
-  postInvoiceRequestFail(ctx: StateContext<IRequest>, {payload}: PostInvoiceRequestFail) {
+  postInvoiceRequestFail(
+    ctx: StateContext<IRequest>,
+    {payload}: PostInvoiceRequestFail
+  ) {
     ctx.patchState(requestEntitiesFail(payload));
-    console.error('An error occured: ', payload.message);
+    return console.error('An error occured: ', payload.message);
   }
 }

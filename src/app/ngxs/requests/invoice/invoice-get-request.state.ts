@@ -31,7 +31,10 @@ export class GetInvoiceRequestState {
   }
 
   @Action(GetInvoiceRequest)
-  getInvoiceRequest(ctx: StateContext<IRequest>, {payload: id}: GetInvoiceRequest) {
+  getInvoiceRequest(
+    ctx: StateContext<IRequest>,
+    {payload: id}: GetInvoiceRequest
+  ) {
     ctx.patchState(requestEntitiesLoading);
     return this.requestService
     .get(`invoices/${id}`)
@@ -51,17 +54,22 @@ export class GetInvoiceRequestState {
     {payload}: GetInvoiceRequestSuccess
   ) {
     ctx.patchState(requestEntitiesSuccess(payload));
-    ctx.dispatch(new FetchInvoiceSuccess(payload));
+    return ctx.dispatch(new FetchInvoiceSuccess(payload));
   }
 
   @Action(GetInvoiceRequestFail)
-  getInvoiceRequestFail(ctx: StateContext<IRequest>, {payload}: GetInvoiceRequestFail) {
+  getInvoiceRequestFail(
+    ctx: StateContext<IRequest>,
+    {payload}: GetInvoiceRequestFail
+  ) {
     ctx.patchState(requestEntitiesFail(payload));
-    console.error('An error occured: ', payload.message);
+    return console.error('An error occured: ', payload.message);
   }
 
   @Action(GetInvoiceRequestReset)
-  getInvoiceRequestReset({patchState}: StateContext<IRequest>) {
-    patchState(requestEntitiesInitial);
+  getInvoiceRequestReset(
+    {patchState}: StateContext<IRequest>
+  ) {
+    return patchState(requestEntitiesInitial);
   }
 }

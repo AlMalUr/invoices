@@ -29,16 +29,18 @@ export class CustomersState {
 
 
   @Action(FetchCustomers)
-  fetchCustomers({dispatch}: StateContext<CustomersStateModel>) {
-    dispatch(new CustomersRequest);
+  fetchCustomers(
+    { dispatch }: StateContext<CustomersStateModel>
+  ) {
+    return dispatch(new CustomersRequest);
   }
 
   @Action(FetchCustomersSuccess)
   fetchCustomersSuccess(
-    {setState}: StateContext<CustomersStateModel>,
-    {payload: custom}: FetchCustomersSuccess
+    { setState }: StateContext<CustomersStateModel>,
+    { payload: custom }: FetchCustomersSuccess
   ) {
-    setState({
+    return setState({
       entities: custom.reduce((acc, item) => ({
         ...acc,
         [item._id]: item

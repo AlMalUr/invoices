@@ -1,4 +1,4 @@
-import { Action, State, StateContext, Store } from '@ngxs/store';
+import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
 import { catchError, tap } from 'rxjs/operators';
 
 import { RequestService } from '../../../core/services/request.service';
@@ -18,6 +18,7 @@ import {
 } from './invoice-items-post-request.action';
 
 
+
 @State<IRequest>({
   name: 'invoiceItemsPostRequestState',
   defaults: requestEntitiesInitial,
@@ -31,7 +32,10 @@ export class InvoiceItemsPostRequestState {
   }
 
   @Action(InvoiceItemsPostRequest)
-  invoiceItemsPostRequest(ctx: StateContext<IRequest>, {payload: id}: InvoiceItemsPostRequest) {
+  invoiceItemsPostRequest(
+    ctx: StateContext<IRequest>,
+    {payload: id}: InvoiceItemsPostRequest
+  ) {
     ctx.patchState(requestEntitiesLoading);
     const items = this.store.selectSnapshot(InvoiceItemsState.getNewItems);
     return this.requestService
@@ -49,15 +53,18 @@ export class InvoiceItemsPostRequestState {
   @Action(InvoiceItemsPostRequestSuccess)
   invoiceItemsPostRequestSuccess(
     ctx: StateContext<IRequest>,
-    {payload}: InvoiceItemsPostRequestSuccess
+    { payload }: InvoiceItemsPostRequestSuccess
   ) {
-    ctx.patchState(requestEntitiesSuccess(payload));
+    return ctx.patchState(requestEntitiesSuccess(payload));
   }
 
   @Action(InvoiceItemsPostRequestFail)
-  invoiceItemsPostRequestFail(ctx: StateContext<IRequest>, {payload}: InvoiceItemsPostRequestFail) {
+  invoiceItemsPostRequestFail(
+    ctx: StateContext<IRequest>,
+    { payload }: InvoiceItemsPostRequestFail
+  ) {
     ctx.patchState(requestEntitiesFail(payload));
-    console.error('An error occured: ', payload.message);
+    return console.error('An error occured: ', payload.message);
   }
 
 

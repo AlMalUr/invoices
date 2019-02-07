@@ -58,7 +58,7 @@ export class InvoicesState {
     {setState}: StateContext<InvoicesStateModel>,
     {payload: inv}: FetchInvoicesSuccess
   ) {
-    setState({
+    return setState({
       entities: inv.reduce((acc, item) => ({
         ...acc,
         [item._id]: item
@@ -69,19 +69,30 @@ export class InvoicesState {
   }
 
   @Action(UpdateInvoices)
-  updateInvoices({getState, patchState, dispatch}: StateContext<InvoicesStateModel>, {payload: newInvoice}: UpdateInvoices) {
+  updateInvoices(
+    {getState, patchState, dispatch}: StateContext<InvoicesStateModel>,
+    {payload: newInvoice}: UpdateInvoices
+  ) {
+    const {entities, collectionIds} = getState();
     patchState({
-      entities: {...getState().entities, [newInvoice._id]: newInvoice},
-      collectionIds: [...getState().collectionIds, newInvoice._id],
+      entities: {
+        ...entities,
+        [newInvoice._id]: newInvoice
+      },
+      collectionIds: [
+        ...collectionIds,
+        newInvoice._id
+      ],
     });
-    dispatch(new Navigate(['/invoices']));
+    return dispatch(new Navigate(['/invoices']));
   }
 
-  // invoice get & reset
-
   @Action(FetchInvoice)
-  fetchInvoice({dispatch}: StateContext<InvoicesStateModel>, {payload: id}: FetchInvoice) {
-    dispatch(new GetInvoiceRequest(id));
+  fetchInvoice(
+    {dispatch}: StateContext<InvoicesStateModel>,
+    {payload: id}: FetchInvoice
+  ) {
+   return dispatch(new GetInvoiceRequest(id));
   }
 
   @Action(FetchInvoiceSuccess)
@@ -89,7 +100,7 @@ export class InvoicesState {
     {patchState, getState}: StateContext<InvoicesStateModel>,
     {payload}: FetchInvoiceSuccess
   ) {
-    patchState({
+    return patchState({
       invoice: payload
     });
   }
@@ -101,14 +112,18 @@ export class InvoicesState {
     patchState({
       invoice: null
     });
-    dispatch(new GetInvoiceRequestReset());
+    return dispatch(new GetInvoiceRequestReset());
   }
 
-  // invoice create
-
   @Action(CreateInvoice)
-  createInvoice({dispatch}: StateContext<InvoicesStateModel>, {payload: newInvoice}: CreateInvoice) {
-    dispatch([new SaveNewInvoiceItems(newInvoice.items), new PostInvoiceRequest(newInvoice)]);
+  createInvoice(
+    {dispatch}: StateContext<InvoicesStateModel>,
+    {payload: newInvoice}: CreateInvoice
+  ) {
+    return dispatch([
+      new SaveNewInvoiceItems(newInvoice.items),
+      new PostInvoiceRequest(newInvoice)]
+    );
   }
 
   @Action(CreateInvoiceSuccess)
@@ -116,7 +131,10 @@ export class InvoicesState {
     {dispatch}: StateContext<InvoicesStateModel>,
     {payload}: CreateInvoiceSuccess
   ) {
-    dispatch([new UpdateInvoices(payload), new PostInvoiceItems(payload._id)]);
+    return dispatch([
+      new UpdateInvoices(payload),
+      new PostInvoiceItems(payload._id)
+    ]);
   }
 
 }

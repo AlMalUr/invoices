@@ -28,8 +28,10 @@ export class ProductsState {
   }
 
   @Action(FetchProducts)
-  fetchProducts({dispatch}: StateContext<ProductsStateModel>) {
-    dispatch(new ProductsRequest);
+  fetchProducts(
+    {dispatch}: StateContext<ProductsStateModel>
+  ) {
+    return dispatch(new ProductsRequest);
   }
 
   @Action(FetchProductsSuccess)
@@ -42,7 +44,7 @@ export class ProductsState {
         [item._id]: item
       }), {});
     const collectionIds = product.map(item => item._id);
-    setState({
+    return setState({
       entities: entities,
       collectionIds: collectionIds
     });

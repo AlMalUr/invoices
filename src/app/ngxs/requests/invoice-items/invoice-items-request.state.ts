@@ -51,17 +51,22 @@ export class InvoiceItemsRequestState {
     {payload}: InvoiceItemsRequestSuccess
   ) {
     ctx.patchState(requestEntitiesSuccess(payload));
-    ctx.dispatch(new FetchInvoiceItemsSuccess(payload));
+    return ctx.dispatch(new FetchInvoiceItemsSuccess(payload));
   }
 
   @Action(InvoiceItemsRequestFail)
-  invoiceItemsRequestFail(ctx: StateContext<IRequest>, {payload}: InvoiceItemsRequestFail) {
+  invoiceItemsRequestFail(
+    ctx: StateContext<IRequest>,
+    {payload}: InvoiceItemsRequestFail
+  ) {
     ctx.patchState(requestEntitiesFail(payload));
-    console.error('An error occured: ', payload.message);
+    return console.error('An error occured: ', payload.message);
   }
 
   @Action(InvoiceItemsRequestReset)
-  invoiceItemsRequestReset({patchState}: StateContext<IRequest>) {
-    patchState(requestEntitiesInitial);
+  invoiceItemsRequestReset(
+    {patchState}: StateContext<IRequest>
+  ) {
+    return patchState(requestEntitiesInitial);
   }
 }

@@ -34,9 +34,6 @@
             <div class="product__cell product__cell-qty">
               <mat-form-field>
                 <input matInput type="number" min="1" formControlName="quantity">
-                <!--<mat-error *ngIf="emailFormControl.hasError('required')">-->
-
-
                 <mat-error
                   *ngIf="(item.get('quantity').dirty || item.get('quantity').touched)
                    && item.get('quantity').hasError('required')"
@@ -54,9 +51,11 @@
               class="invoice__submit-btn"
               color="warn"
               type="button"
+              *ngIf="i !== (items.length - 1)"
               (click)="deleteProductField(i)"
             >delete
             </button>
+            <div *ngIf="i === (items.length - 1)" style="width: 70px"></div>
           </div>
         </div>
       </div>
@@ -72,10 +71,10 @@
           class="invoice__submit-btn"
           color="primary"
           type="submit"
-          [disabled]="!invoiceForm.valid"
+          [disabled]="!invoiceForm.valid || ((status$ | async).loading)"
         >Save Invoice
         </button>
-        <button
+<!--        <button
           mat-button
           mat-raised-button
           class="invoice__submit-btn"
@@ -83,7 +82,7 @@
           type="button"
           (click)="addProductField()"
         >Add Product
-        </button>
+        </button>-->
       </div>
     </div>
     <div class="invoice__discount-area">

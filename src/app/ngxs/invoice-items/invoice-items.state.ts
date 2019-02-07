@@ -41,16 +41,19 @@ export class InvoiceItemsState {
   }
 
   @Action(FetchInvoiceItems)
-  fetchInvoiceItems({dispatch}: StateContext<InvoiceItemsStateModel>, {payload: id}: FetchInvoiceItems) {
-    dispatch(new InvoiceItemsRequest(id));
+  fetchInvoiceItems(
+    { dispatch }: StateContext<InvoiceItemsStateModel>,
+    { payload: id }: FetchInvoiceItems
+  ) {
+    return dispatch(new InvoiceItemsRequest(id));
   }
 
   @Action(FetchInvoiceItemsSuccess)
   fetchInvoiceItemsSuccess(
-    {setState}: StateContext<InvoiceItemsStateModel>,
-    {payload: custom}: FetchInvoiceItemsSuccess
+    { setState }: StateContext<InvoiceItemsStateModel>,
+    { payload: custom }: FetchInvoiceItemsSuccess
   ) {
-    setState({
+    return setState({
       entities: custom.reduce((acc, item) => ({
         ...acc,
         [item._id]: item
@@ -62,22 +65,27 @@ export class InvoiceItemsState {
 
   @Action(ResetInvoiceItems)
   resetInvoiceItems(
-    {setState, dispatch}: StateContext<InvoiceItemsStateModel>,
+    { setState, dispatch }: StateContext<InvoiceItemsStateModel>,
   ) {
     setState(entitiesDefault);
-    dispatch(new InvoiceItemsRequestReset());
+    return dispatch(new InvoiceItemsRequestReset());
   }
 
   @Action(SaveNewInvoiceItems)
-  createInvoiceItems({patchState}: StateContext<InvoiceItemsStateModel>, {payload}: SaveNewInvoiceItems) {
-    patchState({
+  createInvoiceItems(
+    { patchState }: StateContext<InvoiceItemsStateModel>,
+    { payload }: SaveNewInvoiceItems
+  ) {
+    return patchState({
       newItems: payload
     });
   }
 
   @Action(PostInvoiceItems)
-  postInvoiceItems({dispatch, getState}: StateContext<InvoiceItemsStateModel>, {payload}: PostInvoiceItems) {
-    dispatch(new InvoiceItemsPostRequest(payload));
+  postInvoiceItems(
+    { dispatch, getState }: StateContext<InvoiceItemsStateModel>,
+    { payload }: PostInvoiceItems) {
+    return dispatch(new InvoiceItemsPostRequest(payload));
   }
 }
 

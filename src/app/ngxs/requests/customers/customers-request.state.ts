@@ -29,7 +29,9 @@ export class CustomersRequestState {
   }
 
   @Action(CustomersRequest)
-  customersRequest(ctx: StateContext<IRequest>) {
+  customersRequest(
+    ctx: StateContext<IRequest>
+  ) {
     ctx.patchState( requestEntitiesLoading );
     return this.requestService
     .get('customers')
@@ -49,13 +51,16 @@ export class CustomersRequestState {
     {payload}: CustomersRequestSuccess
   ) {
     ctx.patchState( requestEntitiesSuccess(payload) );
-    ctx.dispatch(new FetchCustomersSuccess(payload));
+    return ctx.dispatch(new FetchCustomersSuccess(payload));
   }
 
   @Action(CustomersRequestFail)
-  customersRequestFail(ctx: StateContext<IRequest>, {payload}: CustomersRequestFail) {
+  customersRequestFail(
+    ctx: StateContext<IRequest>,
+    {payload}: CustomersRequestFail
+  ) {
     ctx.patchState( requestEntitiesFail(payload) );
-    console.error('An error occured: ', payload.message);
+    return console.error('An error occured: ', payload.message);
   }
 
 }
