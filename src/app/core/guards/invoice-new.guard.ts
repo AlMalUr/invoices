@@ -10,9 +10,8 @@ import { InvoiceNewComponent } from '../../invoices/invoice-new/invoice-new.comp
 })
 export class InvoiceNewGuard implements CanDeactivate<InvoiceNewComponent> {
   canDeactivate(
-    component: InvoiceNewComponent ,
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    component: InvoiceNewComponent,
+  ): Observable<boolean> | Promise<boolean> | boolean {
     return component.canDeactivate ? component.canDeactivate() : true;
   }
 }
