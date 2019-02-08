@@ -22,6 +22,11 @@
         </div>
         <div class="product__body" formArrayName="items">
           <div class="product__item" [formGroupName]="i" *ngFor="let item of items.controls; let i = index">
+<!--            <app-invoice-item
+              [item]="item"
+            ></app-invoice-item>
+            -->
+
             <div class="product__cell product__cell-product">
               <mat-form-field product__form-fied-product>
                 <mat-select placeholder="Select product" formControlName="product_id">

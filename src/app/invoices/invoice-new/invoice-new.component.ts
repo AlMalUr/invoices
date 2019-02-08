@@ -2,8 +2,21 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 import { Select, Store } from '@ngxs/store';
-import { BehaviorSubject, combineLatest, Observable, Subject, Subscription } from 'rxjs';
-import { startWith, withLatestFrom } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, ConnectableObservable, from, Observable, of, Subject, Subscription } from 'rxjs';
+import {
+  combineAll,
+  map,
+  mapTo,
+  merge,
+  publish,
+  shareReplay,
+  startWith,
+  switchMap,
+  switchMapTo,
+  take,
+  tap,
+  withLatestFrom
+} from 'rxjs/operators';
 
 import { CustomersService } from '../../core/services/customers.service';
 import { ModalService } from '../../core/services/modal.service';
@@ -33,9 +46,8 @@ export class InvoiceNewComponent implements OnInit, OnDestroy {
   submitted = new BehaviorSubject(false);
 
   isEdited: Subscription;
-
-  // canDeactivateEvent = new Subject();
-  // navigatePermission$: Observable<boolean>;
+  canDeactivateEvent = new Subject();
+  navigatePermission$: Observable<boolean>;
 
   @Select(PostInvoiceRequestState.getStatus) status$;
 
@@ -65,9 +77,32 @@ export class InvoiceNewComponent implements OnInit, OnDestroy {
 
     this.initForm();
     this.initNewFormItem();
-    // this.navigatePermission$ = this.canDeactivateEvent.pipe(
 
-    // );
+
+   this.navigatePermission$ = this.canDeactivateEvent.pipe(
+     switchMap(xx => {
+       if ((this.invoiceForm.touched && this.submitted.getValue()) || !this.invoiceForm.touched) {
+         return of(true);
+       }
+       return this.modalService.confirmModal();
+     }),
+      shareReplay(1),
+   );
+    this.navigatePermission$.subscribe();
+
+  //  this.navigatePermission$ = this.canDeactivateEvent.pipe(
+  //    switchMap(xx => {
+  //      if ((this.invoiceForm.touched && this.submitted.getValue()) || !this.invoiceForm.touched) {
+  //        return of(true);
+  //      }
+  //      return this.modalService.confirmModal();
+  //    }),
+  //   // shareReplay(1),
+  //    publish(),
+//
+  //  );
+  //  this.navigatePermission$.connect();
+
 
     this.itemsPriceSubscription = this.items.valueChanges.pipe(
       withLatestFrom(this.products$),
@@ -125,7 +160,7 @@ export class InvoiceNewComponent implements OnInit, OnDestroy {
 
   initFormItems(item): FormGroup {
     return new FormGroup({
-      invoice_id: new FormControl(item.invoice_id || null),
+      // invoice_id: new FormControl(item.invoice_id || null),
       product_id: new FormControl(item.product_id),
       quantity: new FormControl(item.quantity || 1, [Validators.min(1)]),
       price: new FormControl(item.price || 0)
@@ -134,10 +169,10 @@ export class InvoiceNewComponent implements OnInit, OnDestroy {
 
   initNewFormItem() {
     this.formNewItems = new FormGroup({
-      invoice_id: new FormControl(null),
+       invoice_id: new FormControl(null),
       product_id: new FormControl(null),
-      quantity: new FormControl({value: 0, disabled: true}, [Validators.min(1)]),
-      price: new FormControl(0)
+       quantity: new FormControl({value: 0, disabled: true}, [Validators.min(1)]),
+       price: new FormControl(0)
     });
   }
 
@@ -152,13 +187,8 @@ export class InvoiceNewComponent implements OnInit, OnDestroy {
   }
 
   canDeactivate(): Observable<boolean> | boolean {
-    // this.canDeactivateEvent.next();
-    // return this.navigatePermission$;
-
-    if ((this.invoiceForm.touched && this.submitted.getValue()) || !this.invoiceForm.touched) {
-      return true;
-    }
-    return this.modalService.confirmModal();
+    this.canDeactivateEvent.next();
+    return this.navigatePermission$;
   }
 }
 
