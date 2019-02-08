@@ -26,7 +26,7 @@ export class InvoiceNewComponent implements OnInit, OnDestroy {
   customers$: Observable<CustomerModel[]>;
 
   invoiceForm: FormGroup;
-
+  formNewItems: FormGroup;
   itemsPriceSubscription: Subscription;
   totalPriceSubscription: Subscription;
 
@@ -64,10 +64,10 @@ export class InvoiceNewComponent implements OnInit, OnDestroy {
     this.customers$ = this.customersService.customers$;
 
     this.initForm();
+    this.initNewFormItem();
+    // this.navigatePermission$ = this.canDeactivateEvent.pipe(
 
-    //this.navigatePermission$ = this.canDeactivateEvent.pipe(
-
-   // );
+    // );
 
     this.itemsPriceSubscription = this.items.valueChanges.pipe(
       withLatestFrom(this.products$),
@@ -86,18 +86,18 @@ export class InvoiceNewComponent implements OnInit, OnDestroy {
       this.items.valueChanges,
       this.discount.valueChanges.pipe(startWith(0))
     ).subscribe(([itemsPrice, discount]) => {
-      const itemsPriceTotal = itemsPrice.map(item => item.price).reduce((acc, val) => acc + val);
-      const total = (itemsPriceTotal / 100 * (100 - discount));
-      this.total.patchValue(total, {emitEvent: false});
+      if (itemsPrice.length) {
+        const itemsPriceTotal = itemsPrice.map(item => item.price).reduce((acc, val) => acc + val);
+        const total = (itemsPriceTotal / 100 * (100 - discount));
+        this.total.patchValue(total, {emitEvent: false});
+      } else {
+        this.total.patchValue(0, {emitEvent: false});
+      }
     });
 
-    this.isEdited = this.items.valueChanges.subscribe(itemsArray => {
-      if (itemsArray.length) {
-        const prod = !itemsArray.find(item => item.product_id === null);
-        const quant = !itemsArray.find(item => item.quantity === 0);
-        if (prod && quant) {
-          this.addProductField();
-        }
+    this.isEdited = this.formNewItems.valueChanges.subscribe(item => {
+      if (item.product_id) {
+        this.addProductField(item);
       }
     });
   }
@@ -109,7 +109,6 @@ export class InvoiceNewComponent implements OnInit, OnDestroy {
 
   createInvoice() {
     this.submitted.next(true);
-    this.items.value.pop();
     this.store.dispatch(
       new CreateInvoice(this.invoiceForm.value)
     );
@@ -117,51 +116,49 @@ export class InvoiceNewComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.invoiceForm = new FormGroup({
-      customer_id: new FormControl(null),
-      items: new FormArray([], this.minLengthArrayValidator(2)),
+      customer_id: new FormControl(null, Validators.required),
+      items: new FormArray([], Validators.required),
       discount: new FormControl(0, [Validators.min(0), Validators.max(50), Validators.required]),
       total: new FormControl(0)
     });
-    this.addProductField();
   }
 
-  initFormItems(): FormGroup {
+  initFormItems(item): FormGroup {
     return new FormGroup({
+      invoice_id: new FormControl(item.invoice_id || null),
+      product_id: new FormControl(item.product_id),
+      quantity: new FormControl(item.quantity || 1, [Validators.min(1)]),
+      price: new FormControl(item.price || 0)
+    });
+  }
+
+  initNewFormItem() {
+    this.formNewItems = new FormGroup({
       invoice_id: new FormControl(null),
       product_id: new FormControl(null),
-      quantity: new FormControl(1, [ Validators.min(1)]),
+      quantity: new FormControl({value: 0, disabled: true}, [Validators.min(1)]),
       price: new FormControl(0)
     });
   }
 
-  minLengthArrayValidator(min: number): ValidatorFn {
-    return (items: AbstractControl) => {
-      if (items.value.length >= min) {
-        return null;
-      }
-      return {'minLengthArray': {valid: false}};
-    };
-  }
-
-  addProductField(): void {
-    const item = this.initFormItems();
-    this.items.push(item);
+  addProductField(item): void {
+    const itm = this.initFormItems(item);
+    this.items.push(itm);
+    this.formNewItems.reset({quantity: 0, price: 0});
   }
 
   deleteProductField(index) {
-    if (this.items.length > 1) {
-      this.items.removeAt(index);
-    }
+    this.items.removeAt(index);
   }
 
   canDeactivate(): Observable<boolean> | boolean {
-    //this.canDeactivateEvent.next();
-    //return this.navigatePermission$;
+    // this.canDeactivateEvent.next();
+    // return this.navigatePermission$;
 
-     if ((this.invoiceForm.touched && this.submitted.getValue()) || !this.invoiceForm.touched) {
-       return true;
-     }
-     return this.modalService.confirmModal();
+    if ((this.invoiceForm.touched && this.submitted.getValue()) || !this.invoiceForm.touched) {
+      return true;
+    }
+    return this.modalService.confirmModal();
   }
 }
 

@@ -51,11 +51,29 @@
               class="invoice__submit-btn"
               color="warn"
               type="button"
-              *ngIf="i !== (items.length - 1)"
               (click)="deleteProductField(i)"
             >delete
             </button>
-            <div *ngIf="i === (items.length - 1)" style="width: 70px"></div>
+          </div>
+        </div>
+        <div class="product__body" [formGroup]="formNewItems">
+          <div class="product__item">
+            <div class="product__cell product__cell-product">
+              <mat-form-field product__form-fied-product>
+                <mat-select placeholder="Select product" formControlName="product_id">
+                  <mat-option *ngFor="let product of (products$ | async)" [value]="product._id">
+                    {{product.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="product__cell product__cell-qty">
+              <mat-form-field>
+                <input matInput type="number" formControlName="quantity">
+              </mat-form-field>
+            </div>
+            <div class="product__cell product__cell-price">$ 0</div>
+            <div style="width: 70px"></div>
           </div>
         </div>
       </div>
@@ -74,15 +92,6 @@
           [disabled]="!invoiceForm.valid || ((status$ | async).loading)"
         >Save Invoice
         </button>
-<!--        <button
-          mat-button
-          mat-raised-button
-          class="invoice__submit-btn"
-          color="accent"
-          type="button"
-          (click)="addProductField()"
-        >Add Product
-        </button>-->
       </div>
     </div>
     <div class="invoice__discount-area">
